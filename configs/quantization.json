@@ -1,0 +1,38 @@
+{
+  "_doc": "Quantisation settings used by scripts/export_onnx.py (values copied from the code). Input: merged fine-tuned model (LoRA D) exported to ONNX FP32.",
+  "runtime": "onnxruntime 1.31.1 (quantisation tools + inference)",
+  "common": {
+    "lm_head": "untied from the embedding before quantisation so both are quantised",
+    "strip_unused_initializers": true,
+    "state_tensors_dtype": "float32 for FP32/INT8/INT4 (KV cache + Mamba state), float16 for FP16",
+    "kv_cache_quantization": false
+  },
+  "fp16": {
+    "method": "weights written into the reference onnx-community fp16 graph (generic float16 converter breaks the Mamba If-subgraphs)",
+    "command": "python scripts/export_onnx.py onnx16 --hf models/merged/D --out models/onnx/ft_fp16",
+    "size_mib": 651.5
+  },
+  "int8": {
+    "method": "onnxruntime.quantization.quantize_dynamic",
+    "weight_type": "QInt8",
+    "per_channel": true,
+    "activations": "quantised dynamically at run time (DynamicQuantizeLinear)",
+    "op_types_to_quantize": ["MatMul"],
+    "extra_options": {"MatMulConstBOnly": true, "EnableSubgraph": true},
+    "embedding": "int8 with per-row scale (Gather -> Cast -> Mul), custom step _int8_embedding()",
+    "command": "python scripts/export_onnx.py quant --src models/onnx/ft_fp32 --out-root models/onnx --prefix ft",
+    "size_mib": 404.4
+  },
+  "int4": {
+    "method": "onnxruntime.quantization.matmul_nbits_quantizer.MatMulNBitsQuantizer (weight-only)",
+    "bits": 4,
+    "block_size": 32,
+    "is_symmetric": true,
+    "accuracy_level": 4,
+    "op_types_to_quantize": ["MatMul", "Gather"],
+    "quant_axes": {"MatMul": 0, "Gather": 1},
+    "embedding": "GatherBlockQuantized",
+    "command": "same quant command as int8 (both are produced)",
+    "size_mib": 252.7
+  }
+}
