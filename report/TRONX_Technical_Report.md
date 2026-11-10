@@ -541,6 +541,12 @@ Two Android apps were built: Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, mod
 | Fine-tuned INT8 | 404.4 MiB (423,992,240 bytes) |
 | Fine-tuned INT4 | 252.7 MiB |
 
+**Why the sizes differ:**
+- **Base model (651.5 MiB at FP16):** all 340 M parameters at 2 bytes each.
+- **Adapter (16.3 MiB):** only the LoRA matrices A and B: 4.26 M parameters, 1.25% of the base, stored as FP32 (4 bytes each). It is useless on its own; it needs the base model to run. That makes it the cheapest artifact to ship or swap.
+- **Merged model (651.5 MiB at FP16, the same as the base):** merging computes W' = W + 2·B·A into the existing matrices, so the parameter count and shapes do not change. The fine-tuning costs **zero extra size** after merging. Only the weight values differ.
+- **Quantized merged models (404.4 / 252.7 MiB):** the same merged weights stored in fewer bits per value, plus per-channel or per-block scales. Some layers (norms, Mamba state parameters) stay in floating point, so INT8 is 62% of FP16, not 50%, and INT4 is 39%, not 25%.
+
 ### 11.3 Loading memory and peak inference RAM: fine-tuned INT8 on the phone
 
 | Measurement | Value |
