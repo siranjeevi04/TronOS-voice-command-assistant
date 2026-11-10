@@ -1,8 +1,8 @@
 """Evaluate a HF model (optionally + LoRA adapter) on a split: greedy decoding, JSON
 validity, intent / field / exact-match accuracy, and masked target loss.
 
-  python scripts/eval_hf.py --model models/Qwen2.5-0.5B-Instruct --split test --prompt schema --name base_schema
-  python scripts/eval_hf.py --model models/Qwen2.5-0.5B-Instruct --adapter runs/lora_D_attn_mlp/adapter --split test --name ft_D
+  python scripts/eval_hf.py --model models/granite-4.0-h-350m --data-dir data/v1.2 --prompt schema --split test --name granite_v12_base_test
+  python scripts/eval_hf.py --model models/granite-4.0-h-350m --adapter runs/granite/D_attn_mlp/adapter --data-dir data/v1.2 --prompt schema --split test --name granite_v12_loraD_attn_mlp_test
 """
 from __future__ import annotations
 
