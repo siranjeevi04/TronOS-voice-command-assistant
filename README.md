@@ -91,7 +91,7 @@ The same model file and the same input token ids were used on both devices; only
 
 ## Model weights
 
-All trained weights are published in the release [**v1.0-models**](https://github.com/siranjeevi04/tronx-finetuned-llm/releases/tag/v1.0-models). Git cannot hold files over 100 MB, so the weights are release assets instead of git files.
+All trained weights are published in the release [**v1.0-models**](https://github.com/siranjeevi04/TRONX-On-Device-AI-Assignment/releases/tag/v1.0-models). Git cannot hold files over 100 MB, so the weights are release assets instead of git files.
 
 | File | Model | Precision |
 |---|---|---|
