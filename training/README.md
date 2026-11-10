@@ -24,7 +24,6 @@ LoRA fine-tuning of `ibm-granite/granite-4.0-h-350m` on the TronOS command datas
 | Batch | micro-batch 1 × gradient accumulation 16 = 16 |
 | Max length | 640 tokens (longest sample 551) |
 | Precision | FP32 |
-| Gradient clipping | max norm 1.0 |
 | Loss | Cross-entropy on the assistant JSON tokens only (system prompt + command masked) |
 | Seed | 42 |
 

@@ -207,7 +207,6 @@ Each sample is a chat: the **system prompt** (schema + 7 examples, 490 tokens), 
 | Effective batch | 16 (micro-batch 1 × gradient accumulation 16) | T4 16 GB memory: Mamba2 runs a PyTorch fallback with large activations |
 | Max length | 640 tokens | Longest sample is 553 tokens (system prompt 490) |
 | Precision | FP32 | T4 has no BF16; avoids FP16 overflow in the Mamba fallback |
-| Gradient clipping | max norm 1.0 | Stability |
 | Loss | Cross-entropy on JSON tokens only | Teaches the output, not the prompt |
 | Seed | 42 | Reproducibility |
 | Hardware | Kaggle 2× NVIDIA T4 (one run per GPU) | Mac MPS was ~6–9 h per run |
@@ -638,7 +637,6 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 - **English only.** No Hindi, Tamil or code-mixed commands.
 - **Synthetic data:** real-user phrasing will be more diverse than the templates.
 - **Measurement gaps:**
-  - Gradient norm and fine-grained validation curves were not logged in the reported training runs. Validation loss was measured per epoch; the script now logs these for future runs.
   - Phone RAM after unloading the model stays at about 1.39 GB because the native allocator keeps freed pages.
   - The thermal headroom API is not supported on this phone.
 

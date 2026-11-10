@@ -26,7 +26,7 @@ def main():
     runs, ev = Path(a.runs), Path(a.eval)
 
     # 1) training + validation loss curves
-    fig, ax = plt.subplots(1, 4, figsize=(21, 4))
+    fig, ax = plt.subplots(1, 3, figsize=(16, 4))
     for e in EXPS:
         p = runs / e / "train_log.json"
         if not p.exists():
@@ -42,20 +42,12 @@ def main():
         vs = [(x["step"], x["val_loss_step"]) for x in h if "val_loss_step" in x]
         if vs:   # detailed validation curve (runs logged with val_every)
             ax[1].plot(*zip(*vs), marker=".", label=LABEL[e] + " (per step)")
-        gn = [(x["step"], x["grad_norm_mean"]) for x in h if "grad_norm_mean" in x]
-        if gn:
-            ax[3].plot(*zip(*gn), label=LABEL[e])
         if va and not vs:
             ax[1].plot([0] + [v[0] for v in va], [json.loads(p.read_text())["val_loss_before"]] + [v[1] for v in va], marker="o", label=LABEL[e])
     ax[0].set(title="Training loss (JSON tokens only)", xlabel="optimizer step", ylabel="cross-entropy"); ax[0].legend()
     ax[1].set(title="Validation loss (measured per epoch)", xlabel="epoch", ylabel="cross-entropy"); ax[1].legend()
     ax[2].set(title="Learning rate (5% warm-up + cosine decay)", xlabel="optimizer step", ylabel="learning rate"); ax[2].legend()
     ax[2].ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
-    ax[3].set(title="Gradient norm (pre-clip, mean per 10 steps)", xlabel="optimizer step", ylabel="L2 norm")
-    if ax[3].lines:
-        ax[3].legend()
-    else:
-        ax[3].text(0.5, 0.5, "not logged in this run\n(added to train_lora.py for next runs)", ha="center", va="center", transform=ax[3].transAxes)
     fig.tight_layout(); fig.savefig(OUT / "lora_loss_curves.png", dpi=150); plt.close(fig)
 
     # 2) quality comparison: base vs A-D on test
