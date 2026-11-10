@@ -51,9 +51,24 @@ On the Moto G34 5G (Snapdragon 695, ONNX Runtime Android 1.31.1, fine-tuned INT8
 | Screenshots / logs | [`deliverables/screenshots/`](deliverables/screenshots), raw phone logs [`results/phone/raw_share_logs_20261110.txt`](results/phone/raw_share_logs_20261110.txt), charts [`results/plots/`](results/plots), model-selection evidence [`evidence/`](evidence) |
 | Final report | [`report/TRONX_Technical_Report.md`](report/TRONX_Technical_Report.md) |
 
+## Model weights
+
+All trained weights are published in the release [**v1.0-models**](https://github.com/siranjeevi04/tronx-finetuned-llm/releases/tag/v1.0-models). Git cannot hold files over 100 MB, so the weights are release assets instead of git files.
+
+| File | Model | Precision |
+|---|---|---|
+| `tronx-granite-350m-onnx-ft_int8.zip` | **Deployed model**: fine-tuned, merged, ONNX | INT8 (404 MiB) |
+| `tronx-granite-350m-onnx-ft_int4.zip` | Fine-tuned, merged, ONNX | INT4 (253 MiB) |
+| `tronx-granite-350m-onnx-ft_fp16.zip` | Fine-tuned, merged, ONNX | FP16 (651 MiB) |
+| `tronx-granite-350m-onnx-ft_fp32.zip` | Fine-tuned, merged, ONNX | FP32 (1.3 GiB) |
+| `tronx-granite-350m-loraD-merged-fp32-hf.zip` | Fine-tuned, merged, Hugging Face safetensors | FP32 |
+| `tronx-granite-350m-onnx-base_fp16.zip` | Base model, for comparison | FP16 |
+
+The LoRA adapters (A–D) are in git under `runs/granite/<exp>/adapter/`. Each ONNX zip contains `model.onnx` + `model.onnx_data` (keep them together) and the tokenizer.
+
 ## Reproduce
 
-Model weights are not stored in this repo. They are downloaded or regenerated with the steps below.
+To rebuild everything from scratch instead of downloading:
 
 ```bash
 python3.12 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
