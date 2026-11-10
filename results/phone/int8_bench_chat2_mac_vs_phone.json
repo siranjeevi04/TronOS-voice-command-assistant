@@ -9,7 +9,8 @@
   "phone_decode": 12.1,
   "phone_total": 9960.1,
   "phone_ram": 816.1,
-  "mac_total": 7522.194292003405
+  "mac_total": 7522.194292003405,
+  "base_fp32": "{\"intent\": \"send_message\", \"contact\": \"Mom\", \"message\": \"I am going to work\"}"
  },
  {
   "text": "I need to be up before sunrise tomorrow, make sure I'm awake by 5:15",
@@ -21,7 +22,8 @@
   "phone_decode": 4.51,
   "phone_total": 16838.3,
   "phone_ram": 865.8,
-  "mac_total": 7460.396166999999
+  "mac_total": 7460.396166999999,
+  "base_fp32": "{\"intent\": \"set_alarm\", \"time\": \"05:15\", \"date\": \"tomorrow\", \"in\": \"relative time\", \"label\": \"in\"}"
  },
  {
   "text": "text my mom that I'm done with my dinner.",
@@ -33,7 +35,8 @@
   "phone_decode": 10.27,
   "phone_total": 7294.7,
   "phone_ram": 873.5,
-  "mac_total": 6310.965249998844
+  "mac_total": 6310.965249998844,
+  "base_fp32": "{\"intent\": \"send_message\", \"contact\": \"Mom\", \"message\": \"text my mom that I'm done with my dinner.\"}"
  },
  {
   "text": "Text my mom that I'm done with my dinner.",
@@ -45,7 +48,8 @@
   "phone_decode": 11.97,
   "phone_total": 6484.4,
   "phone_ram": 886.3,
-  "mac_total": 6253.40458300343
+  "mac_total": 6253.40458300343,
+  "base_fp32": "{\"intent\": \"send_message\", \"contact\": \"Mom\", \"message\": \"Text my mom that I'm done with my dinner.\"}"
  },
  {
   "text": "Can u please text my mom that I'm done with my dinner.",
@@ -57,7 +61,8 @@
   "phone_decode": 11.98,
   "phone_total": 7079.3,
   "phone_ram": 853.8,
-  "mac_total": 6343.286875002377
+  "mac_total": 6343.286875002377,
+  "base_fp32": "{\"intent\": \"send_message\", \"contact\": \"Mom\", \"message\": \"I'm done with my dinner.\"}"
  },
  {
   "text": "It's too noisy can you reduce the volume to 20%",
@@ -69,7 +74,8 @@
   "phone_decode": 3.32,
   "phone_total": 20992.1,
   "phone_ram": 885.2,
-  "mac_total": 6526.05445899826
+  "mac_total": 6526.05445899826,
+  "base_fp32": "{\"intent\": \"change_setting\", \"setting\": \"volume\", \"action\": \"set\", \"value\": 20}"
  },
  {
   "text": "Hey Tron, sorry to bother you, could you possibly open up Spotify for me when you get a sec?",
@@ -81,7 +87,8 @@
   "phone_decode": 9.55,
   "phone_total": 13601.6,
   "phone_ram": 880.9,
-  "mac_total": 6895.027625003422
+  "mac_total": 6895.027625003422,
+  "base_fp32": "{\"intent\": \"open_app\", \"app_name\": \"Spotify\"}"
  },
  {
   "text": "Hey Tron, sorry to bother you. I just want you to call my mom right now",
@@ -93,7 +100,8 @@
   "phone_decode": 12.15,
   "phone_total": 7748.6,
   "phone_ram": 868.8,
-  "mac_total": 6617.1768749991315
+  "mac_total": 6617.1768749991315,
+  "base_fp32": "{\"intent\": \"make_call\", \"contact\": \"Mom\"}"
  },
  {
   "text": "He Tron, can he set a reminder that I have to go to temple at 8 p.m.?",
@@ -105,7 +113,8 @@
   "phone_decode": 9.83,
   "phone_total": 8472.1,
   "phone_ram": 873.0,
-  "mac_total": 7513.41508400219
+  "mac_total": 7513.41508400219,
+  "base_fp32": "{\"intent\": \"create_reminder\", \"task\": \"go to temple\", \"time\": \"20:00\"}"
  },
  {
   "text": "i need u to wake me at 5 tmrw eve",
@@ -117,7 +126,8 @@
   "phone_decode": 11.75,
   "phone_total": 8152.8,
   "phone_ram": 785.6,
-  "mac_total": 6161.6559169997345
+  "mac_total": 6161.6559169997345,
+  "base_fp32": "{\"intent\": \"set_alarm\", \"time\": \"05:00\", \"date\": \"tomorrow\", \"in\": \"relative time\"}"
  },
  {
   "text": "bro tesa forgot her bag call her please",
@@ -129,6 +139,7 @@
   "phone_decode": 10.3,
   "phone_total": 6771.5,
   "phone_ram": 896.7,
-  "mac_total": 5063.016958003573
+  "mac_total": 5063.016958003573,
+  "base_fp32": "{\"intent\": \"unsupported\"}"
  }
 ]

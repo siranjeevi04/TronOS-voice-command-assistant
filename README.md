@@ -73,6 +73,45 @@ The same model file and the same input token ids were used on both devices; only
 
 ![Mac vs phone](results/plots/mac_vs_phone_int8.png)
 
+## Examples: base vs fine-tuned INT8 on Mac and phone
+
+10 example commands that were run on all three: base model, fine-tuned INT8 on the Mac and fine-tuned INT8 on the phone (Moto G34). All three received identical input token ids. ✅ = exact JSON match.
+
+| # | Command | Base FP32 (Mac) | Fine-tuned INT8 (Mac) | Fine-tuned INT8 (phone) |
+|---|---|---|---|---|
+| 1 | Set an alarm in half an hour. | ❌ `{"intent": "set_alarm", "time": "06:30", "date": "tomorrow"}` | ✅ `{"intent": "set_alarm", "in": "00:30"}` | ✅ `{"intent": "set_alarm", "in": "00:30"}` |
+| 2 | set an alarm for 11:59 pm | ❌ `{"intent": "set_alarm", "time": "11:59", "date": "tomorrow", "in": "in 59 minutes"}` | ✅ `{"intent": "set_alarm", "time": "23:59"}` | ✅ `{"intent": "set_alarm", "time": "23:59"}` |
+| 3 | remind me on monday to submit the timesheet | ❌ `{"intent": "create_reminder", "task": "submit the timesheet", "time": "monday"}` | ✅ `{"intent": "create_reminder", "task": "submit the timesheet", "date": "monday"}` | ✅ `{"intent": "create_reminder", "task": "submit the timesheet", "date": "monday"}` |
+| 4 | video call grandma | ❌ `{"intent": "create_reminder", "task": "video call grandma", "time": "18:00"}` | ✅ `{"intent": "make_call", "contact": "Grandma"}` | ✅ `{"intent": "make_call", "contact": "Grandma"}` |
+| 5 | launch the camera i want to take a picture | ❌ `{"intent": "create_reminder", "task": "take a picture", "time": "00:00", "date": "today"}` | ✅ `{"intent": "open_app", "app_name": "Camera"}` | ✅ `{"intent": "open_app", "app_name": "Camera"}` |
+| 6 | send 2000 to my mom's account | ❌ `{"intent": "send_message", "contact": "Mom", "message": "2000"}` | ✅ `{"intent": "unsupported"}` | ✅ `{"intent": "unsupported"}` |
+| 7 | read my last message | ❌ `{"intent": "read_message"}` | ✅ `{"intent": "unsupported"}` | ✅ `{"intent": "unsupported"}` |
+| 8 | set an alarm for 7 no wait its 7 45 in the evening | ❌ `{"intent": "set_alarm", "time": "19:45", "date": "today", "in": "relative time as "in 45 minutes""}` | ✅ `{"intent": "set_alarm", "time": "19:45"}` | ✅ `{"intent": "set_alarm", "time": "19:45"}` |
+| 9 | arm the home security alarm before i leave | ❌ `{"intent": "set_alarm", "time": "06:30", "date": "tomorrow", "in": "relative time", "label": "home"}` | ❌ `{"intent": "set_alarm", "label": "home security", "action": "on"}` | ✅ `{"intent": "unsupported"}` |
+| 10 | enable airplane mode | ❌ `{"intent": "set_alarm", "time": "08:00", "date": "today", "in": "relative time"}` | ✅ `{"intent": "change_setting", "setting": "airplane_mode", "action": "on"}` | ❌ `{"intent": "change_setting", "setting": "airplane_mode"}` |
+
+**All commands tested on both devices** (32 commands outside the training data: demo prompts, hard informal commands with typos, and free-typed commands):
+
+| Command set | n | Base FP32 (Mac) | Fine-tuned INT8 (Mac) | Fine-tuned INT8 (phone) |
+|---|---:|---:|---:|---:|
+| Demo prompts (where the base model fails) | 10 | 0 | 9 | 7 |
+| Hard commands (typos, informal, self-corrections) | 11 | 4 | 6 | 5 |
+| Free-typed commands in the phone app | 11 | 6 | 8 | 4 |
+| **Total** | **32** | **10 (31%)** | **23 (72%)** | **16 (50%)** |
+
+The fine-tuned model is better than the base model on both devices. On the full 613-command test set, the gap is much larger (32.5% → 86.3% for INT8).
+
+**Why the phone scores lower than the Mac with the same model file:**
+1. **Same input, same file:** the token ids were verified identical, and the INT8 file has the same checksum on both devices. The Mac is deterministic: identical outputs at 1, 4 and 8 threads. So the difference is neither randomness nor a bug.
+2. **INT8 here is *dynamic* quantization:** weights are stored as 8-bit integers, but each layer's activations are rounded to 8 bits **at run time**, with a scale computed from the current values.
+3. **Different CPUs run different kernels:**
+   - The phone (Snapdragon 695: Cortex-A78/A55, Armv8.2 dot-product instructions) and the Mac (Apple M5, newer int8 matrix instructions) use different ONNX Runtime kernels.
+   - Different kernels add the floating-point parts (normalisation, the Mamba state update, attention, the run-time scales) in a different order, so the results differ in the last few bits.
+4. **Tiny differences can flip a token:** a value near a rounding boundary rounds to a different 8-bit number. After 32 layers and about 500 prompt tokens, this can flip a near-tie in greedy decoding. From that token on, the answers diverge.
+5. **It goes both ways:** example 9 is right on the phone and wrong on the Mac. On average the phone loses more, because its kernels differ further from the reference numerics.
+
+**Fix (report Section 18):** weight-only or calibrated static INT8, which has no run-time activation rounding, plus JSON-constrained decoding. Both keep the file size the same.
+
 ## Required attachments
 
 | Attachment | Where |

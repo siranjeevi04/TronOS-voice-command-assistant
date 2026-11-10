@@ -29,6 +29,8 @@ FP32 = full precision (base: PyTorch; fine-tuned: ONNX Runtime, identical to PyT
 - **Recommended configuration for TronOS: fine-tuned INT8** (Section 17). INT4 is 37% smaller but loses 11 points and starts acting on out-of-scope requests.
 - Main limitations (Section 16): phone INT8 output differs from Mac INT8 for the same file, the long system prompt makes time to first token slow, and some phrasing patterns are still unlearned.
 
+**Measured vs estimated:** every number in this report is measured unless it is explicitly marked **Estimate**. Estimates appear only in Section 3 (device feasibility), Section 10 (voice-app memory total) and Section 18 (future optimizations).
+
 ---
 
 ## 2. Use case and requirements
@@ -69,7 +71,7 @@ Project decisions beyond the problem statement:
 ## 3. Base model selection
 
 **Selection rules:**
-1. At most about 400 M parameters. A 1 B-class model was estimated at 11–12 s per command on the Moto G34, because decode speed is limited by memory bandwidth (17 GB/s).
+1. At most about 400 M parameters. **Estimate, not measured:** a 1 B-class model would take 11–12 s per command on the Moto G34, because decode speed is limited by memory bandwidth (17 GB/s). Derived from a published Snapdragon 8 Gen 1 measurement scaled by bandwidth (`evidence/device_feasibility/estimate_moto_g34.py`).
 2. Strongest published instruction-following (IFEval) and function-calling (BFCL) scores.
 3. A licence that allows commercial use.
 4. Mature tooling for export to a mobile runtime.
@@ -228,12 +230,14 @@ Each sample is a chat: the **system prompt** (schema + 7 examples, 490 tokens), 
 
 Four experiments on the same data, hyper-parameters and seed. Only the target modules change:
 
-| Exp | Target modules | Layers touched | Trainable params | % of base | Adapter size |
-|---|---|---|---:|---:|---:|
-| A | attention `q_proj`, `v_proj` | 4 | 163,840 | 0.05% | 0.6 MB |
-| B | attention `q,k,v,o_proj` | 4 | 327,680 | 0.10% | 1.3 MB |
-| C | MLP `input_linear`, `output_linear` | 32 | 3,932,160 | 1.16% | 15.0 MB |
-| **D** | **attention q,k,v,o + MLP** | **32** | **4,259,840** | **1.25%** | **16.3 MB** |
+| Exp | Target modules (actual Granite names) | Layers touched | Rank / alpha / dropout | Trainable params | % of base | Adapter size | Training time (T4) |
+|---|---|---|---|---:|---:|---:|---:|
+| A | `self_attn.q_proj`, `self_attn.v_proj` | 4 | 16 / 32 / 0.05 | 163,840 | 0.05% | 0.6 MB | 51 min |
+| B | `self_attn.q_proj`, `k_proj`, `v_proj`, `o_proj` | 4 | 16 / 32 / 0.05 | 327,680 | 0.10% | 1.3 MB | 52 min |
+| C | `shared_mlp.input_linear`, `shared_mlp.output_linear` | 32 | 16 / 32 / 0.05 | 3,932,160 | 1.16% | 15.0 MB | 61 min |
+| **D** | **attention q,k,v,o + MLP** | **32** | 16 / 32 / 0.05 | **4,259,840** | **1.25%** | **16.3 MB** | 61 min |
+
+Granite-H has no separate `gate_proj` / `up_proj` / `down_proj`. Its MLP fuses gate and up into `shared_mlp.input_linear` (768→4096, split 2048 + 2048), and `shared_mlp.output_linear` (2048→768) plays the down-projection role. Module names were read from the loaded model (`results/model_inspection/granite-4.0-h-350m_modules.txt`).
 
 All rows FP32, PyTorch, unmerged adapter (identical to merged ONNX FP32).
 
@@ -244,6 +248,18 @@ All rows FP32, PyTorch, unmerged adapter (identical to merged ONNX FP32).
 | B | 85.0% | 0.0429 | 81.4% | 91.0% | 83.4% | 100% | 89.6% |
 | C | 91.2% | 0.0229 | 85.5% | 93.6% | 88.7% | 100% | 91.5% |
 | **D** | **91.2%** | **0.0215** | **89.1%** | **94.9%** | **88.8%** | **100%** | **99.1%** |
+
+**Inference performance per experiment** (measured: 613 test commands, batch 16, greedy, NVIDIA T4, PyTorch FP32, adapter not merged):
+
+| Exp | Generation time, 613 commands | Per command | Generated tok/s (batched) |
+|---|---:|---:|---:|
+| A | 205.0 s | 334 ms | 46.8 |
+| B | 210.8 s | 344 ms | 45.1 |
+| C | 206.9 s | 338 ms | 46.8 |
+| D | 213.3 s | 348 ms | 45.3 |
+
+- With the adapter **unmerged**, D costs about 4% more time than A (extra low-rank matmuls in all 32 layers). The differences are within run-to-run noise on a shared GPU.
+- After **merging** (Section 7.3), every experiment has exactly the base model's shapes, so on-device speed and memory are identical for A–D. The target-module choice affects quality only, not deployed inference cost.
 
 ![Quality by experiment](../results/plots/lora_quality_test.png)
 
@@ -329,6 +345,9 @@ LoRA D adapter ─merge─► HF FP32 checkpoint ─► ONNX FP32 ─┬─► F
   - The embedding uses `GatherBlockQuantized`.
   - `accuracy_level=4`, so compute uses INT8 activations.
 - **Cleanup:** unused FP32 initialisers were stripped. Before that, INT8 was 868 MB and INT4 477 MB.
+- **Calibration dataset:** none needed. INT8 is *dynamic* (activation ranges computed at run time), INT4 is *weight-only* with per-block scales from the weights themselves, and FP16 is a cast. No calibration data was used, so no test data can leak into quantization.
+- **Runtime compatibility:** every variant runs on ONNX Runtime 1.31.1 CPU (desktop and Android arm64) with standard contrib ops (`DynamicQuantizeLinear` / `MatMulInteger` for INT8, `MatMulNBits` / `GatherBlockQuantized` for INT4, `GroupQueryAttention`). No custom kernels are needed.
+- **Supported variants:** all required variants (FP16, INT8, INT4) were produced. BF16 was not used because ONNX Runtime CPU has no BF16 kernels for this graph and mobile ARM CPUs lack BF16 arithmetic; FP16 is the 16-bit baseline instead.
 
 **Script:** `scripts/export_onnx.py` (subcommands `merge`, `onnx`, `onnx16`, `verify`, `quant`). Runtime: ONNX Runtime 1.31.1.
 
@@ -381,6 +400,9 @@ Same prompt, same greedy decoding (max 64 new tokens), same scoring code (`scrip
 | Exact JSON match | 32.5% | ⟨pending⟩ | 89.1% | ⟨pending⟩ | 86.3% | 77.8% |
 | JSON validity | 98.9% | ⟨pending⟩ | 100% | ⟨pending⟩ | 100% | 99.8% |
 | Unsupported recall | 33.0% | ⟨pending⟩ | 99.1% | ⟨pending⟩ | 99.1% | 78.3% |
+| Test-set loss (JSON tokens) | 0.353 | ⟨pending⟩ | 0.062 | ⟨pending⟩ | 0.064 | 0.082 |
+
+Stages required by the problem statement: Stage 1 = Base, Stage 2 = Fine-tuned (FP32; FP16 shown too), Stage 3 = Fine-tuned INT8, Stage 4 = Fine-tuned INT4.
 
 ![Before vs after, per intent](../results/plots/improvement_per_intent.png)
 
@@ -406,6 +428,44 @@ On 10 new, harder patterns written after training:
 - Fine-tuned FP32: 7/10
 
 The remaining failures are listed in Section 16.
+
+### 9.4 Examples: base vs fine-tuned INT8 on Mac and phone
+10 example commands that were run on all three: base model, fine-tuned INT8 on the Mac and fine-tuned INT8 on the phone (Moto G34). All three received identical input token ids. ✅ = exact JSON match.
+
+| # | Command | Base FP32 (Mac) | Fine-tuned INT8 (Mac) | Fine-tuned INT8 (phone) |
+|---|---|---|---|---|
+| 1 | Set an alarm in half an hour. | ❌ `{"intent": "set_alarm", "time": "06:30", "date": "tomorrow"}` | ✅ `{"intent": "set_alarm", "in": "00:30"}` | ✅ `{"intent": "set_alarm", "in": "00:30"}` |
+| 2 | set an alarm for 11:59 pm | ❌ `{"intent": "set_alarm", "time": "11:59", "date": "tomorrow", "in": "in 59 minutes"}` | ✅ `{"intent": "set_alarm", "time": "23:59"}` | ✅ `{"intent": "set_alarm", "time": "23:59"}` |
+| 3 | remind me on monday to submit the timesheet | ❌ `{"intent": "create_reminder", "task": "submit the timesheet", "time": "monday"}` | ✅ `{"intent": "create_reminder", "task": "submit the timesheet", "date": "monday"}` | ✅ `{"intent": "create_reminder", "task": "submit the timesheet", "date": "monday"}` |
+| 4 | video call grandma | ❌ `{"intent": "create_reminder", "task": "video call grandma", "time": "18:00"}` | ✅ `{"intent": "make_call", "contact": "Grandma"}` | ✅ `{"intent": "make_call", "contact": "Grandma"}` |
+| 5 | launch the camera i want to take a picture | ❌ `{"intent": "create_reminder", "task": "take a picture", "time": "00:00", "date": "today"}` | ✅ `{"intent": "open_app", "app_name": "Camera"}` | ✅ `{"intent": "open_app", "app_name": "Camera"}` |
+| 6 | send 2000 to my mom's account | ❌ `{"intent": "send_message", "contact": "Mom", "message": "2000"}` | ✅ `{"intent": "unsupported"}` | ✅ `{"intent": "unsupported"}` |
+| 7 | read my last message | ❌ `{"intent": "read_message"}` | ✅ `{"intent": "unsupported"}` | ✅ `{"intent": "unsupported"}` |
+| 8 | set an alarm for 7 no wait its 7 45 in the evening | ❌ `{"intent": "set_alarm", "time": "19:45", "date": "today", "in": "relative time as "in 45 minutes""}` | ✅ `{"intent": "set_alarm", "time": "19:45"}` | ✅ `{"intent": "set_alarm", "time": "19:45"}` |
+| 9 | arm the home security alarm before i leave | ❌ `{"intent": "set_alarm", "time": "06:30", "date": "tomorrow", "in": "relative time", "label": "home"}` | ❌ `{"intent": "set_alarm", "label": "home security", "action": "on"}` | ✅ `{"intent": "unsupported"}` |
+| 10 | enable airplane mode | ❌ `{"intent": "set_alarm", "time": "08:00", "date": "today", "in": "relative time"}` | ✅ `{"intent": "change_setting", "setting": "airplane_mode", "action": "on"}` | ❌ `{"intent": "change_setting", "setting": "airplane_mode"}` |
+
+**All commands tested on both devices** (32 commands outside the training data: demo prompts, hard informal commands with typos, and free-typed commands):
+
+| Command set | n | Base FP32 (Mac) | Fine-tuned INT8 (Mac) | Fine-tuned INT8 (phone) |
+|---|---:|---:|---:|---:|
+| Demo prompts (where the base model fails) | 10 | 0 | 9 | 7 |
+| Hard commands (typos, informal, self-corrections) | 11 | 4 | 6 | 5 |
+| Free-typed commands in the phone app | 11 | 6 | 8 | 4 |
+| **Total** | **32** | **10 (31%)** | **23 (72%)** | **16 (50%)** |
+
+The fine-tuned model is better than the base model on both devices. On the full 613-command test set, the gap is much larger (32.5% → 86.3% for INT8).
+
+**Why the phone scores lower than the Mac with the same model file:**
+1. **Same input, same file:** the token ids were verified identical, and the INT8 file has the same checksum on both devices. The Mac is deterministic: identical outputs at 1, 4 and 8 threads. So the difference is neither randomness nor a bug.
+2. **INT8 here is *dynamic* quantization:** weights are stored as 8-bit integers, but each layer's activations are rounded to 8 bits **at run time**, with a scale computed from the current values.
+3. **Different CPUs run different kernels:**
+   - The phone (Snapdragon 695: Cortex-A78/A55, Armv8.2 dot-product instructions) and the Mac (Apple M5, newer int8 matrix instructions) use different ONNX Runtime kernels.
+   - Different kernels add the floating-point parts (normalisation, the Mamba state update, attention, the run-time scales) in a different order, so the results differ in the last few bits.
+4. **Tiny differences can flip a token:** a value near a rounding boundary rounds to a different 8-bit number. After 32 layers and about 500 prompt tokens, this can flip a near-tie in greedy decoding. From that token on, the answers diverge.
+5. **It goes both ways:** example 9 is right on the phone and wrong on the Mac. On average the phone loses more, because its kernels differ further from the reference numerics.
+
+**Fix (Section 18):** weight-only or calibrated static INT8, which has no run-time activation rounding, plus JSON-constrained decoding. Both keep the file size the same.
 
 ---
 
@@ -442,7 +502,7 @@ Two Android apps were built: Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, mod
 - **Packaging:** models are stored uncompressed in the APK assets and copied once to app-private storage on first launch (ONNX Runtime needs a file path for external weights). Uninstalling the app removes them.
 - **Privacy:** no network permission. The ONNX Runtime library's `INTERNET`, `ACCESS_NETWORK_STATE` and telemetry initializer were removed from the merged manifest. The only permission is `RECORD_AUDIO`, in the voice app.
 - **Identical input:** the on-device tokenizer runs a start-up self-check against Mac token ids (20/20 identical). Prompt token counts matched the Mac on every phone command.
-- **Memory budget (voice app):** LLM about 0.9 GB process peak, STT q8 158 MB on disk, VAD 2 MB. The estimated total is about 1.1–1.2 GB on an 8 GB phone.
+- **Memory budget (voice app):** LLM about 0.9 GB process peak, STT q8 158 MB on disk, VAD 2 MB. **Estimate, not measured:** the total is about 1.1–1.2 GB on an 8 GB phone (LLM peak measured; STT and VAD added from file sizes).
 
 ---
 
@@ -665,10 +725,10 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 
 ## 18. Future optimization opportunities
 
-1. **Cache the system prompt (prefix caching).** The 490-token prompt is identical for every command. Run it once at start-up and keep the KV cache + Mamba state; each command then only processes about 15 tokens. Expected time to first token on the Moto G34: about 6 s → about 0.3 s. Granite-H makes this cheap: the saved state is about 26 MB.
+1. **Cache the system prompt (prefix caching).** The 490-token prompt is identical for every command. Run it once at start-up and keep the KV cache + Mamba state; each command then only processes about 15 tokens. **Estimate, not measured:** time to first token on the Moto G34 would drop from about 6 s (measured) to about 0.3 s (15 tokens at the measured 85 tok/s prefill, plus one decode step). Granite-H makes this cheap: the saved state is about 26 MB.
 2. **JSON-constrained decoding.** Allow only tokens that keep the output a valid JSON object with schema keys. This removes non-JSON replies (3 in 32 phone commands) and out-of-schema keys at almost no cost.
 3. **Weight-only or static INT8.** Keep weights INT8 but avoid run-time activation rounding, using MatMulNBits 8-bit or calibrated static INT8. This removes the phone-vs-Mac drift at the same file size.
-4. **Shorter prompt through fine-tuning.** The adapter has learned the schema, so the 7 in-prompt examples could be dropped and the model retrained with a compact prompt (about 75 tokens). That cuts prefill by about 6× on top of item 1.
+4. **Shorter prompt through fine-tuning.** The adapter has learned the schema, so the 7 in-prompt examples could be dropped and the model retrained with a compact prompt (about 75 tokens). **Estimate:** that cuts prefill by about 6× on top of item 1.
 5. **Data v1.3** for the unlearned patterns (negation, "reply to", app-as-verb, message containing a time or command, "tonight", relationship names), plus real recorded speech.
 6. **Use the NPU/GPU** (QNN or NNAPI execution provider) for prefill on Snapdragon devices.
 7. **Quantization-aware LoRA** (QLoRA-style or QAT) if INT4 is needed for low-storage devices.
