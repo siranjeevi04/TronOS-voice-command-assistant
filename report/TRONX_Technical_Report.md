@@ -383,6 +383,8 @@ Same prompt, same greedy decoding (max 64 new tokens), same scoring code (`scrip
 | JSON validity | 98.9% | ⟨pending⟩ | 100% | ⟨pending⟩ | 100% | 99.8% |
 | Unsupported recall | 33.0% | ⟨pending⟩ | 99.1% | ⟨pending⟩ | 99.1% | 78.3% |
 
+![Before vs after, per intent](../results/plots/improvement_per_intent.png)
+
 On the 120 hand-written test commands, exact match went from **44.2% (base FP32) to 92.5% (fine-tuned FP32)**. On the template commands, it went from 29.6% to 88.2%.
 
 ### 9.2 What changed (real test outputs)
@@ -600,6 +602,8 @@ A typical command (about 505 prompt tokens and 15 output tokens) takes about 7.5
 4. **The hybrid architecture suits phones.** The KV cache is only 8 KB/token and decode speed stays constant from 512 to 2,048 tokens of context.
 5. **Latency is dominated by the long system prompt.** Prefill takes about 85 tok/s on the phone, so 490 prompt tokens take about 5.7 s. Decode of a 15-token answer takes about 1.5 s.
 6. **The same INT8 file behaves differently on the phone.** Over 32 commands where we compared outputs, exact match was 71.9% on the Mac and 50.0% on the phone; only 14 of 32 outputs were identical. Inputs were verified identical and the Mac is deterministic. The cause is dynamic INT8 activation quantization: activations are rounded at run time, and different ARM kernels (Snapdragon 695 vs Apple M5) produce slightly different values that flip close greedy choices. Accuracy measured off-device over-estimates phone accuracy for dynamic INT8.
+![Mac vs phone, same INT8 file](../results/plots/mac_vs_phone_int8.png)
+
 7. **Thermals are acceptable:** −8% decode speed after 10 minutes of continuous load, 3% battery.
 
 ---
@@ -607,6 +611,8 @@ A typical command (about 505 prompt tokens and 15 output tokens) takes about 7.5
 ## 16. Limitations and failure cases
 
 **Model failures (fine-tuned D, FP32, hand-written test commands):**
+
+Per intent, `send_message` is the weakest (59.7% exact on the test set): the model struggles to find where the message content starts when it contains a time, a task or a command.
 
 | Command | Expected | Model output | Failure |
 |---|---|---|---|

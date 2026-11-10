@@ -36,6 +36,43 @@ On the Moto G34 5G (Snapdragon 695, ONNX Runtime Android 1.31.1, fine-tuned INT8
 | Decode speed | 9.8 tok/s |
 | 10-min thermal | −8% decode speed, 3% battery |
 
+## Results in charts
+
+### 1. Fine-tuning: before vs after, per intent
+The base model (grey) gets only 2% of alarms and 7% of messages exactly right: it invents times, dates and fields. After LoRA fine-tuning (blue), every intent improves, and unsupported requests are refused 99% of the time (base 33%). The deployed INT8 model (green) stays close to FP32. `send_message` (60%) is the weakest intent: the message boundary is hard when the content itself contains a time or a task.
+
+![Before vs after fine-tuning, per intent](results/plots/improvement_per_intent.png)
+
+### 2. Which layers to adapt: LoRA experiments A–D
+A and B train only the 4 attention layers. C trains the MLP in all 32 layers. D trains both and is the best on every metric, especially refusing unsupported requests (99%).
+
+![Base vs LoRA A-D](results/plots/lora_quality_test.png)
+
+### 3. Training curves (A–D)
+All four runs converge smoothly. Validation loss keeps falling through epoch 2 (D: 0.326 → 0.0215), so the very low training loss is fitting, not harmful over-fitting.
+
+![LoRA learning curves](results/plots/lora_loss_curves.png)
+
+### 4. Quantisation: what precision costs
+INT8 keeps almost all of the quality (−2.8 points exact JSON) at 31% of the FP32 size. INT4 saves another 151 MiB but loses 11 points and starts acting on unsupported requests (recall 99% → 78%).
+
+![Quality after quantisation](results/plots/quant_quality.png)
+
+### 5. KV cache on the phone (fine-tuned INT8, Moto G34)
+Only 4 of 32 layers use attention, so the KV cache is tiny (4 → 16 MB from 512 to 2,048 tokens). The Mamba state is a fixed 21.8 MB. Decode speed stays about 9–10 tok/s at every context length. What grows is prefill time and temporary memory.
+
+![KV cache vs context](results/plots/phone_kv_cache.png)
+
+### 6. Thermal: 10 minutes of continuous inference on the phone
+The phone throttled briefly (status SEVERE, CPU clocks capped to 940 MHz), but decode speed fell only 8% over 10 minutes. Battery temperature went from 35.4 to 36.3 °C and the run used 3% battery.
+
+![Thermal test](results/plots/phone_thermal.png)
+
+### 7. Same INT8 model on Mac vs phone
+The same model file and the same input token ids were used on both devices; only the hardware differs. The phone is about 8× slower, and its output differs on 18 of 32 commands. Dynamic INT8 rounds activations at run time, and the phone CPU's integer kernels round slightly differently, which flips close greedy choices. See report Section 15.
+
+![Mac vs phone](results/plots/mac_vs_phone_int8.png)
+
 ## Required attachments
 
 | Attachment | Where |
