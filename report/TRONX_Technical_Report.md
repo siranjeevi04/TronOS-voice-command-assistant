@@ -549,14 +549,17 @@ The remaining failures are listed in Section 16.
 | 10 | i an hr and a half remind me to check on the briyani | ❌ `{"intent": "create_reminder", "task": "check on the briyani", "time": "13:30", "date": "today"}` | ✅ `{"intent": "create_reminder", "task": "check on the briyani", "in": "01:30"}` | ❌ `{"intent": "create_reminder", "task": "check on the briyani", "time": "01:30"}` |
 | | **Correct** | **2 / 10** | **9 / 10** | **7 / 10** |
 
-**All commands tested on both devices** (32 commands outside the training data: demo prompts, hard informal commands with typos, and free-typed commands):
+**All commands tested on both devices** (62 runs: demo prompts, hard informal commands with typos, free-typed commands, and 30 held-out test commands run with the voice app's "Run 30" button):
 
 | Command set | n | Base FP32 (Mac) | Fine-tuned INT8 (Mac) | Fine-tuned INT8 (phone) |
 |---|---:|---:|---:|---:|
 | Demo prompts (where the base model fails) | 10 | 0 | 9 | 7 |
 | Hard commands (typos, informal, self-corrections) | 11 | 4 | 6 | 5 |
 | Free-typed commands in the phone app | 11 | 6 | 9 | 4 |
-| **Total** | **32** | **10 (31%)** | **24 (75%)** | **16 (50%)** |
+| Held-out test commands, "Run 30" (chosen where the base model fails; Mac 26 pass / 4 fail) | 30 | 0 | 26 | 16 |
+| **Total** | **62** | **10 (16%)** | **50 (81%)** | **32 (52%)** |
+
+Valid JSON: Mac 62/62, phone 54/62 (87%). Phone output identical to Mac output: 28/62. Run 30 timing on the phone (voice app, speech-to-text model loaded): average 5.8 s to first token, 7.2 s per command, 10.7 tok/s decode, peak RAM 1,176 MB. Raw results: `results/phone/int8_run30_20261111.json` (command list from `scripts/make_phone_run.py`).
 
 The fine-tuned model is better than the base model on both devices. On the full 613-command test set, the gap is much larger (32.5% → 86.3% for INT8).
 
@@ -627,7 +630,7 @@ Two Android apps were built: Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, mod
 - Each full benchmark run (memory, speed, KV cache) plus the 10-minute thermal test puts the phone under sustained load, and it throttles: CPU clocks were capped to 940 MHz and Android reported SEVERE thermal status (Section 14).
 - To limit that repeated heat and battery stress, only one variant was benchmarked on the phone: **INT8, the most accurate variant that runs smoothly on it** (86.3% exact, about 0.9 GB process RAM). It is also the recommended deployment model (Section 17).
 - Base FP16, fine-tuned FP16 and INT4 were measured on the Mac with the same scripts, the same pre-tokenized prompts and the same method (`scripts/bench_mac.py`). Those numbers are labelled (Mac) throughout.
-- For the same reason, phone accuracy was checked on 32 commands instead of all 613: a full run would be about 77 minutes of continuous load (613 × about 7.5 s). Full test-set accuracy for the same INT8 file comes from the Mac (Section 9.1). Section 9.4 shows how phone output differs from Mac output.
+- For the same reason, phone accuracy was checked on 62 commands (32 + 30 held-out test commands) instead of all 613: a full run would be about 77 minutes of continuous load (613 × about 7.5 s). Full test-set accuracy for the same INT8 file comes from the Mac (Section 9.1). Section 9.4 shows how phone output differs from Mac output.
 
 ### 11.1 Device
 | | |
@@ -871,7 +874,7 @@ Notes:
 3. **INT8 is the sweet spot.** −2.8 points for a 3.2× smaller file than FP32 (1.6× smaller than FP16). INT4 saves another 152 MiB but loses 8.5 more points vs INT8 (−11.3 vs FP32), and its errors are the dangerous kind: acting on unsupported requests.
 4. **The hybrid architecture suits phones.** The KV cache is only 8 KB/token and decode speed stays constant from 512 to 2,048 tokens of context.
 5. **Latency is dominated by the long system prompt.** Prefill takes about 85 tok/s on the phone, so 490 prompt tokens take about 5.7 s. Decode of a 15-token answer takes about 1.5 s.
-6. **The same INT8 file behaves differently on the phone.** Over 32 commands where we compared outputs, exact match was 75.0% on the Mac and 50.0% on the phone; only 14 of 32 outputs were identical. Inputs were verified identical and the Mac is deterministic. The cause is dynamic INT8 activation quantization: activations are rounded at run time, and different ARM kernels (Snapdragon 695 vs Apple M5) produce slightly different values that flip close greedy choices. Accuracy measured off-device over-estimates phone accuracy for dynamic INT8.
+6. **The same INT8 file behaves differently on the phone.** Over 62 commands where we compared outputs, exact match was 80.6% on the Mac and 51.6% on the phone; only 28 of 62 outputs were identical. Inputs were verified identical and the Mac is deterministic. The cause is dynamic INT8 activation quantization: activations are rounded at run time, and different ARM kernels (Snapdragon 695 vs Apple M5) produce slightly different values that flip close greedy choices. Accuracy measured off-device over-estimates phone accuracy for dynamic INT8.
 ![Mac vs phone, same INT8 file](../results/plots/mac_vs_phone_int8.png)
 
 7. **Thermals are acceptable:** −8% decode speed after 10 minutes of continuous load, 3% battery.
@@ -905,8 +908,8 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 - "Make sure I'm awake by 5:15" is correct at both FP32 and INT8 on the Mac. It failed only in the phone run (Section 9.4).
 
 **System limitations:**
-- **Phone coverage:** only INT8 was measured on the phone, and phone accuracy was checked on 32 commands, not 613. Repeated full benchmark and thermal runs made the phone throttle, so testing was limited to the variant that runs smoothly. The other variants and the full test set ran on the Mac (Section 11).
-- **Phone vs Mac INT8 drift** (Section 15, observation 6): the phone produced 3 non-JSON outputs in 32 commands, for example "I'm sorry, I can't assist with that." Phone-side accuracy is lower than the Mac-measured 86.3%.
+- **Phone coverage:** only INT8 was measured on the phone, and phone accuracy was checked on 62 commands, not 613. Repeated full benchmark and thermal runs made the phone throttle, so testing was limited to the variant that runs smoothly. The other variants and the full test set ran on the Mac (Section 11).
+- **Phone vs Mac INT8 drift** (Section 15, observation 6): the phone produced 8 non-JSON outputs in 62 commands, for example "I'm sorry, I can't assist with that." Phone-side accuracy is lower than the Mac-measured 86.3%.
 - **Latency:** about 6 s to first token on the Moto G34 because the 490-token system prompt is processed for every command.
 - **Speech-to-text errors propagate:** names (Ravi → "Navi"), app names (WhatsApp → "watcher") and spoken numbers ("six thirty" → "30 pm"). The LLM cannot fix a wrong transcript. Moonshine small WER on our 150 test clips: 8.42% (PyTorch), 8.52% (ONNX FP32), 9.18% (ONNX q8, used on the phone) (`results/stt/onnx_parity_wer.json`).
 - **English only.** No Hindi, Tamil or code-mixed commands.
@@ -941,7 +944,7 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 ## 18. Future optimization opportunities
 
 1. **Cache the system prompt (prefix caching).** The 490-token prompt is identical for every command. Run it once at start-up and keep the KV cache + Mamba state; each command then only processes about 15 tokens. **Estimate, not measured:** time to first token on the Moto G34 would drop from about 6 s (measured) to about 0.3 s (15 tokens at the measured 85 tok/s prefill, plus one decode step). Granite-H makes this cheap: the saved state is about 26 MB.
-2. **JSON-constrained decoding.** Allow only tokens that keep the output a valid JSON object with schema keys. This removes non-JSON replies (3 in 32 phone commands) and out-of-schema keys at almost no cost.
+2. **JSON-constrained decoding.** Allow only tokens that keep the output a valid JSON object with schema keys. This removes non-JSON replies (8 in 62 phone commands) and out-of-schema keys at almost no cost.
 3. **Weight-only or static INT8.** Keep weights INT8 but avoid run-time activation rounding, using MatMulNBits 8-bit or calibrated static INT8. This removes the phone-vs-Mac drift at the same file size.
 4. **Shorter prompt through fine-tuning.** The adapter has learned the schema, so the 7 in-prompt examples could be dropped and the model retrained with a compact prompt (about 75 tokens). **Estimate:** that cuts prefill by about 6× on top of item 1.
 5. **Data v1.3** for the unlearned patterns (negation, "reply to", app-as-verb, message containing a time or command, "tonight", relationship names), plus real recorded speech.

@@ -115,7 +115,7 @@ Full write-up with every source: report [Section 3](report/TRONX_Technical_Repor
 
 Notes:
 - **KV cache** values are identical on Mac and phone (same tensors). FP16 keeps FP16 states; INT8/INT4 keep FP32 states.
-- **Phone vs Mac:** only INT8 was benchmarked and thermal-tested on the phone. Repeated full benchmark and thermal runs made the phone throttle (CPU capped to 940 MHz, thermal status SEVERE), so testing was limited to the most accurate variant that runs smoothly on it, INT8. Base FP16, fine-tuned FP16 and INT4 were measured on the Mac with the same scripts, prompts and method. For the same reason, phone accuracy was checked on 32 commands rather than the full 613 (about 77 minutes of continuous load).
+- **Phone vs Mac:** only INT8 was benchmarked and thermal-tested on the phone. Repeated full benchmark and thermal runs made the phone throttle (CPU capped to 940 MHz, thermal status SEVERE), so testing was limited to the most accurate variant that runs smoothly on it, INT8. Base FP16, fine-tuned FP16 and INT4 were measured on the Mac with the same scripts, prompts and method. For the same reason, phone accuracy was checked on 62 commands (32 + 30 held-out test commands) rather than the full 613 (about 77 minutes of continuous load).
 - **Accuracy runtimes:**
   - Base FP16: PyTorch FP16 (Base FP32 for reference: 32.5% exact).
   - Fine-tuned variants: ONNX Runtime on the Mac.
@@ -169,7 +169,7 @@ The phone throttled briefly (status SEVERE, CPU clocks capped to 940 MHz), but d
 ![Thermal test](results/plots/phone_thermal.png)
 
 ### 7. Same INT8 model on Mac vs phone
-The same model file and the same input token ids were used on both devices; only the hardware differs. The phone is about 8× slower, and its output differs on 18 of 32 commands. Dynamic INT8 rounds activations at run time, and the phone CPU's integer kernels round slightly differently, which flips close greedy choices. See report Section 15.
+The same model file and the same input token ids were used on both devices; only the hardware differs. The phone is about 8× slower, and its output differs on 34 of 62 commands. Dynamic INT8 rounds activations at run time, and the phone CPU's integer kernels round slightly differently, which flips close greedy choices. See report Section 15.
 
 ![Mac vs phone](results/plots/mac_vs_phone_int8.png)
 
@@ -191,14 +191,17 @@ The same model file and the same input token ids were used on both devices; only
 | 10 | i an hr and a half remind me to check on the briyani | ❌ `{"intent": "create_reminder", "task": "check on the briyani", "time": "13:30", "date": "today"}` | ✅ `{"intent": "create_reminder", "task": "check on the briyani", "in": "01:30"}` | ❌ `{"intent": "create_reminder", "task": "check on the briyani", "time": "01:30"}` |
 | | **Correct** | **2 / 10** | **9 / 10** | **7 / 10** |
 
-**All commands tested on both devices** (32 commands outside the training data: demo prompts, hard informal commands with typos, and free-typed commands):
+**All commands tested on both devices** (62 runs: demo prompts, hard informal commands with typos, free-typed commands, and 30 held-out test commands run with the voice app's "Run 30" button):
 
 | Command set | n | Base FP32 (Mac) | Fine-tuned INT8 (Mac) | Fine-tuned INT8 (phone) |
 |---|---:|---:|---:|---:|
 | Demo prompts (where the base model fails) | 10 | 0 | 9 | 7 |
 | Hard commands (typos, informal, self-corrections) | 11 | 4 | 6 | 5 |
 | Free-typed commands in the phone app | 11 | 6 | 9 | 4 |
-| **Total** | **32** | **10 (31%)** | **24 (75%)** | **16 (50%)** |
+| Held-out test commands, "Run 30" (chosen where the base model fails; Mac 26 pass / 4 fail) | 30 | 0 | 26 | 16 |
+| **Total** | **62** | **10 (16%)** | **50 (81%)** | **32 (52%)** |
+
+Valid JSON: Mac 62/62, phone 54/62 (87%). Phone output identical to Mac output: 28/62. Run 30 timing on the phone (voice app, speech-to-text model loaded): average 5.8 s to first token, 7.2 s per command, 10.7 tok/s decode, peak RAM 1,176 MB. Raw results: `results/phone/int8_run30_20261111.json` (command list from `scripts/make_phone_run.py`).
 
 The fine-tuned model is better than the base model on both devices. On the full 613-command test set, the gap is much larger (32.5% → 86.3% for INT8).
 

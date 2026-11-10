@@ -1,0 +1,436 @@
+{
+ "description": "30 held-out test commands (base wrong; Mac INT8 26 pass / 4 fail), scripts/make_phone_run.py",
+ "mac_int8_correct": 26,
+ "mac_fp32_correct": 27,
+ "base_fp32_correct": 0,
+ "items": [
+  {
+   "n": 1,
+   "id": "a1723846acbb",
+   "text": "Um delete Gayathri from my contacts.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "unsupported"
+   },
+   "mac_int8_raw": "{\"intent\": \"unsupported\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 2,
+   "id": "641c9e38728c",
+   "text": "set an alarm for quarter to 6 in the morning",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "set_alarm",
+    "time": "05:45"
+   },
+   "mac_int8_raw": "{\"intent\": \"set_alarm\", \"time\": \"05:45\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 3,
+   "id": "a5c05e644ca8",
+   "text": "Quickly bump up volume.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "change_setting",
+    "setting": "volume",
+    "action": "increase"
+   },
+   "mac_int8_raw": "{\"intent\": \"change_setting\", \"setting\": \"volume\", \"action\": \"increase\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 4,
+   "id": "1759f9ab7b2e",
+   "text": "um delete didi from my contacts",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "unsupported"
+   },
+   "mac_int8_raw": "{\"intent\": \"unsupported\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 5,
+   "id": "ef1b52c2a83e",
+   "text": "remind me to switch off the heater",
+   "source": "handwritten",
+   "gold": {
+    "intent": "create_reminder",
+    "task": "switch off the heater"
+   },
+   "mac_int8_raw": "{\"intent\": \"create_reminder\", \"task\": \"switch off the heater\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 6,
+   "id": "4fb2c08674d3",
+   "text": "set a wake up alarm for eleven fifteen",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "set_alarm",
+    "time": "11:15",
+    "label": "wake up"
+   },
+   "mac_int8_raw": "{\"intent\": \"set_alarm\", \"time\": \"11:15\"}",
+   "mac_int8_exact": false,
+   "mac_fp32_exact": false,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 7,
+   "id": "06086a4f2335",
+   "text": "call aunty rekha",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "make_call",
+    "contact": "Aunty Rekha"
+   },
+   "mac_int8_raw": "{\"intent\": \"make_call\", \"contact\": \"Aunty Rekha\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 8,
+   "id": "fd94135d49e6",
+   "text": "hey tron open insta",
+   "source": "handwritten",
+   "gold": {
+    "intent": "open_app",
+    "app_name": "Instagram"
+   },
+   "mac_int8_raw": "{\"intent\": \"open_app\", \"app_name\": \"Instagram\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 9,
+   "id": "77a6d7984158",
+   "text": "Remind me about the rent.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "create_reminder",
+    "task": "the rent"
+   },
+   "mac_int8_raw": "{\"intent\": \"create_reminder\", \"task\": \"the rent\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 10,
+   "id": "da1e5168c0d7",
+   "text": "send money to priya and text her",
+   "source": "handwritten",
+   "gold": {
+    "intent": "unsupported"
+   },
+   "mac_int8_raw": "{\"intent\": \"unsupported\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 11,
+   "id": "c2dee0434963",
+   "text": "Send Nisha a text.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "send_message",
+    "contact": "Nisha"
+   },
+   "mac_int8_raw": "{\"intent\": \"send_message\", \"contact\": \"Nisha\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 12,
+   "id": "af52cc9ee01c",
+   "text": "text balaji the wifi password is on the fridge",
+   "source": "handwritten",
+   "gold": {
+    "intent": "send_message",
+    "contact": "Balaji",
+    "message": "the wifi password is on the fridge"
+   },
+   "mac_int8_raw": "{\"intent\": \"send_message\", \"contact\": \"Balaji\", \"message\": \"the wifi password is on the fridge\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 13,
+   "id": "1e24413b8bce",
+   "text": "it's too dark increase brightness",
+   "source": "handwritten",
+   "gold": {
+    "intent": "change_setting",
+    "setting": "brightness",
+    "action": "increase"
+   },
+   "mac_int8_raw": "{\"intent\": \"change_setting\", \"setting\": \"brightness\", \"action\": \"increase\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 14,
+   "id": "0676cf3a476c",
+   "text": "Let Balaji know reached safely.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "send_message",
+    "contact": "Balaji",
+    "message": "reached safely"
+   },
+   "mac_int8_raw": "{\"intent\": \"create_reminder\", \"task\": \"reached safely\", \"contact\": \"Balaji\"}",
+   "mac_int8_exact": false,
+   "mac_fp32_exact": false,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 15,
+   "id": "a0262ee7b8c7",
+   "text": "call the office",
+   "source": "handwritten",
+   "gold": {
+    "intent": "make_call",
+    "contact": "office"
+   },
+   "mac_int8_raw": "{\"intent\": \"make_call\", \"contact\": \"Office\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 16,
+   "id": "1065b4e09022",
+   "text": "Call Uncle Mohan on speakerphone right now.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "make_call",
+    "contact": "Uncle Mohan"
+   },
+   "mac_int8_raw": "{\"intent\": \"make_call\", \"contact\": \"Uncle Mohan\", \"phone_type\": \"speakerphone\"}",
+   "mac_int8_exact": false,
+   "mac_fp32_exact": false,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 17,
+   "id": "2158b408626e",
+   "text": "hey tron remind me to stretch every evening",
+   "source": "handwritten",
+   "gold": {
+    "intent": "create_reminder",
+    "task": "stretch every evening"
+   },
+   "mac_int8_raw": "{\"intent\": \"create_reminder\", \"task\": \"stretch\", \"time\": \"18:00\"}",
+   "mac_int8_exact": false,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 18,
+   "id": "6b8e417109cf",
+   "text": "Open file manager and play the latest song.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "open_app",
+    "app_name": "Files"
+   },
+   "mac_int8_raw": "{\"intent\": \"open_app\", \"app_name\": \"Files\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 19,
+   "id": "7b0c196036df",
+   "text": "Please send Joseph a text.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "send_message",
+    "contact": "Joseph"
+   },
+   "mac_int8_raw": "{\"intent\": \"send_message\", \"contact\": \"Joseph\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 20,
+   "id": "acd082b8d370",
+   "text": "Hey Tron, alarm for quarter past 3 AM this Saturday.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "set_alarm",
+    "time": "03:15",
+    "date": "saturday"
+   },
+   "mac_int8_raw": "{\"intent\": \"set_alarm\", \"time\": \"03:15\", \"date\": \"saturday\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 21,
+   "id": "f81a1a425973",
+   "text": "order a coffee",
+   "source": "handwritten",
+   "gold": {
+    "intent": "unsupported"
+   },
+   "mac_int8_raw": "{\"intent\": \"unsupported\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 22,
+   "id": "ffb89419dac0",
+   "text": "please open an app right now",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "open_app"
+   },
+   "mac_int8_raw": "{\"intent\": \"open_app\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 23,
+   "id": "1242a9c5c997",
+   "text": "ok tron decrease volume",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "change_setting",
+    "setting": "volume",
+    "action": "decrease"
+   },
+   "mac_int8_raw": "{\"intent\": \"change_setting\", \"setting\": \"volume\", \"action\": \"decrease\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 24,
+   "id": "9d281ee7b216",
+   "text": "Remind me to defrost the chicken on Tuesday.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "create_reminder",
+    "task": "defrost the chicken",
+    "date": "tuesday"
+   },
+   "mac_int8_raw": "{\"intent\": \"create_reminder\", \"task\": \"defrost the chicken\", \"date\": \"tuesday\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 25,
+   "id": "129255f03c7a",
+   "text": "ok tron get me up at nine at night",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "set_alarm",
+    "time": "21:00"
+   },
+   "mac_int8_raw": "{\"intent\": \"set_alarm\", \"time\": \"21:00\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 26,
+   "id": "21a7bf1e3043",
+   "text": "ok tron send fatima a message via sms the movie starts at 7.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "send_message",
+    "contact": "Fatima",
+    "message": "the movie starts at 7",
+    "app": "SMS"
+   },
+   "mac_int8_raw": "{\"intent\": \"send_message\", \"contact\": \"Fatima\", \"message\": \"the movie starts at 7\", \"app\": \"SMS\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 27,
+   "id": "9d1a730a09b2",
+   "text": "Set a timer in 25 minutes.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "unsupported"
+   },
+   "mac_int8_raw": "{\"intent\": \"unsupported\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 28,
+   "id": "138b8833a97c",
+   "text": "Schedule a reminder next Friday at 4 o'clock to fill the water bottle.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "create_reminder",
+    "task": "fill the water bottle",
+    "time": "04:00",
+    "date": "friday"
+   },
+   "mac_int8_raw": "{\"intent\": \"create_reminder\", \"task\": \"fill the water bottle\", \"time\": \"04:00\", \"date\": \"friday\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 29,
+   "id": "2f3b4c9393d5",
+   "text": "wake me at 9 tomorrow morning",
+   "source": "handwritten",
+   "gold": {
+    "intent": "set_alarm",
+    "time": "09:00",
+    "date": "tomorrow"
+   },
+   "mac_int8_raw": "{\"intent\": \"set_alarm\", \"time\": \"09:00\", \"date\": \"tomorrow\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  },
+  {
+   "n": 30,
+   "id": "604338dabe6a",
+   "text": "Turn off Wi-Fi and turn on Bluetooth for me.",
+   "source": "synthetic_template",
+   "gold": {
+    "intent": "change_setting",
+    "setting": "wifi",
+    "action": "off"
+   },
+   "mac_int8_raw": "{\"intent\": \"change_setting\", \"setting\": \"wifi\", \"action\": \"off\"}",
+   "mac_int8_exact": true,
+   "mac_fp32_exact": true,
+   "base_fp32_exact": false
+  }
+ ]
+}

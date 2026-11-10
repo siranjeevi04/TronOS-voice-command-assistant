@@ -2,6 +2,7 @@ package com.tronx.voice
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
@@ -22,6 +23,8 @@ import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.File
 import java.util.Locale
 import java.util.concurrent.Executors
@@ -29,7 +32,8 @@ import java.util.concurrent.Executors
 /**
  * TronX Voice: on-device voice/text -> JSON chat.
  *   mic -> Silero VAD -> 2 s silence -> Moonshine v2 small (ONNX q8) -> Granite-4.0-H-350M + LoRA D (ONNX INT8) -> JSON
- * Every reply shows the raw JSON plus RAM and timings. No network, no sharing.
+ * Every reply shows the raw JSON plus RAM and timings. No network.
+ * "Run 30" runs 30 held-out test commands (assets/phone_run.json, scripts/make_phone_run.py), scores them like scripts/common.py, and "Share" exports the results.
  */
 class MainActivity : Activity() {
     // palette
@@ -45,6 +49,9 @@ class MainActivity : Activity() {
     private lateinit var input: EditText
     private lateinit var mic: TextView
     private lateinit var send: TextView
+    private lateinit var runBtn: TextView
+    private lateinit var shareBtn: TextView
+    private var run30: JSONObject? = null
     private val worker = Executors.newSingleThreadExecutor()
     @Volatile private var busy = true
     @Volatile private var listening = false
@@ -78,6 +85,15 @@ class MainActivity : Activity() {
             background = round(surface, 12, stroke)
         }
         header.addView(status, LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply { topMargin = dp(8) })
+        val actions = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        fun pill(label: String, color: Int) = TextView(this).apply {
+            text = label; textSize = 13f; setTextColor(Color.WHITE); setTypeface(null, Typeface.BOLD)
+            background = round(color, 16); setPadding(dp(14), dp(7), dp(14), dp(7))
+        }
+        runBtn = pill("▶  Run 30 test commands", accent).apply { setOnClickListener { if (!busy) worker.execute { runThirty() } } }
+        shareBtn = pill("Share 30 results", surface).apply { alpha = 0.4f; setOnClickListener { shareThirty() } }
+        actions.addView(runBtn); actions.addView(shareBtn, LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply { leftMargin = dp(8) })
+        header.addView(actions, LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply { topMargin = dp(8) })
         root.addView(header)
 
         // chat
@@ -271,6 +287,94 @@ class MainActivity : Activity() {
     }
 
     private fun scrollDown() = scroll.post { scroll.fullScroll(View.FOCUS_DOWN) }
+
+    // ------------------------------------------------------------------ Run 30 (on-phone accuracy check)
+    /** Same normalisation as scripts/common.py norm_value: case-, punctuation- and space-insensitive; 40 == "40". */
+    private fun norm(v: Any?): String = when (v) {
+        is Boolean -> v.toString()
+        is Number -> { val d = v.toDouble(); if (d == Math.floor(d) && !d.isInfinite()) d.toLong().toString() else v.toString() }
+        else -> v.toString().lowercase(Locale.ROOT).trim().replace(Regex("[^\\p{L}\\p{N}_\\s:]"), "").replace(Regex("\\s+"), " ").trim()
+    }
+
+    /** Same as scripts/common.py parse_output: (object, strictly valid). */
+    private fun parse(raw: String): Pair<JSONObject?, Boolean> {
+        var s = raw.trim()
+        Regex("^```(?:json)?\\s*(.*?)\\s*```$", RegexOption.DOT_MATCHES_ALL).find(s)?.let { s = it.groupValues[1].trim() }
+        try { val tk = org.json.JSONTokener(s); val o = tk.nextValue(); if (o is JSONObject && tk.nextClean() == 0.toChar()) return o to true } catch (_: Exception) {}
+        Regex("\\{.*?\\}", RegexOption.DOT_MATCHES_ALL).find(raw)?.let { m -> try { return JSONObject(m.value) to false } catch (_: Exception) {} }
+        return null to false
+    }
+
+    /** Same as scripts/common.py score_sample: exact = intent right, every gold field right, no extra fields. */
+    private fun exact(pred: JSONObject?, gold: JSONObject): Boolean {
+        if (pred == null || pred.optString("intent") != gold.getString("intent")) return false
+        val goldKeys = gold.keys().asSequence().filter { it != "intent" }.toSet()
+        val predKeys = pred.keys().asSequence().filter { it != "intent" && !pred.isNull(it) && pred.opt(it).toString() != "" }.toSet()
+        if (predKeys != goldKeys) return false
+        return goldKeys.all { norm(pred.get(it)) == norm(gold.get(it)) }
+    }
+
+    private fun runThirty() {
+        busy = true
+        runOnUiThread { runBtn.alpha = 0.4f; shareBtn.alpha = 0.4f }
+        val set = JSONObject(assets.open("phone_run.json").bufferedReader().readText())
+        val items = set.getJSONArray("items"); val n = items.length()
+        val t = tokens!!; val eng = llm!!
+        val results = JSONArray(); val misses = StringBuilder()
+        var ok = 0; var valid = 0; var macOk = 0; var sumTtft = 0.0; var sumTotal = 0.0; var sumDec = 0.0; var peak = 0.0
+        addInfo("Run $n: $n held-out test commands (the base model gets all of them wrong; Mac INT8 got ${set.getInt("mac_int8_correct")}/$n). About ${n / 8} min.")
+        val tStart = System.nanoTime()
+        for (k in 0 until n) {
+            val it = items.getJSONObject(k); val text = it.getString("text"); val gold = it.getJSONObject("gold")
+            setStatus("Run $n: ${k + 1}/$n…", warn)
+            val g = eng.generate(t.chatIds(text), 64, t.eos)
+            val raw = t.decode(g.tokens).trim()
+            val (pred, isValid) = parse(raw); val hit = exact(pred, gold)
+            val totalMs = g.ttftMs + g.decodeMs
+            if (hit) ok++; if (isValid) valid++; if (it.getBoolean("mac_int8_exact")) macOk++
+            sumTtft += g.ttftMs; sumTotal += totalMs; sumDec += g.decodeTps; peak = maxOf(peak, g.peakRssMb)
+            results.put(JSONObject().apply {
+                put("n", it.getInt("n")); put("id", it.getString("id")); put("text", text); put("gold", gold); put("phone_raw", raw)
+                put("phone_exact", hit); put("phone_valid_json", isValid); put("mac_int8_raw", it.getString("mac_int8_raw"))
+                put("mac_int8_exact", it.getBoolean("mac_int8_exact")); put("same_as_mac", raw == it.getString("mac_int8_raw"))
+                put("prompt_tokens", g.promptTokens); put("out_tokens", g.tokens.size); put("ttft_ms", g.ttftMs)
+                put("decode_tps", g.decodeTps); put("total_ms", totalMs); put("peak_rss_mb", g.peakRssMb)
+            })
+            addInfo("${if (hit) "✅" else "❌"} ${k + 1}/$n  ${gold.getString("intent")}  ·  ${f1(totalMs / 1000)} s  ·  \"${if (text.length > 42) text.take(40) + "…" else text}\"")
+            if (!hit) misses.append("❌ \"$text\"\n   expected ${gold}\n   phone    ${raw.ifBlank { "(empty)" }}\n")
+        }
+        val mins = (System.nanoTime() - tStart) / 6e10
+        val same = (0 until n).count { results.getJSONObject(it).getBoolean("same_as_mac") }
+        run30 = JSONObject().apply {
+            put("device", "${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}"); put("model", "Granite-4.0-H-350M + LoRA D, ONNX INT8")
+            put("phone_correct", ok); put("phone_valid_json", valid); put("mac_int8_correct", macOk); put("base_fp32_correct", 0)
+            put("identical_to_mac", same); put("n", n); put("minutes", mins); put("avg_ttft_ms", sumTtft / n)
+            put("avg_total_ms", sumTotal / n); put("avg_decode_tps", sumDec / n); put("peak_rss_mb", peak); put("results", results)
+        }
+        runOnUiThread {
+            val box = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; background = round(card, 16, accent); setPadding(dp(14), dp(12), dp(14), dp(12)) }
+            box.addView(TextView(this).apply { text = "Run $n result"; textSize = 16f; setTextColor(textMain); setTypeface(null, Typeface.BOLD) })
+            box.addView(TextView(this).apply {
+                text = "Phone INT8: $ok / $n correct (${(100 * ok / n)}%)\nMac INT8 (same $n): $macOk / $n   ·   Base: 0 / $n\nValid JSON: $valid / $n   ·   identical to Mac: $same / $n"
+                textSize = 14f; setTextColor(good); setTypeface(null, Typeface.BOLD); setLineSpacing(0f, 1.2f)
+            })
+            box.addView(TextView(this).apply {
+                text = "Avg first token ${f1(sumTtft / n / 1000)} s  ·  avg total ${f1(sumTotal / n / 1000)} s  ·  decode ${f1(sumDec / n)} tok/s\nPeak RAM ${f1(peak)} MB  ·  ${f1(mins)} min" +
+                    (if (misses.isNotEmpty()) "\n\n$misses" else "")
+                textSize = 12f; setTextColor(textDim); typeface = Typeface.MONOSPACE; setLineSpacing(0f, 1.15f); setTextIsSelectable(true)
+            })
+            chat.addView(box, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = dp(10) })
+            scrollDown(); runBtn.alpha = 1f; shareBtn.alpha = 1f; shareBtn.background = round(good, 16)
+        }
+        ready()
+    }
+
+    private fun shareThirty() {
+        val r = run30 ?: run { addInfo("Run the 30 test commands first."); return }
+        val summary = "TronX Voice - Run ${r.getInt("n")}: phone ${r.getInt("phone_correct")}/${r.getInt("n")}, Mac INT8 ${r.getInt("mac_int8_correct")}/${r.getInt("n")}, valid JSON ${r.getInt("phone_valid_json")}/${r.getInt("n")}"
+        val i = Intent(Intent.ACTION_SEND).apply { type = "text/plain"; putExtra(Intent.EXTRA_SUBJECT, summary); putExtra(Intent.EXTRA_TEXT, summary + "\n\n" + r.toString()) }
+        startActivity(Intent.createChooser(i, "Share Run 30 results"))
+    }
 
     override fun onDestroy() { listening = false; worker.shutdownNow(); llm?.close(); stt?.close(); vad?.close(); super.onDestroy() }
 }

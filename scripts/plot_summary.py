@@ -48,14 +48,14 @@ fig.tight_layout(); fig.savefig(OUT / "improvement_per_intent.png", dpi=160); pl
 # ---- 2. same INT8 file, same prompts: Mac vs phone (quality + speed as small multiples, no dual axis)
 fig, ax = plt.subplots(1, 3, figsize=(10.5, 3.6))
 lab = ["Mac M5", "Moto G34"]; col = [S1, S2]
-q = {"Exact JSON": (24 / 32 * 100, 16 / 32 * 100), "Valid JSON": (100.0, 29 / 32 * 100)}
+q = {"Exact JSON": (50 / 62 * 100, 32 / 62 * 100), "Valid JSON": (100.0, 54 / 62 * 100)}
 x = range(len(q)); w = 0.36
 for j in range(2):
     xs = [i + (j - 0.5) * w for i in x]; ys = [v[j] for v in q.values()]
     ax[0].bar(xs, ys, width=w, color=col[j], label=lab[j], edgecolor=SURF, linewidth=1.5)
     for a, b in zip(xs, ys):
         ax[0].text(a, b + 1.5, f"{b:.0f}%", ha="center", fontsize=8, color=INK2)
-ax[0].set_xticks(list(x), list(q)); ax[0].set_ylim(0, 112); ax[0].set_title("Quality, 32 commands (%)", loc="left")
+ax[0].set_xticks(list(x), list(q)); ax[0].set_ylim(0, 112); ax[0].set_title("Quality, 62 commands (%)", loc="left")
 ax[0].grid(axis="x", visible=False)
 for a, title, vals, fmt in [(ax[1], "Time per command, 21 prompts (s)", {"First token": (0.766, 6.215), "Total": (1.017, 7.915)}, "{:.1f}"),
                             (ax[2], "Decode speed (tok/s)", {"Decode": (74.0, 10.2)}, "{:.0f}")]:
@@ -66,7 +66,7 @@ for a, title, vals, fmt in [(ax[1], "Time per command, 21 prompts (s)", {"First 
         for p, b in zip(xs, ys):
             a.text(p, b * 1.02 + 0.05, fmt.format(b), ha="center", fontsize=8, color=INK2)
     a.set_xticks(list(xx), list(vals)); a.set_title(title, loc="left"); a.grid(axis="x", visible=False)
-fig.suptitle("Same INT8 model file, same prompts: only the device differs (outputs identical on 14 of 32)",
+fig.suptitle("Same INT8 model file, same prompts: only the device differs (outputs identical on 28 of 62)",
              x=0.01, ha="left", fontsize=11, fontweight="bold", color=INK)
 fig.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=c) for c in col], labels=lab, frameon=False, ncol=2,
            loc="upper right", fontsize=9)
