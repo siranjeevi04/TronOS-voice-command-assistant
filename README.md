@@ -115,7 +115,7 @@ Full write-up with every source: report [Section 3](report/TRONX_Technical_Repor
 
 Notes:
 - **KV cache** values are identical on Mac and phone (same tensors). FP16 keeps FP16 states; INT8/INT4 keep FP32 states.
-- **Thermal behaviour** was measured for the deployed model (INT8).
+- **Phone vs Mac:** only INT8 was benchmarked and thermal-tested on the phone. Repeated full benchmark and thermal runs made the phone throttle (CPU capped to 940 MHz, thermal status SEVERE), so testing was limited to the most accurate variant that runs smoothly on it, INT8. Base FP16, fine-tuned FP16 and INT4 were measured on the Mac with the same scripts, prompts and method. For the same reason, phone accuracy was checked on 32 commands rather than the full 613 (about 77 minutes of continuous load).
 - **Accuracy runtimes:**
   - Base FP16: PyTorch FP16 (Base FP32 for reference: 32.5% exact).
   - Fine-tuned variants: ONNX Runtime on the Mac.

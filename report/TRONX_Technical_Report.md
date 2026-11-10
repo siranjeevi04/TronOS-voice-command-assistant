@@ -623,6 +623,12 @@ Two Android apps were built: Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, mod
 - Phone: Moto G34 5G, Android 15, battery saver off, on battery, ambient 32 °C.
 - The Mac numbers use the same app logic in Python (`scripts/bench_mac.py`) on an Apple M5 (macOS 26.6).
 
+**Why only INT8 was run on the phone:**
+- Each full benchmark run (memory, speed, KV cache) plus the 10-minute thermal test puts the phone under sustained load, and it throttles: CPU clocks were capped to 940 MHz and Android reported SEVERE thermal status (Section 14).
+- To limit that repeated heat and battery stress, only one variant was benchmarked on the phone: **INT8, the most accurate variant that runs smoothly on it** (86.3% exact, about 0.9 GB process RAM). It is also the recommended deployment model (Section 17).
+- Base FP16, fine-tuned FP16 and INT4 were measured on the Mac with the same scripts, the same pre-tokenized prompts and the same method (`scripts/bench_mac.py`). Those numbers are labelled (Mac) throughout.
+- For the same reason, phone accuracy was checked on 32 commands instead of all 613: a full run would be about 77 minutes of continuous load (613 × about 7.5 s). Full test-set accuracy for the same INT8 file comes from the Mac (Section 9.1). Section 9.4 shows how phone output differs from Mac output.
+
 ### 11.1 Device
 | | |
 |---|---|
@@ -836,7 +842,7 @@ A typical command (about 505 prompt tokens and 15 output tokens) takes about 7.5
 
 Notes:
 - **KV cache** values are identical on Mac and phone (same tensors). FP16 keeps FP16 states; INT8/INT4 keep FP32 states.
-- **Thermal behaviour** was measured for the deployed model (INT8).
+- **Phone vs Mac:** only INT8 was benchmarked and thermal-tested on the phone, because repeated full runs made the phone throttle (Section 11). The other variants were measured on the Mac with the same method, so their thermal cell is n/a.
 - **Accuracy runtimes:**
   - Base FP16: PyTorch FP16 (Base FP32 for reference: 32.5% exact).
   - Fine-tuned variants: ONNX Runtime on the Mac.
@@ -899,6 +905,7 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 - "Make sure I'm awake by 5:15" is correct at both FP32 and INT8 on the Mac. It failed only in the phone run (Section 9.4).
 
 **System limitations:**
+- **Phone coverage:** only INT8 was measured on the phone, and phone accuracy was checked on 32 commands, not 613. Repeated full benchmark and thermal runs made the phone throttle, so testing was limited to the variant that runs smoothly. The other variants and the full test set ran on the Mac (Section 11).
 - **Phone vs Mac INT8 drift** (Section 15, observation 6): the phone produced 3 non-JSON outputs in 32 commands, for example "I'm sorry, I can't assist with that." Phone-side accuracy is lower than the Mac-measured 86.3%.
 - **Latency:** about 6 s to first token on the Moto G34 because the 490-token system prompt is processed for every command.
 - **Speech-to-text errors propagate:** names (Ravi → "Navi"), app names (WhatsApp → "watcher") and spoken numbers ("six thirty" → "30 pm"). The LLM cannot fix a wrong transcript. Moonshine small WER on our 150 test clips: 8.42% (PyTorch), 8.52% (ONNX FP32), 9.18% (ONNX q8, used on the phone) (`results/stt/onnx_parity_wer.json`).
