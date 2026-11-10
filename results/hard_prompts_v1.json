@@ -1,0 +1,12 @@
+[
+ {"text": "I need to be up before sunrise tomorrow, make sure I'm awake by 5:15.", "pattern": "indirect wording (no 'alarm' word)", "gold": {"intent": "set_alarm", "time": "05:15", "date": "tomorrow"}},
+ {"text": "Set an alarm for 7, no wait, make it 7:45 in the evening.", "pattern": "self-correction (last value wins)", "gold": {"intent": "set_alarm", "time": "19:45"}},
+ {"text": "In an hour and a half, remind me to check on the biryani.", "pattern": "compound relative time + unseen task", "gold": {"intent": "create_reminder", "task": "check on the biryani", "in": "01:30"}},
+ {"text": "Remind me tonight at 9:15 to lock the back door.", "pattern": "tonight + pm inference", "gold": {"intent": "create_reminder", "task": "lock the back door", "time": "21:15", "date": "today"}},
+ {"text": "Text Ravi saying remind me to call mom tomorrow.", "pattern": "message text looks like another command", "gold": {"intent": "send_message", "contact": "Ravi", "message": "remind me to call mom tomorrow"}},
+ {"text": "Send a WhatsApp to Priya Sharma that the meeting got pushed to 4:30.", "pattern": "full name + app + time inside message", "gold": {"intent": "send_message", "contact": "Priya Sharma", "message": "the meeting got pushed to 4:30", "app": "WhatsApp"}},
+ {"text": "Don't turn on Bluetooth, turn on the Wi-Fi instead.", "pattern": "negation of first action", "gold": {"intent": "change_setting", "setting": "wifi", "action": "on"}},
+ {"text": "Bring the volume down to about thirty percent.", "pattern": "'down to N' = set (spelled number)", "gold": {"intent": "change_setting", "setting": "volume", "action": "set", "value": 30}},
+ {"text": "Hey Tron, sorry to bother you, could you possibly open up Spotify for me when you get a sec?", "pattern": "long polite wrapper", "gold": {"intent": "open_app", "app_name": "Spotify"}},
+ {"text": "Arm the home security alarm before I leave.", "pattern": "out-of-scope disguised with 'alarm'", "gold": {"intent": "unsupported"}}
+]

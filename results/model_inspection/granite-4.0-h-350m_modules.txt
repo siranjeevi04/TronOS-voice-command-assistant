@@ -1,0 +1,35 @@
+== granite-4.0-h-350m GraniteMoeHybridForCausalLM transformers 5.22.2
+  hidden_size: 768
+  num_hidden_layers: 32
+  num_attention_heads: 12
+  num_key_value_heads: 4
+  intermediate_size: 2048
+  vocab_size: 100352
+  max_position_embeddings: 32768
+  tie_word_embeddings: True
+  layer_types: ['linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'full_attention', 'linear_attention', 'linear_attention', 'full_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'full_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'full_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention']
+  layers_block_type: ['linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'full_attention', 'linear_attention', 'linear_attention', 'full_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'full_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'full_attention', 'linear_attention', 'linear_attention', 'linear_attention', 'linear_attention']
+  mamba_d_state: 128
+  mamba_n_heads: 48
+  mamba_d_conv: 4
+  mamba_expand: 2
+  total params: 340332224
+  Linear module suffix counts: {'input_linear': 32, 'output_linear': 32, 'in_proj': 28, 'out_proj': 28, 'q_proj': 4, 'k_proj': 4, 'v_proj': 4, 'o_proj': 4, 'lm_head': 1}
+    model.layers.0.shared_mlp.input_linear        in=768 out=4096
+    model.layers.0.shared_mlp.output_linear       in=2048 out=768
+    model.layers.0.mamba.in_proj                  in=768 out=3376
+    model.layers.0.mamba.out_proj                 in=1536 out=768
+    model.layers.10.self_attn.q_proj              in=768 out=768
+    model.layers.10.self_attn.k_proj              in=768 out=256
+    model.layers.10.self_attn.v_proj              in=768 out=256
+    model.layers.10.self_attn.o_proj              in=768 out=768
+    lm_head                                       in=768 out=100352
+  layers with attention q_proj: [10, 13, 17, 27]
+  chat template:
+<|start_of_role|>system<|end_of_role|>You are the TronOS voice command parser. Convert the user's command into one JSON object. Intents: set_alarm, create_reminder, open_app, make_call, send_message, change_setting, unsupported. Output only JSON.<|end_of_text|>
+<|start_of_role|>user<|end_of_role|>Set an alarm for 6:30 AM tomorrow.<|end_of_text|>
+<|start_of_role|>assistant<|end_of_role|>{"intent": "set_alarm"}<|end_of_text|>
+
+  prompt tokens (compact): 72
+  prompt tokens (schema): 446
+  eos: <|end_of_text|> 100257  pad: <|pad|>

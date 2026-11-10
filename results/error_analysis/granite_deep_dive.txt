@@ -1,0 +1,117 @@
+TOTAL 395  exact 165  failed 230
+
+PER INTENT  failed/total (exact%)
+  make_call         35/ 55  exact 36%
+  unsupported       32/ 56  exact 43%
+  set_alarm         30/ 57  exact 47%
+  open_app          14/ 57  exact 75%
+  create_reminder   42/ 56  exact 25%
+  send_message      32/ 57  exact 44%
+  change_setting    45/ 57  exact 21%
+
+ERRORS PER FAILED COMMAND: {1: 192, 2: 36, 3: 2}
+
+FAMILIES: {'spurious_hallucinated_field': 77, 'wrong_intent': 70, 'missing_field': 36, 'wrong_value': 31, 'spurious_unknown_key': 21, 'time_wrong_HHMM': 21, 'invented_intent': 4, 'text_slot_too_long': 2, 'wrong_value+copied_from_example': 2, 'time_wrong_HHMM+copied_from_example': 2, 'time_not_HHMM': 1, 'extra_text_around_json': 1, 'date_wrong': 1, 'text_slot_truncated': 1}
+
+INTENT CONFUSION (gold -> pred) among wrong-intent:
+   21 unsupported -> set_alarm
+   12 make_call -> create_reminder
+    8 change_setting -> unsupported
+    7 create_reminder -> set_alarm
+    6 open_app -> unsupported
+    4 unsupported -> open_app
+    4 change_setting -> set_alarm
+    3 unsupported -> create_reminder
+    3 unsupported -> convert_currency
+    1 unsupported -> convert
+    1 make_call -> open_app
+
+UNSUPPORTED gold misfires by phrase type:
+   12 cancel alarm         -> set_alarm
+    5 Q&A/fact             -> set_alarm
+    4 play music           -> open_app
+    3 recharge/payment     -> set_alarm
+    3 calendar query       -> create_reminder
+    3 currency             -> convert_currency
+    1 currency             -> convert
+    1 calendar query       -> set_alarm
+
+SPURIOUS (hallucinated) FIELDS:
+   33 spurious_hallucinated_field[change_setting.value]  e.g. 'can you increase volume?' -> {"intent": "change_setting", "setting": "volume", "action": "increase", "value":
+   20 spurious_hallucinated_field[create_reminder.time]  e.g. 'Don't let me forget to review the slides' -> {"intent": "create_reminder", "task": "review slides", "time": "10:00"}
+   19 spurious_unknown_key[make_call.action]             e.g. 'Call David on speaker.' -> {"intent": "make_call", "contact": "David", "action": "on"}
+   14 spurious_hallucinated_field[set_alarm.date]        e.g. 'set an alarm for 2 am' -> {"intent": "set_alarm", "time": "02:00", "date": "today"}
+    9 spurious_hallucinated_field[send_message.message]  e.g. 'Send a message to Sanjay' -> {"intent": "send_message", "contact": "Sanjay", "message": "I am not the TronOS 
+    2 spurious_unknown_key[make_call.speaker]            e.g. 'call deepa on speaker.' -> {"intent": "make_call", "contact": "Deepa", "speaker": "on"}
+    1 spurious_hallucinated_field[set_alarm.label]       e.g. 'tron set an alarm for 11:25 in the morni' -> {"intent": "set_alarm", "time": "11:25", "date": "today", "label": "morning"}
+
+MISSING FIELDS:
+   19 missing_field[send_message.app]          e.g. 'Send Papa a message through whatsapp: thanks for t' -> {"intent": "send_message", "contact": "Papa", "message": "thanks for the help."}
+   11 missing_field[create_reminder.date]      e.g. 'Remind me to attend the yoga class on friday' -> {"intent": "create_reminder", "task": "attend yoga class", "time": "friday"}
+    5 missing_field[set_alarm.label]           e.g. 'ok tron set the alarm for 10:45 on monday for scho' -> {"intent": "set_alarm", "time": "10:45", "date": "monday"}
+    1 missing_field[send_message.contact]      e.g. 'Send Mummy a message on whatsapp: i reached home.' -> {"intent": "send_message", "app": "WhatsApp", "message": "i reached home"}
+
+WRONG VALUES:
+   12 wrong_value[create_reminder.task]            
+        'Don't let me forget to review the slides.' gold={"task": "review the slides"} pred={"intent": "create_reminder", "task": "review slides", "time": "10:00"
+        'Remind me to attend the yoga class on friday' gold={"task": "attend the yoga class", "date": "friday"} pred={"intent": "create_reminder", "task": "attend yoga class", "time": "fr
+        'please remind me to check my email at quarter to 4 pm.' gold={"task": "check my email", "time": "15:45"} pred={"intent": "create_reminder", "task": "check email", "time": "14:45"}
+   11 time_wrong_HHMM[create_reminder.time]        
+        'please remind me to recharge my phone at quarter to 2 p' gold={"task": "recharge my phone", "time": "13:45"} pred={"intent": "create_reminder", "task": "recharge my phone", "time": "14
+        'please remind me to check my email at quarter to 4 pm.' gold={"task": "check my email", "time": "15:45"} pred={"intent": "create_reminder", "task": "check email", "time": "14:45"}
+        'ok tron quickly remind me to lock the door on wednesday' gold={"task": "lock the door", "time": "02:00", "date": "wednesda pred={"intent": "create_reminder", "task": "lock the door", "time": "14:00"
+   10 time_wrong_HHMM[set_alarm.time]              
+        'tron set an alarm for half past seven in the evening.' gold={"time": "19:30"} pred={"intent": "set_alarm", "time": "17:30", "date": "today"}
+        'set the alarm for four thirty in the morning on friday ' gold={"time": "04:30", "date": "friday", "label": "medicine"} pred={"intent": "set_alarm", "time": "16:30", "date": "friday", "label": "m
+        'i want to wake up at two ten pm on monday.' gold={"time": "14:10", "date": "monday"} pred={"intent": "set_alarm", "time": "14:20", "date": "monday"}
+    8 wrong_value[open_app.app_name]               
+        'open file manager.' gold={"app_name": "Files"} pred={"intent": "open_app", "app_name": "File Manager"}
+        'open file manager and call olivia' gold={"app_name": "Files"} pred={"intent": "open_app", "app_name": "File Manager"}
+        'open phone pe' gold={"app_name": "Phonepe"} pred={"intent": "open_app", "app_name": "Phone"}
+    7 wrong_value[change_setting.action]           
+        'please reduce media volume' gold={"setting": "volume", "action": "decrease"} pred={"intent": "change_setting", "setting": "volume", "action": "set", "va
+        'Turn DND on' gold={"setting": "do_not_disturb", "action": "on"} pred={"intent": "change_setting", "setting": "do_not_disturb", "action": "s
+        'turn dark mode on' gold={"setting": "dark_mode", "action": "on"} pred={"intent": "change_setting", "setting": "dark_mode", "action": "set", 
+    2 text_slot_too_long[send_message.message]     
+        'Send a message to Anna saying i'll be there in five min' gold={"contact": "Anna", "message": "i'll be there in five minute pred={"intent": "send_message", "contact": "Anna", "message": "i will be th
+        'um send anna a message via whatsapp let's meet at 5' gold={"contact": "Anna", "message": "let's meet at 5", "app": "Wh pred={"intent": "send_message", "contact": "Anna", "message": "Let's meet a
+    2 wrong_value[send_message.message]            
+        'Send Keerthi a message on whatsapp are you free tonight' gold={"contact": "Keerthi", "message": "are you free tonight", "a pred={"intent": "send_message", "contact": "Keerthi", "message": "I am free
+        'send didi a message via whatsapp dinner is ready' gold={"contact": "Didi", "message": "dinner is ready", "app": "Wh pred={"intent": "send_message", "contact": "Didi", "message": "I am ready f
+    2 time_wrong_HHMM+copied_from_example[set_alarm.time]
+        'I want to wake up at half past two am this saturday' gold={"time": "02:30", "date": "saturday"} pred={"intent": "set_alarm", "time": "06:30", "date": "saturday"}
+        'set an alarm for half past two pm' gold={"time": "14:30"} pred={"intent": "set_alarm", "time": "06:30", "date": "tomorrow"}
+    1 wrong_value+copied_from_example[send_message.message]
+        'send a message to divya saying i'm on my way.' gold={"contact": "Divya", "message": "i'm on my way"} pred={"intent": "send_message", "contact": "divya", "message": "i am on my 
+    1 time_not_HHMM[set_alarm.time]                
+        'hey tronos set an alarm for 10.50am.' gold={"time": "10:50"} pred={"intent": "set_alarm", "time": "10.50", "date": "today"}
+    1 wrong_value+copied_from_example[make_call.contact]
+        'tron please call mummy please.' gold={"contact": "Mummy"} pred={"intent": "make_call", "contact": "Mom"}
+    1 wrong_value[make_call.contact]               
+        'um call keerthi please' gold={"contact": "Keerthi"} pred={"intent": "make_call", "contact": "Kerthi"}
+    1 wrong_value[set_alarm.label]                 
+        'set the alarm for 6.20 in the evening tomorrow for cook' gold={"time": "18:20", "date": "tomorrow", "label": "cooking"} pred={"intent": "set_alarm", "time": "18:20", "date": "tomorrow", "label": 
+    1 date_wrong[set_alarm.date]                   
+        'set alarm 10:25am this saturday' gold={"time": "10:25", "date": "saturday"} pred={"intent": "set_alarm", "time": "10:25", "date": "this saturday"}
+    1 text_slot_truncated[send_message.message]    
+        'hey tron send a message to ananya saying lunch at one.' gold={"contact": "Ananya", "message": "lunch at one"} pred={"intent": "send_message", "contact": "Ananya", "message": "lunch"}
+
+TIME ERROR SUBTYPES:
+   12 AM/PM flipped (12 h off)
+    4 'half past' wrong
+    3 minutes wrong
+    3 'quarter to' wrong
+    1 not HH:MM format
+    1 hour wrong
+
+CHANGE_SETTING failures by gold action:
+    9 gold action=off pred={}
+    8 gold action=increase pred={"action": "increase", "value": 100}
+    5 gold action=increase pred={"action": "increase", "value": 10}
+    4 gold action=increase pred={"action": "increase", "value": 40}
+    3 gold action=on pred={"action": "set", "value": 1}
+    2 gold action=increase pred={"action": "increase", "value": 0}
+    2 gold action=decrease pred={"action": "set", "value": 30}
+    2 gold action=decrease pred={"action": "increase", "value": 10}
+    2 gold action=decrease pred={"action": "decrease", "value": 10}
+    2 gold action=on pred={}

@@ -1,0 +1,1111 @@
+{
+  "run": "zeroshot_val_LFM2.5-350M_schema",
+  "n": 395,
+  "failures": 278,
+  "fail_by_intent": {
+    "make_call": 18,
+    "unsupported": 51,
+    "set_alarm": 48,
+    "create_reminder": 56,
+    "open_app": 20,
+    "send_message": 35,
+    "change_setting": 50
+  },
+  "by_source": {
+    "synthetic_template|fail": 278,
+    "synthetic_template|exact": 117
+  },
+  "error_families": {
+    "missing_field": 93,
+    "spurious_hallucinated_field": 92,
+    "wrong_intent": 84,
+    "wrong_value": 63,
+    "date_wrong+copied_from_example": 31,
+    "spurious_unknown_key": 28,
+    "time_wrong_HHMM": 16,
+    "text_slot_truncated": 2,
+    "time_wrong_HHMM+copied_from_example": 2,
+    "wrong_value+copied_from_example": 1,
+    "invented_intent": 1,
+    "extra_text_around_json": 1
+  },
+  "error_tags": {
+    "spurious_hallucinated_field[change_setting.value]": 46,
+    "wrong_value[change_setting.action]": 46,
+    "missing_field[change_setting.setting]": 44,
+    "date_wrong+copied_from_example[set_alarm.date]": 28,
+    "spurious_unknown_key[unsupported.action]": 21,
+    "wrong_intent[create_reminder->send_message]": 19,
+    "spurious_hallucinated_field[send_message.message]": 18,
+    "missing_field[create_reminder.task]": 16,
+    "wrong_intent[make_call->open_app]": 15,
+    "missing_field[send_message.app]": 15,
+    "spurious_hallucinated_field[set_alarm.date]": 14,
+    "missing_field[set_alarm.label]": 14,
+    "wrong_intent[unsupported->set_alarm]": 12,
+    "time_wrong_HHMM[set_alarm.time]": 8,
+    "time_wrong_HHMM[create_reminder.time]": 8,
+    "spurious_hallucinated_field[create_reminder.time]": 8,
+    "wrong_value[create_reminder.task]": 7,
+    "wrong_intent[open_app->make_call]": 7,
+    "wrong_value[open_app.app_name]": 6,
+    "wrong_intent[create_reminder->unsupported]": 6,
+    "spurious_hallucinated_field[send_message.app]": 4,
+    "spurious_unknown_key[unsupported.value]": 4,
+    "wrong_intent[unsupported->open_app]": 4,
+    "missing_field[create_reminder.date]": 4,
+    "wrong_intent[open_app->unsupported]": 4,
+    "wrong_intent[unsupported->create_reminder]": 4,
+    "wrong_intent[create_reminder->change_setting]": 3,
+    "date_wrong+copied_from_example[create_reminder.date]": 3,
+    "spurious_unknown_key[unsupported.field]": 2,
+    "wrong_intent[unsupported->make_call]": 2,
+    "time_wrong_HHMM+copied_from_example[create_reminder.time]": 2,
+    "spurious_hallucinated_field[create_reminder.date]": 2,
+    "wrong_value[make_call.contact]": 2,
+    "wrong_intent[unsupported->send_message]": 1,
+    "wrong_value+copied_from_example[send_message.message]": 1,
+    "spurious_unknown_key[unsupported.setting]": 1,
+    "wrong_intent[change_setting->set]": 1,
+    "invented_intent[set]": 1,
+    "text_slot_truncated[create_reminder.task]": 1,
+    "wrong_intent[open_app->set_alarm]": 1,
+    "wrong_value[send_message.contact]": 1,
+    "wrong_intent[open_app->change_setting]": 1,
+    "extra_text_around_json": 1,
+    "wrong_intent[create_reminder->make_call]": 1,
+    "wrong_intent[open_app->send_message]": 1,
+    "wrong_intent[create_reminder->set_alarm]": 1,
+    "wrong_intent[make_call->send_message]": 1,
+    "wrong_value[send_message.app]": 1,
+    "text_slot_truncated[send_message.message]": 1
+  },
+  "examples": {
+    "wrong_intent[make_call->open_app]": [
+      {
+        "text": "video call manoj",
+        "gold": {
+          "intent": "make_call",
+          "contact": "Manoj"
+        },
+        "raw": "{\"intent\": \"open_app\", \"app_name\": \"video_call\"}"
+      },
+      {
+        "text": "Video call Aditya",
+        "gold": {
+          "intent": "make_call",
+          "contact": "Aditya"
+        },
+        "raw": "{\"intent\": \"open_app\", \"app_name\": \"Video Call Aditya\"}"
+      },
+      {
+        "text": "Video call Mummy",
+        "gold": {
+          "intent": "make_call",
+          "contact": "Mummy"
+        },
+        "raw": "{\"intent\": \"open_app\", \"app_name\": \"Video Call Mummy\"}"
+      }
+    ],
+    "wrong_intent[unsupported->send_message]": [
+      {
+        "text": "um um",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Priya\", \"message\": \"i am on my way\"}"
+      }
+    ],
+    "spurious_hallucinated_field[set_alarm.date]": [
+      {
+        "text": "set an alarm for 2 am",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "02:00"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"02:00\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "tron set an alarm for half past seven in the evening.",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "19:30"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"19:30\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "hey set an alarm for 3.05 pm.",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "15:05"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"15:05\", \"date\": \"tomorrow\"}"
+      }
+    ],
+    "missing_field[set_alarm.label]": [
+      {
+        "text": "ok tron set the alarm for 10:45 on monday for school run",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "10:45",
+          "date": "monday",
+          "label": "school run"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"10:45\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "hey tronos set the alarm for 04:10 this sunday for gym.",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "04:10",
+          "date": "sunday",
+          "label": "gym"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"04:10\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "Set the alarm for 2 AM this sunday for school run",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "02:00",
+          "date": "sunday",
+          "label": "school run"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"02:00\", \"date\": \"tomorrow\"}"
+      }
+    ],
+    "date_wrong+copied_from_example[set_alarm.date]": [
+      {
+        "text": "ok tron set the alarm for 10:45 on monday for school run",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "10:45",
+          "date": "monday",
+          "label": "school run"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"10:45\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "hey tronos set the alarm for 04:10 this sunday for gym.",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "04:10",
+          "date": "sunday",
+          "label": "gym"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"04:10\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "Set the alarm for 2 AM this sunday for school run",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "02:00",
+          "date": "sunday",
+          "label": "school run"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"02:00\", \"date\": \"tomorrow\"}"
+      }
+    ],
+    "wrong_intent[create_reminder->send_message]": [
+      {
+        "text": "Don't let me forget to review the slides.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "review the slides"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Priya\", \"message\": \"I will review the slides\", \"app\": \"YouTube\"}"
+      },
+      {
+        "text": "hey don't let me forget to check my email.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "check my email"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Priya\", \"message\": \"hey don't let me forget to check my email\"}"
+      },
+      {
+        "text": "Don't let me forget to drink water",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "drink water"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Priya\", \"message\": \"I'm on my way\", \"app\": \"YouTube\"}"
+      }
+    ],
+    "wrong_intent[unsupported->set_alarm]": [
+      {
+        "text": "ok tron cancel my 5 pm alarm",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"17:00\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "uh cancel my 05:20 alarm.",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"05:20\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "Cancel my 11AM alarm",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"11:00\", \"date\": \"today\"}"
+      }
+    ],
+    "wrong_value[open_app.app_name]": [
+      {
+        "text": "open file manager.",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Files"
+        },
+        "raw": "{\"intent\": \"open_app\", \"app_name\": \"file_manager\"}"
+      },
+      {
+        "text": "open file manager and call olivia",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Files"
+        },
+        "raw": "{\"intent\": \"open_app\", \"app_name\": \"file_manager\"}, {\"intent\": \"make_call\", \"contact\": \"Olivia\"}"
+      },
+      {
+        "text": "open phone pe",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Phonepe"
+        },
+        "raw": "{\"intent\": \"open_app\", \"app_name\": \"phone\"}"
+      }
+    ],
+    "spurious_unknown_key[unsupported.field]": [
+      {
+        "text": "hey tronos can you what is the capital of france?",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"field\": \"unsupported\"}"
+      },
+      {
+        "text": "please what is the capital of France",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"field\": \"unsupported\"}"
+      }
+    ],
+    "wrong_value+copied_from_example[send_message.message]": [
+      {
+        "text": "send a message to divya saying i'm on my way.",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Divya",
+          "message": "i'm on my way"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"divya\", \"message\": \"i am on my way\"}"
+      }
+    ],
+    "spurious_unknown_key[unsupported.setting]": [
+      {
+        "text": "uh what is the capital of France?",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"setting\": \"location\"}"
+      }
+    ],
+    "spurious_hallucinated_field[send_message.app]": [
+      {
+        "text": "Send a message to Sanjay",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Sanjay"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Sanjay\", \"message\": \"hey\", \"app\": \"WhatsApp\"}"
+      },
+      {
+        "text": "um send a message to akka.",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Akka"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Akka\", \"message\": \"hello\", \"app\": \"Akka\"}"
+      },
+      {
+        "text": "ok tron uh send a message to Harini",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Harini"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Harini\", \"message\": \"hey harini\", \"app\": \"TronOS\"}"
+      }
+    ],
+    "spurious_hallucinated_field[send_message.message]": [
+      {
+        "text": "Send a message to Sanjay",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Sanjay"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Sanjay\", \"message\": \"hey\", \"app\": \"WhatsApp\"}"
+      },
+      {
+        "text": "Send a message to Jessica.",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Jessica"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Jessica\", \"message\": \"i am on my way\"}"
+      },
+      {
+        "text": "Send a message to Divya.",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Divya"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Divya\", \"message\": \"i am on my way\"}"
+      }
+    ],
+    "wrong_intent[unsupported->make_call]": [
+      {
+        "text": "recharge my phone with 299 plan",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"make_call\", \"contact\": \"Mom\"}"
+      },
+      {
+        "text": "please recharge my phone with 299 plan",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"make_call\", \"contact\": \"Mom\"}"
+      }
+    ],
+    "spurious_unknown_key[unsupported.action]": [
+      {
+        "text": "uninstall calculator.",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"action\": \"change_setting\"}"
+      },
+      {
+        "text": "ok tron quickly what's my bank balance?",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"action\": \"change_setting\"}"
+      },
+      {
+        "text": "Uninstall clock.",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"action\": \"change_setting\"}"
+      }
+    ],
+    "spurious_hallucinated_field[change_setting.value]": [
+      {
+        "text": "can you increase volume?",
+        "gold": {
+          "intent": "change_setting",
+          "setting": "volume",
+          "action": "increase"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"action\": \"set\", \"value\": 100}"
+      },
+      {
+        "text": "please reduce media volume",
+        "gold": {
+          "intent": "change_setting",
+          "setting": "volume",
+          "action": "decrease"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"action\": \"set\", \"value\": 40}"
+      },
+      {
+        "text": "could you please turn the hotspot on.",
+        "gold": {
+          "intent": "change_setting",
+          "setting": "hotspot",
+          "action": "on"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"action\": \"set\", \"value\": 1}"
+      }
+    ],
+    "missing_field[change_setting.setting]": [
+      {
+        "text": "can you increase volume?",
+        "gold": {
+          "intent": "change_setting",
+          "setting": "volume",
+          "action": "increase"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"action\": \"set\", \"value\": 100}"
+      },
+      {
+        "text": "please reduce media volume",
+        "gold": {
+          "intent": "change_setting",
+          "setting": "volume",
+          "action": "decrease"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"action\": \"set\", \"value\": 40}"
+      },
+      {
+        "text": "could you please turn the hotspot on.",
+        "gold": {
+          "intent": "change_setting",
+          "setting": "hotspot",
+          "action": "on"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"action\": \"set\", \"value\": 1}"
+      }
+    ],
+    "wrong_value[change_setting.action]": [
+      {
+        "text": "can you increase volume?",
+        "gold": {
+          "intent": "change_setting",
+          "setting": "volume",
+          "action": "increase"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"action\": \"set\", \"value\": 100}"
+      },
+      {
+        "text": "please reduce media volume",
+        "gold": {
+          "intent": "change_setting",
+          "setting": "volume",
+          "action": "decrease"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"action\": \"set\", \"value\": 40}"
+      },
+      {
+        "text": "could you please turn the hotspot on.",
+        "gold": {
+          "intent": "change_setting",
+          "setting": "hotspot",
+          "action": "on"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"action\": \"set\", \"value\": 1}"
+      }
+    ],
+    "missing_field[send_message.app]": [
+      {
+        "text": "Send Papa a message through whatsapp: thanks for the help.",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Papa",
+          "message": "thanks for the help",
+          "app": "WhatsApp"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Papa\", \"message\": \"thanks for the help\"}"
+      },
+      {
+        "text": "Send Keerthi a message on whatsapp are you free tonight",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Keerthi",
+          "message": "are you free tonight",
+          "app": "WhatsApp"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Keerthi\", \"message\": \"are you free tonight\"}"
+      },
+      {
+        "text": "Send Keerthi a message by sms: flight landed.",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Keerthi",
+          "message": "flight landed",
+          "app": "SMS"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Keerthi\", \"message\": \"flight landed\"}"
+      }
+    ],
+    "wrong_intent[change_setting->set]": [
+      {
+        "text": "Turn DND on",
+        "gold": {
+          "intent": "change_setting",
+          "setting": "do_not_disturb",
+          "action": "on"
+        },
+        "raw": "{\"intent\": \"set\", \"time\": \"00:00\", \"date\": \"today\"}"
+      }
+    ],
+    "invented_intent[set]": [
+      {
+        "text": "Turn DND on",
+        "gold": {
+          "intent": "change_setting",
+          "setting": "do_not_disturb",
+          "action": "on"
+        },
+        "raw": "{\"intent\": \"set\", \"time\": \"00:00\", \"date\": \"today\"}"
+      }
+    ],
+    "time_wrong_HHMM[set_alarm.time]": [
+      {
+        "text": "i want to wake up at two ten pm on monday.",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "14:10",
+          "date": "monday"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"20:00\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "tron i want to wake up at half past eleven pm on wednesday.",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "23:30",
+          "date": "wednesday"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"18:30\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "I want to wake up at half past two am this saturday",
+        "gold": {
+          "intent": "set_alarm",
+          "time": "02:30",
+          "date": "saturday"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"14:30\", \"date\": \"saturday\"}"
+      }
+    ],
+    "missing_field[create_reminder.task]": [
+      {
+        "text": "please remind me to submit the report at 05:15.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "submit the report",
+          "time": "05:15"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"05:15\"}"
+      },
+      {
+        "text": "remind me to charge the car on tuesday",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "charge the car",
+          "date": "tuesday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"09:00\", \"date\": \"tuesday\"}"
+      },
+      {
+        "text": "ok tron quickly remind me to lock the door on wednesday at two in the morning.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "lock the door",
+          "time": "02:00",
+          "date": "wednesday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"14:00\", \"date\": \"Wednesday\"}"
+      }
+    ],
+    "spurious_unknown_key[unsupported.value]": [
+      {
+        "text": "convert 100 dollars to rupees.",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"value\": 100}"
+      },
+      {
+        "text": "What is the capital of France?",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"value\": \"Paris\"}"
+      },
+      {
+        "text": "tron convert 100 dollars to rupees",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"value\": 0}"
+      }
+    ],
+    "wrong_value[create_reminder.task]": [
+      {
+        "text": "please remind me to recharge my phone at quarter to 2 pm.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "recharge my phone",
+          "time": "13:45"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"15:00\", \"task\": \"recharge phone\"}"
+      },
+      {
+        "text": "please remind me to check my email at quarter to 4 pm.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "check my email",
+          "time": "15:45"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"16:00\", \"task\": \"check email\"}"
+      },
+      {
+        "text": "Remind me to join the team meeting this sunday",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "join the team meeting",
+          "date": "sunday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"task\": \"join team meeting\", \"time\": \"19:00\"}"
+      }
+    ],
+    "time_wrong_HHMM[create_reminder.time]": [
+      {
+        "text": "please remind me to recharge my phone at quarter to 2 pm.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "recharge my phone",
+          "time": "13:45"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"15:00\", \"task\": \"recharge phone\"}"
+      },
+      {
+        "text": "please remind me to check my email at quarter to 4 pm.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "check my email",
+          "time": "15:45"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"16:00\", \"task\": \"check email\"}"
+      },
+      {
+        "text": "ok tron quickly remind me to lock the door on wednesday at two in the morning.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "lock the door",
+          "time": "02:00",
+          "date": "wednesday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"14:00\", \"date\": \"Wednesday\"}"
+      }
+    ],
+    "wrong_intent[open_app->make_call]": [
+      {
+        "text": "Launch Zomato.",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Zomato"
+        },
+        "raw": "{\"intent\": \"make_call\", \"contact\": \"Zomato\", \"message\": \"Zomato is launching today\", \"app\": \"Zomato\"}"
+      },
+      {
+        "text": "Launch calculator",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Calculator"
+        },
+        "raw": "{\"intent\": \"make_call\", \"contact\": \"Mom\"}"
+      },
+      {
+        "text": "could you please open phone settings and call Thatha.",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Settings"
+        },
+        "raw": "{\"intent\": \"make_call\", \"contact\": \"Thatha\"}"
+      }
+    ],
+    "wrong_intent[create_reminder->unsupported]": [
+      {
+        "text": "Don't let me forget to renew my insurance.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "renew my insurance"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"action\": \"change_setting\"}"
+      },
+      {
+        "text": "don't let me forget to back up my phone.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "back up my phone"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"action\": \"change_setting\"}"
+      },
+      {
+        "text": "don't let me forget to book train tickets",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "book train tickets"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"action\": \"change_setting\"}"
+      }
+    ],
+    "wrong_intent[unsupported->open_app]": [
+      {
+        "text": "hey tronos play some music.",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"open_app\", \"app_name\": \"YouTube\"}"
+      },
+      {
+        "text": "tron play some music",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"open_app\", \"app_name\": \"Tron\"}"
+      },
+      {
+        "text": "please play some music",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"open_app\", \"app_name\": \"YouTube\"}"
+      }
+    ],
+    "missing_field[create_reminder.date]": [
+      {
+        "text": "Remind me to attend the yoga class on friday",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "attend the yoga class",
+          "date": "friday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"task\": \"yoga class\", \"time\": \"09:00\"}"
+      },
+      {
+        "text": "remind me to take out the trash on monday",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "take out the trash",
+          "date": "monday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"task\": \"take out the trash\", \"time\": \"09:00\"}"
+      },
+      {
+        "text": "Remind me to join the team meeting this sunday",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "join the team meeting",
+          "date": "sunday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"task\": \"join team meeting\", \"time\": \"19:00\"}"
+      }
+    ],
+    "spurious_hallucinated_field[create_reminder.time]": [
+      {
+        "text": "Remind me to attend the yoga class on friday",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "attend the yoga class",
+          "date": "friday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"task\": \"yoga class\", \"time\": \"09:00\"}"
+      },
+      {
+        "text": "remind me to charge the car on tuesday",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "charge the car",
+          "date": "tuesday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"09:00\", \"date\": \"tuesday\"}"
+      },
+      {
+        "text": "remind me to take out the trash on monday",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "take out the trash",
+          "date": "monday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"task\": \"take out the trash\", \"time\": \"09:00\"}"
+      }
+    ],
+    "text_slot_truncated[create_reminder.task]": [
+      {
+        "text": "Remind me to attend the yoga class on friday",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "attend the yoga class",
+          "date": "friday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"task\": \"yoga class\", \"time\": \"09:00\"}"
+      }
+    ],
+    "wrong_intent[open_app->set_alarm]": [
+      {
+        "text": "Launch Settings.",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Settings"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"08:00\", \"date\": \"tomorrow\"}"
+      }
+    ],
+    "wrong_intent[open_app->unsupported]": [
+      {
+        "text": "load telegram",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Telegram"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"action\": \"change_setting\"}"
+      },
+      {
+        "text": "could you please launch Calendar",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Calendar"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"action\": \"change_setting\"}"
+      },
+      {
+        "text": "can you launch Swiggy",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Swiggy"
+        },
+        "raw": "{\"intent\": \"unsupported\", \"action\": \"change_setting\"}"
+      }
+    ],
+    "wrong_value[send_message.contact]": [
+      {
+        "text": "Send Deepa a message on telegram i miss you",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Deepa",
+          "message": "i miss you",
+          "app": "Telegram"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Daya\", \"message\": \"i miss you\"}"
+      }
+    ],
+    "wrong_intent[open_app->change_setting]": [
+      {
+        "text": "quickly load Settings.",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Settings"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"setting\": \"brightness\", \"action\": \"set\", \"value\": 40}"
+      }
+    ],
+    "extra_text_around_json": [
+      {
+        "text": "open file manager and call olivia",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Files"
+        },
+        "raw": "{\"intent\": \"open_app\", \"app_name\": \"file_manager\"}, {\"intent\": \"make_call\", \"contact\": \"Olivia\"}"
+      }
+    ],
+    "wrong_intent[create_reminder->change_setting]": [
+      {
+        "text": "don't let me forget to water the plants",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "water the plants"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"setting\": \"brightness\", \"action\": \"set\", \"value\": 40}"
+      },
+      {
+        "text": "Don't let me forget to collect the laundry",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "collect the laundry"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"setting\": \"brightness\", \"action\": \"set\", \"value\": 40}"
+      },
+      {
+        "text": "don't let me forget to fill the water bottle.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "fill the water bottle"
+        },
+        "raw": "{\"intent\": \"change_setting\", \"setting\": \"brightness\", \"action\": \"set\", \"value\": 40}"
+      }
+    ],
+    "wrong_intent[unsupported->create_reminder]": [
+      {
+        "text": "hey tron what's on my calendar today",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"10:00\", \"date\": \"today\"}"
+      },
+      {
+        "text": "tron uh what's on my calendar today",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"10:00\", \"date\": \"today\"}"
+      },
+      {
+        "text": "tron what's on my calendar today",
+        "gold": {
+          "intent": "unsupported"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"10:00\", \"date\": \"today\"}"
+      }
+    ],
+    "time_wrong_HHMM+copied_from_example[create_reminder.time]": [
+      {
+        "text": "can you please remind me to transfer the files at five twenty in the evening",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "transfer the files",
+          "time": "17:20"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"17:00\", \"task\": \"transfer files\"}"
+      },
+      {
+        "text": "please remind me to attend the yoga class at half past five am.",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "attend the yoga class",
+          "time": "05:30"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"17:00\", \"task\": \"attend yoga class\"}"
+      }
+    ],
+    "spurious_hallucinated_field[create_reminder.date]": [
+      {
+        "text": "please remind me to book a doctor appointment at 2:15 pm",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "book a doctor appointment",
+          "time": "14:15"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"14:15\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "Please remind me to practice guitar at 8.45 in the evening",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "practice guitar",
+          "time": "20:45"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"20:45\", \"date\": \"tomorrow\"}"
+      }
+    ],
+    "wrong_intent[create_reminder->make_call]": [
+      {
+        "text": "Remind me to call the plumber on thursday at 6.25 pm",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "call the plumber",
+          "time": "18:25",
+          "date": "thursday"
+        },
+        "raw": "{\"intent\": \"make_call\", \"contact\": \"plumber\"}"
+      }
+    ],
+    "date_wrong+copied_from_example[create_reminder.date]": [
+      {
+        "text": "remind me to finish the assignment on sunday at four oh five am",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "finish the assignment",
+          "time": "04:05",
+          "date": "sunday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"16:00\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "remind me to renew my insurance on sunday",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "renew my insurance",
+          "date": "sunday"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"09:00\", \"date\": \"tomorrow\"}"
+      },
+      {
+        "text": "could you please remind me to charge the car day after tomorrow",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "charge the car",
+          "date": "day_after_tomorrow"
+        },
+        "raw": "{\"intent\": \"create_reminder\", \"time\": \"18:00\", \"date\": \"tomorrow\"}"
+      }
+    ],
+    "wrong_intent[open_app->send_message]": [
+      {
+        "text": "launch my email",
+        "gold": {
+          "intent": "open_app",
+          "app_name": "Gmail"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"user\", \"message\": \"hello\", \"app\": \"email\"}"
+      }
+    ],
+    "wrong_intent[create_reminder->set_alarm]": [
+      {
+        "text": "tron remind me to take out the trash on sunday at three fifty am",
+        "gold": {
+          "intent": "create_reminder",
+          "task": "take out the trash",
+          "time": "03:50",
+          "date": "sunday"
+        },
+        "raw": "{\"intent\": \"set_alarm\", \"time\": \"15:30\", \"date\": \"tomorrow\"}"
+      }
+    ],
+    "wrong_value[make_call.contact]": [
+      {
+        "text": "call deepa on speaker.",
+        "gold": {
+          "intent": "make_call",
+          "contact": "Deepa"
+        },
+        "raw": "{\"intent\": \"make_call\", \"contact\": \"Daya\"}"
+      },
+      {
+        "text": "hey tronos call deepa please",
+        "gold": {
+          "intent": "make_call",
+          "contact": "Deepa"
+        },
+        "raw": "{\"intent\": \"make_call\", \"contact\": \"Daya\"}"
+      }
+    ],
+    "wrong_intent[make_call->send_message]": [
+      {
+        "text": "video call didi",
+        "gold": {
+          "intent": "make_call",
+          "contact": "Didi"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Didi\", \"message\": \"hey\", \"app\": \"video\"}"
+      }
+    ],
+    "wrong_value[send_message.app]": [
+      {
+        "text": "quickly send kavya a message via text the train is delayed",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Kavya",
+          "message": "the train is delayed",
+          "app": "SMS"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Kavya\", \"message\": \"train is delayed\", \"app\": \"text\"}"
+      }
+    ],
+    "text_slot_truncated[send_message.message]": [
+      {
+        "text": "quickly send kavya a message via text the train is delayed",
+        "gold": {
+          "intent": "send_message",
+          "contact": "Kavya",
+          "message": "the train is delayed",
+          "app": "SMS"
+        },
+        "raw": "{\"intent\": \"send_message\", \"contact\": \"Kavya\", \"message\": \"train is delayed\", \"app\": \"text\"}"
+      }
+    ]
+  }
+}

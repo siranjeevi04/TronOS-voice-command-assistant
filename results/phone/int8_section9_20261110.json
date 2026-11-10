@@ -1,0 +1,306 @@
+{
+ "source": "TronX Bench (INT8) Share text, pasted by user 2026-11-10 ~22:30",
+ "device": {
+  "model": "motorola moto g34 5G",
+  "soc": "QTI SM6375 (Snapdragon 695)",
+  "cpu": "6x A55 1804 MHz + 2x A78 2208 MHz",
+  "ram_total_mb": 7492,
+  "ram_avail_mb_at_start": 2038,
+  "android": "15 (API 35)",
+  "runtime": "ONNX Runtime Android 1.31.1 CPU EP, 4 threads, graph opt ALL",
+  "power": "battery saver OFF, on battery",
+  "ambient_c": 32,
+  "battery_start": "66% 34.8C"
+ },
+ "A_file_mb": 404.4,
+ "A_file_bytes": 423992240,
+ "B_load": {
+  "before_mb": 200.2,
+  "after_mb": 527.3,
+  "delta_mb": 327.1,
+  "peak_mb": 663.0,
+  "peak_delta_mb": 462.9,
+  "load_ms": 4090.2,
+  "settled_mb": 524.7,
+  "released_mb": 138.3,
+  "state_dtype": "FLOAT",
+  "kv_quant": false
+ },
+ "C_ram": {
+  "baseline_mb": 825.9,
+  "peak_mb": 895.9,
+  "after_mb": 875.5,
+  "increase_mb": 70.0
+ },
+ "E_tps": {
+  "prefill_avg": 85.42,
+  "prefill_std": 3.9,
+  "prefill_min": 69.47,
+  "prefill_max": 92.33,
+  "decode_avg": 9.76,
+  "decode_std": 1.15,
+  "decode_min": 7.3,
+  "decode_max": 11.3,
+  "gen_tokens_avg": 14.5,
+  "n": 30
+ },
+ "F_ttft_ms": {
+  "avg": 5921.37,
+  "std": 300.23,
+  "min": 5480.62,
+  "max": 7240.16,
+  "n": 30,
+  "prompt_tokens": "501-508"
+ },
+ "D_kv": {
+  "512": {
+   "kv_mb": 4.24,
+   "mamba_mb": 21.77,
+   "peak_mb": 891.3,
+   "ttft_ms": 6257.7,
+   "decode_tps": 8.64
+  },
+  "1024": {
+   "kv_mb": 8.24,
+   "mamba_mb": 21.77,
+   "peak_mb": 1083.6,
+   "ttft_ms": 11673.6,
+   "decode_tps": 9.55
+  },
+  "2048": {
+   "kv_mb": 16.24,
+   "mamba_mb": 21.77,
+   "peak_mb": 1404.2,
+   "ttft_ms": 23315.3,
+   "decode_tps": 9.84
+  }
+ },
+ "after_unload_rss_mb": 1394.1,
+ "samples_rep1": [
+  [
+   "send didi a text",
+   "{\"intent\": \"send_message\"}"
+  ],
+  [
+   "Let Fatima know keep the door open please.",
+   "I'm sorry, the user said \"let Fatima know keep the door open\"."
+  ],
+  [
+   "make a call",
+   "{\"intent\": \"make_call\"}"
+  ],
+  [
+   "Tell John don't forget the keys.",
+   "{\"intent\": \"create_reminder\", \"task\": \"the keys\"}"
+  ]
+ ],
+ "G_thermal": {
+  "start": "64% 35.4C, thermal NONE, headroom NaN (API unsupported), cpu-1-2 zone 62.0C",
+  "rows": [
+   [
+    36,
+    9.69,
+    5784.6,
+    35.5,
+    "NONE",
+    64,
+    -729,
+    "1516x6,2054x2"
+   ],
+   [
+    68,
+    9.2,
+    6544.9,
+    35.6,
+    "NONE",
+    64,
+    -717,
+    "1708x6,2054x2"
+   ],
+   [
+    99,
+    9.63,
+    5898.0,
+    35.6,
+    "NONE",
+    64,
+    -792,
+    "1708x6,2054x2"
+   ],
+   [
+    131,
+    10.2,
+    6116.5,
+    35.7,
+    "NONE",
+    64,
+    -830,
+    "1708x6,2054x2"
+   ],
+   [
+    176,
+    7.94,
+    6710.9,
+    35.8,
+    "NONE",
+    63,
+    -662,
+    "1708x6,2054x2"
+   ],
+   [
+    210,
+    9.03,
+    6756.4,
+    35.9,
+    "NONE",
+    63,
+    -796,
+    "1708x6,2054x2"
+   ],
+   [
+    247,
+    9.11,
+    5742.3,
+    35.9,
+    "NONE",
+    63,
+    -810,
+    "940x6,2054x2"
+   ],
+   [
+    278,
+    9.57,
+    5772.6,
+    35.9,
+    "NONE",
+    63,
+    -834,
+    "1708x6,2054x2"
+   ],
+   [
+    310,
+    8.91,
+    6192.8,
+    36.0,
+    "NONE",
+    63,
+    -834,
+    "1708x6,2054x2"
+   ],
+   [
+    340,
+    10.09,
+    6262.4,
+    36.0,
+    "NONE",
+    62,
+    -854,
+    "1708x6,2054x2"
+   ],
+   [
+    371,
+    9.52,
+    5926.7,
+    36.1,
+    "SEVERE",
+    62,
+    -675,
+    "940x5,1113,2054x2"
+   ],
+   [
+    401,
+    9.63,
+    5888.9,
+    36.1,
+    "SEVERE",
+    62,
+    -736,
+    "940x6,2054x2"
+   ],
+   [
+    433,
+    9.39,
+    5983.3,
+    36.0,
+    "NONE",
+    62,
+    -800,
+    "940x6,2054x2"
+   ],
+   [
+    469,
+    5.76,
+    9052.2,
+    36.1,
+    "NONE",
+    62,
+    -850,
+    "1708x6,940x2"
+   ],
+   [
+    500,
+    8.82,
+    6485.6,
+    36.2,
+    "NONE",
+    62,
+    -654,
+    "940x6,2054x2"
+   ],
+   [
+    530,
+    9.23,
+    5819.0,
+    36.2,
+    "NONE",
+    61,
+    -829,
+    "1708x6,2054x2"
+   ],
+   [
+    568,
+    8.97,
+    5919.7,
+    36.3,
+    "NONE",
+    61,
+    -766,
+    "1708x6,2054x2"
+   ],
+   [
+    599,
+    9.59,
+    5663.8,
+    36.3,
+    "NONE",
+    61,
+    -848,
+    "1516x3,940x3,2054x2"
+   ],
+   [
+    608,
+    8.92,
+    5881.7,
+    36.3,
+    "NONE",
+    61,
+    -734,
+    "940x6,2054x2"
+   ]
+  ],
+  "summary": {
+   "minutes": 10.0,
+   "batt_temp_start": 35.4,
+   "batt_temp_max": 36.3,
+   "batt_temp_end": 36.3,
+   "tps_first": 9.69,
+   "tps_last": 8.92,
+   "tps_change_pct": -8.0,
+   "worst_thermal_status": 3,
+   "headroom": "NaN (not supported by device)",
+   "battery_pct": "64 -> 61 (3% in 10 min)",
+   "generations": 76,
+   "cpu_zone_max_c": 62.0
+  }
+ }
+}

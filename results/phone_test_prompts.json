@@ -1,0 +1,94 @@
+[
+ {
+  "text": "Set an alarm in half an hour.",
+  "why": "Relative time ('in' field)",
+  "gold": {
+   "intent": "set_alarm",
+   "in": "00:30"
+  },
+  "base_raw": "{\"intent\": \"set_alarm\", \"time\": \"06:30\", \"date\": \"tomorrow\"}"
+ },
+ {
+  "text": "set an alarm for 11:59 pm",
+  "why": "12h -> 24h time",
+  "gold": {
+   "intent": "set_alarm",
+   "time": "23:59"
+  },
+  "base_raw": "{\"intent\": \"set_alarm\", \"time\": \"11:59\", \"date\": \"tomorrow\", \"in\": \"in 59 minutes\"}"
+ },
+ {
+  "text": "remind me on monday to submit the timesheet",
+  "why": "Weekday must go to 'date', not 'time'",
+  "gold": {
+   "intent": "create_reminder",
+   "task": "submit the timesheet",
+   "date": "monday"
+  },
+  "base_raw": "{\"intent\": \"create_reminder\", \"task\": \"submit the timesheet\", \"time\": \"monday\"}"
+ },
+ {
+  "text": "Don't let me forget my charger.",
+  "why": "'don't let me forget' = reminder",
+  "gold": {
+   "intent": "create_reminder",
+   "task": "my charger"
+  },
+  "base_raw": "{\"intent\": \"unsupported\"}"
+ },
+ {
+  "text": "video call grandma",
+  "why": "'video call' = make_call",
+  "gold": {
+   "intent": "make_call",
+   "contact": "Grandma"
+  },
+  "base_raw": "{\"intent\": \"create_reminder\", \"task\": \"video call grandma\", \"time\": \"18:00\"}"
+ },
+ {
+  "text": "launch the camera i want to take a picture",
+  "why": "open_app with extra words",
+  "gold": {
+   "intent": "open_app",
+   "app_name": "Camera"
+  },
+  "base_raw": "{\"intent\": \"create_reminder\", \"task\": \"take a picture\", \"time\": \"00:00\", \"date\": \"today\"}"
+ },
+ {
+  "text": "send fatima a message on telegram saying the class is cancelled",
+  "why": "All fields incl. app (unseen name)",
+  "gold": {
+   "intent": "send_message",
+   "contact": "Fatima",
+   "message": "the class is cancelled",
+   "app": "Telegram"
+  },
+  "base_raw": "{\"intent\": \"send_message\", \"contact\": \"Fatima\", \"message\": \"the class is cancelled\"}"
+ },
+ {
+  "text": "enable airplane mode",
+  "why": "Setting toggle",
+  "gold": {
+   "intent": "change_setting",
+   "setting": "airplane_mode",
+   "action": "on"
+  },
+  "base_raw": "{\"intent\": \"set_alarm\", \"time\": \"08:00\", \"date\": \"today\", \"in\": \"relative time\"}"
+ },
+ {
+  "text": "send 2000 to my mom's account",
+  "why": "Payment -> unsupported (safety)",
+  "gold": {
+   "intent": "unsupported"
+  },
+  "base_raw": "{\"intent\": \"send_message\", \"contact\": \"Mom\", \"message\": \"2000\"}"
+ },
+ {
+  "text": "read my last message",
+  "why": "Out-of-scope -> unsupported",
+  "gold": {
+   "intent": "unsupported"
+  },
+  "base_raw": "{\"intent\": \"read_message\"}"
+ }
+]

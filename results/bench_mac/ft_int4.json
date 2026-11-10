@@ -1,0 +1,90 @@
+{
+ "variant": "ft_int4",
+ "files": {
+  "model.onnx_data": 263181312,
+  "model.onnx": 1819833
+ },
+ "file_size_mb": 252.72478580474854,
+ "runtime": "onnxruntime 1.31.1 CPU EP, 4 threads, graph opt ALL",
+ "device": "arm64 Apple M5",
+ "load": {
+  "before_mb": 49.53125,
+  "after_mb": 336.4375,
+  "peak_mb": 392.703125,
+  "load_ms": 503.85375000041677,
+  "settled_mb": 336.4375,
+  "released_mb": 56.265625
+ },
+ "state_dtype": "float32",
+ "prompts": {
+  "n_prompts": 2,
+  "repeats": 1,
+  "prompt_tokens": [
+   503,
+   508
+  ],
+  "ttft_ms": {
+   "avg": 866.5133750000678,
+   "std": 9.97939799593843,
+   "min": 859.4568750049802,
+   "max": 873.5698749951553,
+   "n": 2
+  },
+  "prefill_tps": {
+   "avg": 583.3876083911366,
+   "std": 2.638531948916441,
+   "min": 581.5218845576804,
+   "max": 585.2533322245928,
+   "n": 2
+  },
+  "decode_tps": {
+   "avg": 123.71293942172424,
+   "std": 0.35464188332399055,
+   "min": 123.46216974113308,
+   "max": 123.9637091023154,
+   "n": 2
+  },
+  "gen_tokens": {
+   "avg": 19.5,
+   "std": 2.1213203435596424,
+   "min": 18,
+   "max": 21,
+   "n": 2
+  }
+ },
+ "inference_ram": {
+  "baseline_mb": 672.890625,
+  "peak_mb": 673.75,
+  "after_mb": 673.71875,
+  "increase_mb": 0.859375
+ },
+ "kv_cache": {
+  "512": {
+   "prompt_tokens": 512,
+   "output_tokens": 32,
+   "kv_mb": 4.2421875,
+   "mamba_state_mb": 21.765625,
+   "peak_mb": 674.09375,
+   "ttft_ms": 872.394271002122,
+   "decode_tps": 122.96686345665324
+  },
+  "1024": {
+   "prompt_tokens": 1024,
+   "output_tokens": 32,
+   "kv_mb": 8.2421875,
+   "mamba_state_mb": 21.765625,
+   "peak_mb": 964.859375,
+   "ttft_ms": 1812.5283750014205,
+   "decode_tps": 117.54434387799662
+  },
+  "2048": {
+   "prompt_tokens": 2048,
+   "output_tokens": 32,
+   "kv_mb": 16.2421875,
+   "mamba_state_mb": 21.765625,
+   "peak_mb": 1435.734375,
+   "ttft_ms": 3769.4542499993986,
+   "decode_tps": 112.40384391930709
+  }
+ }
+}

@@ -1,0 +1,321 @@
+{
+ "prompts": [
+  {
+   "text": "I need to be up before sunrise tomorrow, make sure I'm awake by 5:15.",
+   "pattern": "indirect wording (no 'alarm' word)",
+   "gold": {
+    "intent": "set_alarm",
+    "time": "05:15",
+    "date": "tomorrow"
+   }
+  },
+  {
+   "text": "Set an alarm for 7, no wait, make it 7:45 in the evening.",
+   "pattern": "self-correction (last value wins)",
+   "gold": {
+    "intent": "set_alarm",
+    "time": "19:45"
+   }
+  },
+  {
+   "text": "In an hour and a half, remind me to check on the biryani.",
+   "pattern": "compound relative time + unseen task",
+   "gold": {
+    "intent": "create_reminder",
+    "task": "check on the biryani",
+    "in": "01:30"
+   }
+  },
+  {
+   "text": "Remind me tonight at 9:15 to lock the back door.",
+   "pattern": "tonight + pm inference",
+   "gold": {
+    "intent": "create_reminder",
+    "task": "lock the back door",
+    "time": "21:15",
+    "date": "today"
+   }
+  },
+  {
+   "text": "Text Ravi saying remind me to call mom tomorrow.",
+   "pattern": "message text looks like another command",
+   "gold": {
+    "intent": "send_message",
+    "contact": "Ravi",
+    "message": "remind me to call mom tomorrow"
+   }
+  },
+  {
+   "text": "Send a WhatsApp to Priya Sharma that the meeting got pushed to 4:30.",
+   "pattern": "full name + app + time inside message",
+   "gold": {
+    "intent": "send_message",
+    "contact": "Priya Sharma",
+    "message": "the meeting got pushed to 4:30",
+    "app": "WhatsApp"
+   }
+  },
+  {
+   "text": "Don't turn on Bluetooth, turn on the Wi-Fi instead.",
+   "pattern": "negation of first action",
+   "gold": {
+    "intent": "change_setting",
+    "setting": "wifi",
+    "action": "on"
+   }
+  },
+  {
+   "text": "Bring the volume down to about thirty percent.",
+   "pattern": "'down to N' = set (spelled number)",
+   "gold": {
+    "intent": "change_setting",
+    "setting": "volume",
+    "action": "set",
+    "value": 30
+   }
+  },
+  {
+   "text": "Hey Tron, sorry to bother you, could you possibly open up Spotify for me when you get a sec?",
+   "pattern": "long polite wrapper",
+   "gold": {
+    "intent": "open_app",
+    "app_name": "Spotify"
+   }
+  },
+  {
+   "text": "Arm the home security alarm before I leave.",
+   "pattern": "out-of-scope disguised with 'alarm'",
+   "gold": {
+    "intent": "unsupported"
+   }
+  }
+ ],
+ "results": {
+  "base_fp32": [
+   {
+    "raw": "{\"intent\": \"set_alarm\", \"time\": \"05:15\", \"date\": \"tomorrow\", \"in\": \"relative time\", \"label\": \"in\"}",
+    "exact": false,
+    "intent_ok": true,
+    "fields": "2/2",
+    "valid": true,
+    "sec": 1.6
+   },
+   {
+    "raw": "{\"intent\": \"set_alarm\", \"time\": \"19:45\", \"date\": \"today\", \"in\": \"in 45 minutes\"}",
+    "exact": false,
+    "intent_ok": true,
+    "fields": "1/1",
+    "valid": true,
+    "sec": 1.4
+   },
+   {
+    "raw": "{\"intent\": \"create_reminder\", \"task\": \"check on the biryani\", \"time\": \"13:30\", \"date\": \"today\"}",
+    "exact": false,
+    "intent_ok": true,
+    "fields": "1/2",
+    "valid": true,
+    "sec": 1.6
+   },
+   {
+    "raw": "{\"intent\": \"create_reminder\", \"task\": \"lock the back door\", \"time\": \"21:15\", \"date\": \"today\"}",
+    "exact": true,
+    "intent_ok": true,
+    "fields": "3/3",
+    "valid": true,
+    "sec": 1.4
+   },
+   {
+    "raw": "{\"intent\": \"create_reminder\", \"task\": \"call mom\", \"time\": \"17:00\", \"date\": \"tomorrow\"}",
+    "exact": false,
+    "intent_ok": false,
+    "fields": "0/2",
+    "valid": true,
+    "sec": 1.3
+   },
+   {
+    "raw": "{\"intent\": \"send_message\", \"contact\": \"Priya Sharma\", \"message\": \"the meeting got pushed to 4:30\"}",
+    "exact": false,
+    "intent_ok": true,
+    "fields": "2/3",
+    "valid": true,
+    "sec": 1.4
+   },
+   {
+    "raw": "{\"intent\": \"unsupported\"}",
+    "exact": false,
+    "intent_ok": false,
+    "fields": "0/2",
+    "valid": true,
+    "sec": 0.7
+   },
+   {
+    "raw": "{\"intent\": \"change_setting\", \"setting\": \"volume\", \"action\": \"set\", \"value\": 30}",
+    "exact": true,
+    "intent_ok": true,
+    "fields": "3/3",
+    "valid": true,
+    "sec": 1.1
+   },
+   {
+    "raw": "{\"intent\": \"open_app\", \"app_name\": \"Spotify\"}",
+    "exact": true,
+    "intent_ok": true,
+    "fields": "1/1",
+    "valid": true,
+    "sec": 1.1
+   },
+   {
+    "raw": "{\"intent\": \"set_alarm\", \"time\": \"02:00\", \"date\": \"today\", \"label\": \"relative time\", \"in\": \"in 30 minutes\"}",
+    "exact": false,
+    "intent_ok": false,
+    "fields": "0/0",
+    "valid": true,
+    "sec": 1.4
+   }
+  ],
+  "D_int8": [
+   {
+    "raw": "{\"intent\": \"set_alarm\", \"time\": \"05:15\", \"date\": \"tomorrow\"}",
+    "exact": true,
+    "intent_ok": true,
+    "fields": "2/2",
+    "valid": true,
+    "sec": 0.9
+   },
+   {
+    "raw": "{\"intent\": \"set_alarm\", \"time\": \"19:45\"}",
+    "exact": true,
+    "intent_ok": true,
+    "fields": "1/1",
+    "valid": true,
+    "sec": 0.8
+   },
+   {
+    "raw": "{\"intent\": \"create_reminder\", \"task\": \"check on the biryani\", \"in\": \"01:30\"}",
+    "exact": true,
+    "intent_ok": true,
+    "fields": "2/2",
+    "valid": true,
+    "sec": 1.0
+   },
+   {
+    "raw": "{\"intent\": \"create_reminder\", \"task\": \"lock the back door\", \"time\": \"09:15\", \"date\": \"today\"}",
+    "exact": false,
+    "intent_ok": true,
+    "fields": "2/3",
+    "valid": true,
+    "sec": 1.0
+   },
+   {
+    "raw": "{\"intent\": \"send_message\", \"contact\": \"Ravi\", \"message\": \"reminder to call mom\"}",
+    "exact": false,
+    "intent_ok": true,
+    "fields": "1/2",
+    "valid": true,
+    "sec": 0.8
+   },
+   {
+    "raw": "{\"intent\": \"send_message\", \"contact\": \"Priya Sharma\", \"message\": \"the meeting got pushed to 4:30\", \"app\": \"WhatsApp\"}",
+    "exact": true,
+    "intent_ok": true,
+    "fields": "3/3",
+    "valid": true,
+    "sec": 1.0
+   },
+   {
+    "raw": "{\"intent\": \"change_setting\", \"setting\": \"bluetooth\", \"action\": \"off\"}",
+    "exact": false,
+    "intent_ok": true,
+    "fields": "0/2",
+    "valid": true,
+    "sec": 0.7
+   },
+   {
+    "raw": "{\"intent\": \"change_setting\", \"setting\": \"volume\", \"action\": \"decrease\", \"value\": 30}",
+    "exact": false,
+    "intent_ok": true,
+    "fields": "2/3",
+    "valid": true,
+    "sec": 0.8
+   },
+   {
+    "raw": "{\"intent\": \"open_app\", \"app_name\": \"Spotify\"}",
+    "exact": true,
+    "intent_ok": true,
+    "fields": "1/1",
+    "valid": true,
+    "sec": 0.8
+   },
+   {
+    "raw": "{\"intent\": \"set_alarm\", \"label\": \"home security\"}",
+    "exact": false,
+    "intent_ok": false,
+    "fields": "0/0",
+    "valid": true,
+    "sec": 0.7
+   }
+  ],
+  "D_fp32": [
+   {
+    "raw": "{\"intent\": \"set_alarm\", \"time\": \"05:15\", \"date\": \"tomorrow\"}",
+    "exact": true,
+    "intent_ok": true,
+    "valid": true
+   },
+   {
+    "raw": "{\"intent\": \"set_alarm\", \"time\": \"19:45\"}",
+    "exact": true,
+    "intent_ok": true,
+    "valid": true
+   },
+   {
+    "raw": "{\"intent\": \"create_reminder\", \"task\": \"check on the biryani\", \"in\": \"01:30\"}",
+    "exact": true,
+    "intent_ok": true,
+    "valid": true
+   },
+   {
+    "raw": "{\"intent\": \"create_reminder\", \"task\": \"lock the back door\", \"time\": \"09:15\", \"date\": \"today\"}",
+    "exact": false,
+    "intent_ok": true,
+    "valid": true
+   },
+   {
+    "raw": "{\"intent\": \"send_message\", \"contact\": \"Ravi\", \"message\": \"remind me to call mom\"}",
+    "exact": false,
+    "intent_ok": true,
+    "valid": true
+   },
+   {
+    "raw": "{\"intent\": \"send_message\", \"contact\": \"Priya Sharma\", \"message\": \"the meeting got pushed to 4:30\", \"app\": \"WhatsApp\"}",
+    "exact": true,
+    "intent_ok": true,
+    "valid": true
+   },
+   {
+    "raw": "{\"intent\": \"change_setting\", \"setting\": \"bluetooth\", \"action\": \"off\"}",
+    "exact": false,
+    "intent_ok": true,
+    "valid": true
+   },
+   {
+    "raw": "{\"intent\": \"change_setting\", \"setting\": \"volume\", \"action\": \"set\", \"value\": 30}",
+    "exact": true,
+    "intent_ok": true,
+    "valid": true
+   },
+   {
+    "raw": "{\"intent\": \"open_app\", \"app_name\": \"Spotify\"}",
+    "exact": true,
+    "intent_ok": true,
+    "valid": true
+   },
+   {
+    "raw": "{\"intent\": \"unsupported\"}",
+    "exact": true,
+    "intent_ok": true,
+    "valid": true
+   }
+  ]
+ }
+}

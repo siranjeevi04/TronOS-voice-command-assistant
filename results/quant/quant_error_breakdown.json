@@ -1,0 +1,424 @@
+{
+ "int8": {
+  "n": 613,
+  "identical_raw": 574,
+  "broke": 18,
+  "fixed": 1,
+  "net": -17,
+  "types": [
+   [
+    "missing field",
+    7
+   ],
+   [
+    "wrong intent (change_setting -> unsupported)",
+    2
+   ],
+   [
+    "wrong value (setting)",
+    2
+   ],
+   [
+    "wrong value (task)",
+    2
+   ],
+   [
+    "wrong value (time)",
+    2
+   ],
+   [
+    "wrong intent (create_reminder -> unsupported)",
+    1
+   ],
+   [
+    "wrong value (app_name)",
+    1
+   ],
+   [
+    "extra field",
+    1
+   ]
+  ],
+  "by_gold_intent": [
+   [
+    "set_alarm",
+    8
+   ],
+   [
+    "create_reminder",
+    5
+   ],
+   [
+    "change_setting",
+    4
+   ],
+   [
+    "open_app",
+    1
+   ]
+  ],
+  "examples": [
+   {
+    "text": "Don't let me forget my charger.",
+    "gold": {
+     "intent": "create_reminder",
+     "task": "my charger"
+    },
+    "fp32": "{\"intent\": \"create_reminder\", \"task\": \"my charger\"}",
+    "int8": "{\"intent\": \"unsupported\"}",
+    "type": "wrong intent (create_reminder -> unsupported)"
+   },
+   {
+    "text": "Set a flight alarm for 10 o'clock.",
+    "gold": {
+     "intent": "set_alarm",
+     "time": "10:00",
+     "label": "flight"
+    },
+    "fp32": "{\"intent\": \"set_alarm\", \"time\": \"10:00\", \"label\": \"flight\"}",
+    "int8": "{\"intent\": \"set_alarm\", \"time\": \"10:00\"}",
+    "type": "missing field"
+   },
+   {
+    "text": "alarm for gym at nine o'clock in the evening tomorrow",
+    "gold": {
+     "intent": "set_alarm",
+     "time": "21:00",
+     "date": "tomorrow",
+     "label": "gym"
+    },
+    "fp32": "{\"intent\": \"set_alarm\", \"time\": \"21:00\", \"date\": \"tomorrow\", \"label\": \"gym\"}",
+    "int8": "{\"intent\": \"set_alarm\", \"time\": \"21:00\", \"date\": \"tomorrow\", \"location\": \"gym\"}",
+    "type": "missing field"
+   },
+   {
+    "text": "OK Tron, kill Bluetooth.",
+    "gold": {
+     "intent": "change_setting",
+     "setting": "bluetooth",
+     "action": "off"
+    },
+    "fp32": "{\"intent\": \"change_setting\", \"setting\": \"bluetooth\", \"action\": \"off\"}",
+    "int8": "{\"intent\": \"unsupported\"}",
+    "type": "wrong intent (change_setting -> unsupported)"
+   },
+   {
+    "text": "Can you switch off night mode.",
+    "gold": {
+     "intent": "change_setting",
+     "setting": "dark_mode",
+     "action": "off"
+    },
+    "fp32": "{\"intent\": \"change_setting\", \"setting\": \"dark_mode\", \"action\": \"off\"}",
+    "int8": "{\"intent\": \"change_setting\", \"setting\": \"night_mode\", \"action\": \"off\"}",
+    "type": "wrong value (setting)"
+   },
+   {
+    "text": "Quickly set a prayer alarm for quarter to 3 pm.",
+    "gold": {
+     "intent": "set_alarm",
+     "time": "14:45",
+     "label": "prayer"
+    },
+    "fp32": "{\"intent\": \"set_alarm\", \"time\": \"14:45\", \"label\": \"prayer\"}",
+    "int8": "{\"intent\": \"set_alarm\", \"time\": \"14:45\"}",
+    "type": "missing field"
+   },
+   {
+    "text": "Set a prayer alarm for quarter to 8 pm.",
+    "gold": {
+     "intent": "set_alarm",
+     "time": "19:45",
+     "label": "prayer"
+    },
+    "fp32": "{\"intent\": \"set_alarm\", \"time\": \"19:45\", \"label\": \"prayer\"}",
+    "int8": "{\"intent\": \"set_alarm\", \"time\": \"19:45\"}",
+    "type": "missing field"
+   },
+   {
+    "text": "switch off night mode quickly",
+    "gold": {
+     "intent": "change_setting",
+     "setting": "dark_mode",
+     "action": "off"
+    },
+    "fp32": "{\"intent\": \"change_setting\", \"setting\": \"dark_mode\", \"action\": \"off\"}",
+    "int8": "{\"intent\": \"change_setting\", \"setting\": \"night_mode\", \"action\": \"off\"}",
+    "type": "wrong value (setting)"
+   },
+   {
+    "text": "launch microsoft teams",
+    "gold": {
+     "intent": "open_app",
+     "app_name": "Microsoft Teams"
+    },
+    "fp32": "{\"intent\": \"open_app\", \"app_name\": \"Microsoft Teams\"}",
+    "int8": "{\"intent\": \"open_app\", \"app_name\": \"Teams\"}",
+    "type": "wrong value (app_name)"
+   },
+   {
+    "text": "Alarm for gym at 5 next Saturday for me.",
+    "gold": {
+     "intent": "set_alarm",
+     "time": "05:00",
+     "date": "saturday",
+     "label": "gym"
+    },
+    "fp32": "{\"intent\": \"set_alarm\", \"time\": \"05:00\", \"date\": \"saturday\", \"label\": \"gym\"}",
+    "int8": "{\"intent\": \"set_alarm\", \"time\": \"05:00\", \"date\": \"saturday\"}",
+    "type": "missing field"
+   },
+   {
+    "text": "Don't let me forget the meeting please.",
+    "gold": {
+     "intent": "create_reminder",
+     "task": "the meeting"
+    },
+    "fp32": "{\"intent\": \"create_reminder\", \"task\": \"the meeting\"}",
+    "int8": "{\"intent\": \"create_reminder\", \"task\": \"forget the meeting\"}",
+    "type": "wrong value (task)"
+   },
+   {
+    "text": "Set an alarm for quarter to 9 pm.",
+    "gold": {
+     "intent": "set_alarm",
+     "time": "20:45"
+    },
+    "fp32": "{\"intent\": \"set_alarm\", \"time\": \"20:45\"}",
+    "int8": "{\"intent\": \"set_alarm\", \"time\": \"22:45\"}",
+    "type": "wrong value (time)"
+   }
+  ]
+ },
+ "int4": {
+  "n": 613,
+  "identical_raw": 501,
+  "broke": 72,
+  "fixed": 3,
+  "net": -69,
+  "types": [
+   [
+    "wrong value (time)",
+    12
+   ],
+   [
+    "missing field",
+    8
+   ],
+   [
+    "wrong intent (unsupported -> set_alarm)",
+    8
+   ],
+   [
+    "wrong intent (unsupported -> send_message)",
+    7
+   ],
+   [
+    "wrong value (task)",
+    7
+   ],
+   [
+    "wrong intent (create_reminder -> unsupported)",
+    5
+   ],
+   [
+    "wrong value (app_name)",
+    5
+   ],
+   [
+    "extra field",
+    4
+   ],
+   [
+    "wrong intent (change_setting -> unsupported)",
+    3
+   ],
+   [
+    "wrong intent (unsupported -> make_call)",
+    3
+   ],
+   [
+    "wrong intent (unsupported -> change_setting)",
+    3
+   ],
+   [
+    "wrong value (contact)",
+    2
+   ],
+   [
+    "wrong value (setting)",
+    2
+   ],
+   [
+    "wrong value (message)",
+    1
+   ],
+   [
+    "wrong intent (unsupported -> open_app)",
+    1
+   ],
+   [
+    "invalid JSON",
+    1
+   ]
+  ],
+  "by_gold_intent": [
+   [
+    "unsupported",
+    22
+   ],
+   [
+    "create_reminder",
+    16
+   ],
+   [
+    "set_alarm",
+    15
+   ],
+   [
+    "send_message",
+    7
+   ],
+   [
+    "change_setting",
+    6
+   ],
+   [
+    "open_app",
+    5
+   ],
+   [
+    "make_call",
+    1
+   ]
+  ],
+  "examples": [
+   {
+    "text": "send didi a text",
+    "gold": {
+     "intent": "send_message",
+     "contact": "Didi"
+    },
+    "fp32": "{\"intent\": \"send_message\", \"contact\": \"Didi\"}",
+    "int4": "{\"intent\": \"send_message\", \"contact\": \"Didi\", \"message\": \"text\"}",
+    "type": "extra field"
+   },
+   {
+    "text": "Don't let me forget my charger.",
+    "gold": {
+     "intent": "create_reminder",
+     "task": "my charger"
+    },
+    "fp32": "{\"intent\": \"create_reminder\", \"task\": \"my charger\"}",
+    "int4": "{\"intent\": \"unsupported\"}",
+    "type": "wrong intent (create_reminder -> unsupported)"
+   },
+   {
+    "text": "Set a flight alarm for 10 o'clock.",
+    "gold": {
+     "intent": "set_alarm",
+     "time": "10:00",
+     "label": "flight"
+    },
+    "fp32": "{\"intent\": \"set_alarm\", \"time\": \"10:00\", \"label\": \"flight\"}",
+    "int4": "{\"intent\": \"set_alarm\", \"time\": \"10:00\"}",
+    "type": "missing field"
+   },
+   {
+    "text": "alarm for gym at nine o'clock in the evening tomorrow",
+    "gold": {
+     "intent": "set_alarm",
+     "time": "21:00",
+     "date": "tomorrow",
+     "label": "gym"
+    },
+    "fp32": "{\"intent\": \"set_alarm\", \"time\": \"21:00\", \"date\": \"tomorrow\", \"label\": \"gym\"}",
+    "int4": "{\"intent\": \"set_alarm\", \"time\": \"09:00\", \"date\": \"tomorrow\"}",
+    "type": "missing field"
+   },
+   {
+    "text": "Can you open Snapchat and play the latest song for me.",
+    "gold": {
+     "intent": "open_app",
+     "app_name": "Snapchat"
+    },
+    "fp32": "{\"intent\": \"open_app\", \"app_name\": \"Snapchat\"}",
+    "int4": "{\"intent\": \"open_app\", \"app_name\": \"Snapp\"}",
+    "type": "wrong value (app_name)"
+   },
+   {
+    "text": "OK Tron, kill Bluetooth.",
+    "gold": {
+     "intent": "change_setting",
+     "setting": "bluetooth",
+     "action": "off"
+    },
+    "fp32": "{\"intent\": \"change_setting\", \"setting\": \"bluetooth\", \"action\": \"off\"}",
+    "int4": "{\"intent\": \"unsupported\"}",
+    "type": "wrong intent (change_setting -> unsupported)"
+   },
+   {
+    "text": "Did Daniel text me?",
+    "gold": {
+     "intent": "unsupported"
+    },
+    "fp32": "{\"intent\": \"unsupported\"}",
+    "int4": "{\"intent\": \"send_message\", \"contact\": \"Daniel\"}",
+    "type": "wrong intent (unsupported -> send_message)"
+   },
+   {
+    "text": "Book a cab to the airport.",
+    "gold": {
+     "intent": "unsupported"
+    },
+    "fp32": "{\"intent\": \"unsupported\"}",
+    "int4": "{\"intent\": \"make_call\", \"contact\": \"Airport\"}",
+    "type": "wrong intent (unsupported -> make_call)"
+   },
+   {
+    "text": "Quickly set a prayer alarm for quarter to 3 pm.",
+    "gold": {
+     "intent": "set_alarm",
+     "time": "14:45",
+     "label": "prayer"
+    },
+    "fp32": "{\"intent\": \"set_alarm\", \"time\": \"14:45\", \"label\": \"prayer\"}",
+    "int4": "{\"intent\": \"set_alarm\", \"time\": \"13:45\", \"label\": \"prayer\"}",
+    "type": "wrong value (time)"
+   },
+   {
+    "text": "send venkat a message through whatsapp i forgot my wallet",
+    "gold": {
+     "intent": "send_message",
+     "contact": "Venkat",
+     "message": "I forgot my wallet",
+     "app": "WhatsApp"
+    },
+    "fp32": "{\"intent\": \"send_message\", \"contact\": \"Venkat\", \"message\": \"I forgot my wallet\", \"app\": \"WhatsApp\"}",
+    "int4": "{\"intent\": \"send_message\", \"contact\": \"Venkayat\", \"message\": \"I forgot my wallet\", \"app\": \"WhatsApp\"}",
+    "type": "wrong value (contact)"
+   },
+   {
+    "text": "Set an alarm for 8:50 pm.",
+    "gold": {
+     "intent": "set_alarm",
+     "time": "20:50"
+    },
+    "fp32": "{\"intent\": \"set_alarm\", \"time\": \"20:50\"}",
+    "int4": "{\"intent\": \"set_alarm\", \"time\": \"08:50\"}",
+    "type": "wrong value (time)"
+   },
+   {
+    "text": "message mom that i reached the hostel",
+    "gold": {
+     "intent": "send_message",
+     "contact": "Mom",
+     "message": "i reached the hostel"
+    },
+    "fp32": "{\"intent\": \"send_message\", \"contact\": \"Mom\", \"message\": \"I reached the hostel\"}",
+    "int4": "{\"intent\": \"send_message\", \"contact\": \"Mom\", \"message\": \"reached the hostel\"}",
+    "type": "wrong value (message)"
+   }
+  ]
+ }
+}

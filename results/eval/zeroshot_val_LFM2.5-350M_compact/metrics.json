@@ -1,0 +1,122 @@
+{
+  "n": 395,
+  "intent_accuracy": 0.005063291139240506,
+  "field_accuracy": 0.0017271157167530224,
+  "field_precision": 0.0028169014084507044,
+  "spurious_fields": 353,
+  "exact_match": 0.0,
+  "json_validity": 0.8886075949367088,
+  "unsupported_recall": 0.017857142857142856,
+  "unsupported_precision": 1.0,
+  "per_intent": {
+    "set_alarm": {
+      "n": 57,
+      "intent_acc": 0.0,
+      "exact": 0.0
+    },
+    "create_reminder": {
+      "n": 56,
+      "intent_acc": 0.0,
+      "exact": 0.0
+    },
+    "open_app": {
+      "n": 57,
+      "intent_acc": 0.0,
+      "exact": 0.0
+    },
+    "make_call": {
+      "n": 55,
+      "intent_acc": 0.0,
+      "exact": 0.0
+    },
+    "send_message": {
+      "n": 57,
+      "intent_acc": 0.017543859649122806,
+      "exact": 0.0
+    },
+    "change_setting": {
+      "n": 57,
+      "intent_acc": 0.0,
+      "exact": 0.0
+    },
+    "unsupported": {
+      "n": 56,
+      "intent_acc": 0.017857142857142856,
+      "exact": 0.0
+    }
+  },
+  "by_source": {
+    "synthetic_template": {
+      "n": 395,
+      "intent_accuracy": 0.005063291139240506,
+      "field_accuracy": 0.0017271157167530224,
+      "field_precision": 0.0028169014084507044,
+      "spurious_fields": 353,
+      "exact_match": 0.0,
+      "json_validity": 0.8886075949367088,
+      "unsupported_recall": 0.017857142857142856,
+      "unsupported_precision": 1.0,
+      "per_intent": {
+        "set_alarm": {
+          "n": 57,
+          "intent_acc": 0.0,
+          "exact": 0.0
+        },
+        "create_reminder": {
+          "n": 56,
+          "intent_acc": 0.0,
+          "exact": 0.0
+        },
+        "open_app": {
+          "n": 57,
+          "intent_acc": 0.0,
+          "exact": 0.0
+        },
+        "make_call": {
+          "n": 55,
+          "intent_acc": 0.0,
+          "exact": 0.0
+        },
+        "send_message": {
+          "n": 57,
+          "intent_acc": 0.017543859649122806,
+          "exact": 0.0
+        },
+        "change_setting": {
+          "n": 57,
+          "intent_acc": 0.0,
+          "exact": 0.0
+        },
+        "unsupported": {
+          "n": 56,
+          "intent_acc": 0.017857142857142856,
+          "exact": 0.0
+        }
+      }
+    }
+  },
+  "by_lang": {
+    "en": {
+      "n": 395,
+      "intent_accuracy": 0.005063291139240506,
+      "field_accuracy": 0.0017271157167530224,
+      "field_precision": 0.0028169014084507044,
+      "spurious_fields": 353,
+      "exact_match": 0.0,
+      "json_validity": 0.8886075949367088,
+      "unsupported_recall": 0.017857142857142856,
+      "unsupported_precision": 1.0
+    }
+  },
+  "name": "zeroshot_val_LFM2.5-350M_compact",
+  "model": "models/LFM2.5-350M",
+  "adapter": null,
+  "merged": false,
+  "split": "val",
+  "prompt": "compact",
+  "target_loss": 0.8069118203258882,
+  "runtime": "transformers 5.22.2 / torch 2.15.0 / mps fp32",
+  "gen_wall_s": 42.36697196960449,
+  "gen_tokens": 14973,
+  "batch": 16
+}

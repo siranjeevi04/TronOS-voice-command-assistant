@@ -1,0 +1,156 @@
+{
+  "n": 613,
+  "intent_accuracy": 0.9494290375203915,
+  "field_accuracy": 0.8881491344873502,
+  "field_precision": 0.9112021857923497,
+  "spurious_fields": 53,
+  "exact_match": 0.8907014681892332,
+  "json_validity": 1.0,
+  "unsupported_recall": 0.9905660377358491,
+  "unsupported_precision": 0.9375,
+  "per_intent": {
+    "set_alarm": {
+      "n": 96,
+      "intent_acc": 1.0,
+      "exact": 0.8541666666666666
+    },
+    "create_reminder": {
+      "n": 94,
+      "intent_acc": 1.0,
+      "exact": 0.9468085106382979
+    },
+    "open_app": {
+      "n": 76,
+      "intent_acc": 1.0,
+      "exact": 1.0
+    },
+    "make_call": {
+      "n": 74,
+      "intent_acc": 1.0,
+      "exact": 0.8108108108108109
+    },
+    "send_message": {
+      "n": 72,
+      "intent_acc": 0.6111111111111112,
+      "exact": 0.5972222222222222
+    },
+    "change_setting": {
+      "n": 95,
+      "intent_acc": 0.9789473684210527,
+      "exact": 0.9578947368421052
+    },
+    "unsupported": {
+      "n": 106,
+      "intent_acc": 0.9905660377358491,
+      "exact": 0.9905660377358491
+    }
+  },
+  "by_source": {
+    "handwritten": {
+      "n": 120,
+      "intent_accuracy": 0.9583333333333334,
+      "field_accuracy": 0.9166666666666666,
+      "field_precision": 0.9166666666666666,
+      "spurious_fields": 9,
+      "exact_match": 0.925,
+      "json_validity": 1.0,
+      "unsupported_recall": 0.9629629629629629,
+      "unsupported_precision": 0.9629629629629629,
+      "per_intent": {
+        "set_alarm": {
+          "n": 16,
+          "intent_acc": 1.0,
+          "exact": 1.0
+        },
+        "create_reminder": {
+          "n": 15,
+          "intent_acc": 1.0,
+          "exact": 0.8666666666666667
+        },
+        "open_app": {
+          "n": 17,
+          "intent_acc": 1.0,
+          "exact": 1.0
+        },
+        "make_call": {
+          "n": 14,
+          "intent_acc": 1.0,
+          "exact": 0.8571428571428571
+        },
+        "send_message": {
+          "n": 12,
+          "intent_acc": 0.6666666666666666,
+          "exact": 0.6666666666666666
+        },
+        "change_setting": {
+          "n": 19,
+          "intent_acc": 1.0,
+          "exact": 1.0
+        },
+        "unsupported": {
+          "n": 27,
+          "intent_acc": 0.9629629629629629,
+          "exact": 0.9629629629629629
+        }
+      }
+    },
+    "synthetic_template": {
+      "n": 493,
+      "intent_accuracy": 0.947261663286004,
+      "field_accuracy": 0.8813838550247117,
+      "field_precision": 0.9098639455782312,
+      "spurious_fields": 44,
+      "exact_match": 0.8823529411764706,
+      "json_validity": 1.0,
+      "unsupported_recall": 1.0,
+      "unsupported_precision": 0.9294117647058824,
+      "per_intent": {
+        "set_alarm": {
+          "n": 80,
+          "intent_acc": 1.0,
+          "exact": 0.825
+        },
+        "create_reminder": {
+          "n": 79,
+          "intent_acc": 1.0,
+          "exact": 0.9620253164556962
+        },
+        "open_app": {
+          "n": 59,
+          "intent_acc": 1.0,
+          "exact": 1.0
+        },
+        "make_call": {
+          "n": 60,
+          "intent_acc": 1.0,
+          "exact": 0.8
+        },
+        "send_message": {
+          "n": 60,
+          "intent_acc": 0.6,
+          "exact": 0.5833333333333334
+        },
+        "change_setting": {
+          "n": 76,
+          "intent_acc": 0.9736842105263158,
+          "exact": 0.9473684210526315
+        },
+        "unsupported": {
+          "n": 79,
+          "intent_acc": 1.0,
+          "exact": 1.0
+        }
+      }
+    }
+  },
+  "name": "onnx_ft_fp32_test",
+  "model": "models/onnx/ft_fp32",
+  "split": "test",
+  "data_dir": "data/v1.2",
+  "prompt": "schema",
+  "target_loss": 0.06217424417069071,
+  "runtime": "onnxruntime 1.31.1 CPUExecutionProvider (2 threads)",
+  "state_dtype": "float32",
+  "gen_wall_s": 3629.063169002533,
+  "gen_tokens": 10274
+}

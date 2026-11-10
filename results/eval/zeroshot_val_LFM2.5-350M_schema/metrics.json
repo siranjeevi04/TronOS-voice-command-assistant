@@ -1,0 +1,122 @@
+{
+  "n": 395,
+  "intent_accuracy": 0.7873417721518987,
+  "field_accuracy": 0.49740932642487046,
+  "field_precision": 0.4298507462686567,
+  "spurious_fields": 265,
+  "exact_match": 0.29620253164556964,
+  "json_validity": 0.9645569620253165,
+  "unsupported_recall": 0.5892857142857143,
+  "unsupported_precision": 0.7674418604651163,
+  "per_intent": {
+    "set_alarm": {
+      "n": 57,
+      "intent_acc": 1.0,
+      "exact": 0.15789473684210525
+    },
+    "create_reminder": {
+      "n": 56,
+      "intent_acc": 0.4642857142857143,
+      "exact": 0.0
+    },
+    "open_app": {
+      "n": 57,
+      "intent_acc": 0.7543859649122807,
+      "exact": 0.6491228070175439
+    },
+    "make_call": {
+      "n": 55,
+      "intent_acc": 0.7090909090909091,
+      "exact": 0.6727272727272727
+    },
+    "send_message": {
+      "n": 57,
+      "intent_acc": 1.0,
+      "exact": 0.38596491228070173
+    },
+    "change_setting": {
+      "n": 57,
+      "intent_acc": 0.9824561403508771,
+      "exact": 0.12280701754385964
+    },
+    "unsupported": {
+      "n": 56,
+      "intent_acc": 0.5892857142857143,
+      "exact": 0.08928571428571429
+    }
+  },
+  "by_source": {
+    "synthetic_template": {
+      "n": 395,
+      "intent_accuracy": 0.7873417721518987,
+      "field_accuracy": 0.49740932642487046,
+      "field_precision": 0.4298507462686567,
+      "spurious_fields": 265,
+      "exact_match": 0.29620253164556964,
+      "json_validity": 0.9645569620253165,
+      "unsupported_recall": 0.5892857142857143,
+      "unsupported_precision": 0.7674418604651163,
+      "per_intent": {
+        "set_alarm": {
+          "n": 57,
+          "intent_acc": 1.0,
+          "exact": 0.15789473684210525
+        },
+        "create_reminder": {
+          "n": 56,
+          "intent_acc": 0.4642857142857143,
+          "exact": 0.0
+        },
+        "open_app": {
+          "n": 57,
+          "intent_acc": 0.7543859649122807,
+          "exact": 0.6491228070175439
+        },
+        "make_call": {
+          "n": 55,
+          "intent_acc": 0.7090909090909091,
+          "exact": 0.6727272727272727
+        },
+        "send_message": {
+          "n": 57,
+          "intent_acc": 1.0,
+          "exact": 0.38596491228070173
+        },
+        "change_setting": {
+          "n": 57,
+          "intent_acc": 0.9824561403508771,
+          "exact": 0.12280701754385964
+        },
+        "unsupported": {
+          "n": 56,
+          "intent_acc": 0.5892857142857143,
+          "exact": 0.08928571428571429
+        }
+      }
+    }
+  },
+  "by_lang": {
+    "en": {
+      "n": 395,
+      "intent_accuracy": 0.7873417721518987,
+      "field_accuracy": 0.49740932642487046,
+      "field_precision": 0.4298507462686567,
+      "spurious_fields": 265,
+      "exact_match": 0.29620253164556964,
+      "json_validity": 0.9645569620253165,
+      "unsupported_recall": 0.5892857142857143,
+      "unsupported_precision": 0.7674418604651163
+    }
+  },
+  "name": "zeroshot_val_LFM2.5-350M_schema",
+  "model": "models/LFM2.5-350M",
+  "adapter": null,
+  "merged": false,
+  "split": "val",
+  "prompt": "schema",
+  "target_loss": 0.32617510794080523,
+  "runtime": "transformers 5.22.2 / torch 2.15.0 / mps fp32",
+  "gen_wall_s": 70.01982092857361,
+  "gen_tokens": 9225,
+  "batch": 16
+}

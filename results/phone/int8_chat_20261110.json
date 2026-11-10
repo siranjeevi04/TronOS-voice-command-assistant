@@ -1,0 +1,12 @@
+{"source":"user phone share 2026-11-10 ~20:10, app com.tronx.bench.quant, variant 3_ft_int8","load":{"file_mb":404.35,"load_ms":5021.2,"rss_before_mb":151.6,"rss_after_mb":544.9,"rss_peak_mb":680.7},
+"chats":[["Set an alarm in half an hour.","{\"intent\": \"set_alarm\", \"in\": \"00:30\"}",8305.6,60.9,5.80,16,10892.0,787.4],
+["set an alarm for 11:59 pm","{\"intent\": \"set_alarm\", \"time\": \"23:59\"}",5319.1,95.3,11.71,16,6599.9,891.9],
+["remind me on monday to submit the timesheet","{\"intent\": \"create_reminder\", \"task\": \"submit the timesheet\", \"date\": \"monday\"}",5270.0,96.4,10.68,25,7517.9,914.2],
+["Don't let me forget my charger.","{\"intent\": \"change_setting\", \"setting\": \"battery_saver\", \"action\": \"off\"}",6077.9,83.3,11.83,22,7853.6,902.4],
+["video call grandma","{\"intent\": \"make_call\", \"contact\": \"Grandma\"}",5286.2,94.8,11.39,15,6515.8,926.4],
+["launch the camera i want to take a picture","{\"intent\": \"open_app\", \"app_name\": \"Camera\"}",5547.1,91.4,12.29,15,6686.4,888.8],
+["send fatima a message on telegram saying the class is cancelled","assistant",6457.7,79.0,5.71,2,6632.7,900.5],
+["enable airplane mode","{\"intent\": \"change_setting\", \"setting\": \"airplane_mode\"}",5166.6,97.0,12.26,16,6390.0,918.0],
+["send 2000 to my mom's account","{\"intent\": \"unsupported\"}",5765.0,87.9,10.07,7,6361.0,887.0],
+["read my last message","{\"intent\": \"unsupported\"}",5237.0,95.9,11.66,7,5751.4,903.0]],
+"columns":["command","output","ttft_ms","prefill_tps","decode_tps","out_tokens","total_ms","peak_rss_mb"]}

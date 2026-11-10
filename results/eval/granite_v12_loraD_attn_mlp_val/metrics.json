@@ -1,0 +1,123 @@
+{
+  "n": 354,
+  "intent_accuracy": 0.9717514124293786,
+  "field_accuracy": 0.9549902152641878,
+  "field_precision": 0.9402697495183044,
+  "spurious_fields": 26,
+  "exact_match": 0.9124293785310734,
+  "json_validity": 1.0,
+  "unsupported_recall": 0.9310344827586207,
+  "unsupported_precision": 0.9473684210526315,
+  "per_intent": {
+    "set_alarm": {
+      "n": 60,
+      "intent_acc": 1.0,
+      "exact": 0.9666666666666667
+    },
+    "create_reminder": {
+      "n": 59,
+      "intent_acc": 1.0,
+      "exact": 0.9830508474576272
+    },
+    "open_app": {
+      "n": 36,
+      "intent_acc": 1.0,
+      "exact": 1.0
+    },
+    "make_call": {
+      "n": 36,
+      "intent_acc": 0.9722222222222222,
+      "exact": 0.6388888888888888
+    },
+    "send_message": {
+      "n": 48,
+      "intent_acc": 0.9166666666666666,
+      "exact": 0.8541666666666666
+    },
+    "change_setting": {
+      "n": 57,
+      "intent_acc": 0.9824561403508771,
+      "exact": 0.9298245614035088
+    },
+    "unsupported": {
+      "n": 58,
+      "intent_acc": 0.9310344827586207,
+      "exact": 0.9310344827586207
+    }
+  },
+  "by_source": {
+    "synthetic_template": {
+      "n": 354,
+      "intent_accuracy": 0.9717514124293786,
+      "field_accuracy": 0.9549902152641878,
+      "field_precision": 0.9402697495183044,
+      "spurious_fields": 26,
+      "exact_match": 0.9124293785310734,
+      "json_validity": 1.0,
+      "unsupported_recall": 0.9310344827586207,
+      "unsupported_precision": 0.9473684210526315,
+      "per_intent": {
+        "set_alarm": {
+          "n": 60,
+          "intent_acc": 1.0,
+          "exact": 0.9666666666666667
+        },
+        "create_reminder": {
+          "n": 59,
+          "intent_acc": 1.0,
+          "exact": 0.9830508474576272
+        },
+        "open_app": {
+          "n": 36,
+          "intent_acc": 1.0,
+          "exact": 1.0
+        },
+        "make_call": {
+          "n": 36,
+          "intent_acc": 0.9722222222222222,
+          "exact": 0.6388888888888888
+        },
+        "send_message": {
+          "n": 48,
+          "intent_acc": 0.9166666666666666,
+          "exact": 0.8541666666666666
+        },
+        "change_setting": {
+          "n": 57,
+          "intent_acc": 0.9824561403508771,
+          "exact": 0.9298245614035088
+        },
+        "unsupported": {
+          "n": 58,
+          "intent_acc": 0.9310344827586207,
+          "exact": 0.9310344827586207
+        }
+      }
+    }
+  },
+  "by_lang": {
+    "en": {
+      "n": 354,
+      "intent_accuracy": 0.9717514124293786,
+      "field_accuracy": 0.9549902152641878,
+      "field_precision": 0.9402697495183044,
+      "spurious_fields": 26,
+      "exact_match": 0.9124293785310734,
+      "json_validity": 1.0,
+      "unsupported_recall": 0.9310344827586207,
+      "unsupported_precision": 0.9473684210526315
+    }
+  },
+  "name": "granite_v12_loraD_attn_mlp_val",
+  "model": "ibm-granite/granite-4.0-h-350m",
+  "adapter": "runs/granite/D_attn_mlp/adapter",
+  "merged": false,
+  "split": "val",
+  "data_dir": "data/v1.2",
+  "prompt": "schema",
+  "target_loss": 0.021489653922958787,
+  "runtime": "transformers 5.22.2 / torch 2.11.0+cu130 / cuda fp32",
+  "gen_wall_s": 124.63974595069885,
+  "gen_tokens": 6244,
+  "batch": 16
+}

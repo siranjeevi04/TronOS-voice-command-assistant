@@ -1,0 +1,156 @@
+{
+  "n": 613,
+  "intent_accuracy": 0.8988580750407831,
+  "field_accuracy": 0.8242343541944075,
+  "field_precision": 0.8286479250334672,
+  "spurious_fields": 85,
+  "exact_match": 0.7781402936378466,
+  "json_validity": 0.99836867862969,
+  "unsupported_recall": 0.7830188679245284,
+  "unsupported_precision": 0.8645833333333334,
+  "per_intent": {
+    "set_alarm": {
+      "n": 96,
+      "intent_acc": 1.0,
+      "exact": 0.7083333333333334
+    },
+    "create_reminder": {
+      "n": 94,
+      "intent_acc": 0.925531914893617,
+      "exact": 0.776595744680851
+    },
+    "open_app": {
+      "n": 76,
+      "intent_acc": 1.0,
+      "exact": 0.9342105263157895
+    },
+    "make_call": {
+      "n": 74,
+      "intent_acc": 1.0,
+      "exact": 0.7972972972972973
+    },
+    "send_message": {
+      "n": 72,
+      "intent_acc": 0.5972222222222222,
+      "exact": 0.5
+    },
+    "change_setting": {
+      "n": 95,
+      "intent_acc": 0.968421052631579,
+      "exact": 0.9157894736842105
+    },
+    "unsupported": {
+      "n": 106,
+      "intent_acc": 0.7830188679245284,
+      "exact": 0.7830188679245284
+    }
+  },
+  "by_source": {
+    "handwritten": {
+      "n": 120,
+      "intent_accuracy": 0.9166666666666666,
+      "field_accuracy": 0.9097222222222222,
+      "field_precision": 0.8791946308724832,
+      "spurious_fields": 13,
+      "exact_match": 0.8666666666666667,
+      "json_validity": 1.0,
+      "unsupported_recall": 0.8148148148148148,
+      "unsupported_precision": 0.9565217391304348,
+      "per_intent": {
+        "set_alarm": {
+          "n": 16,
+          "intent_acc": 1.0,
+          "exact": 1.0
+        },
+        "create_reminder": {
+          "n": 15,
+          "intent_acc": 0.9333333333333333,
+          "exact": 0.8
+        },
+        "open_app": {
+          "n": 17,
+          "intent_acc": 1.0,
+          "exact": 1.0
+        },
+        "make_call": {
+          "n": 14,
+          "intent_acc": 1.0,
+          "exact": 0.8571428571428571
+        },
+        "send_message": {
+          "n": 12,
+          "intent_acc": 0.6666666666666666,
+          "exact": 0.5833333333333334
+        },
+        "change_setting": {
+          "n": 19,
+          "intent_acc": 1.0,
+          "exact": 0.9473684210526315
+        },
+        "unsupported": {
+          "n": 27,
+          "intent_acc": 0.8148148148148148,
+          "exact": 0.8148148148148148
+        }
+      }
+    },
+    "synthetic_template": {
+      "n": 493,
+      "intent_accuracy": 0.8945233265720081,
+      "field_accuracy": 0.8039538714991763,
+      "field_precision": 0.8160535117056856,
+      "spurious_fields": 72,
+      "exact_match": 0.7565922920892495,
+      "json_validity": 0.9979716024340771,
+      "unsupported_recall": 0.7721518987341772,
+      "unsupported_precision": 0.8356164383561644,
+      "per_intent": {
+        "set_alarm": {
+          "n": 80,
+          "intent_acc": 1.0,
+          "exact": 0.65
+        },
+        "create_reminder": {
+          "n": 79,
+          "intent_acc": 0.9240506329113924,
+          "exact": 0.7721518987341772
+        },
+        "open_app": {
+          "n": 59,
+          "intent_acc": 1.0,
+          "exact": 0.9152542372881356
+        },
+        "make_call": {
+          "n": 60,
+          "intent_acc": 1.0,
+          "exact": 0.7833333333333333
+        },
+        "send_message": {
+          "n": 60,
+          "intent_acc": 0.5833333333333334,
+          "exact": 0.48333333333333334
+        },
+        "change_setting": {
+          "n": 76,
+          "intent_acc": 0.9605263157894737,
+          "exact": 0.9078947368421053
+        },
+        "unsupported": {
+          "n": 79,
+          "intent_acc": 0.7721518987341772,
+          "exact": 0.7721518987341772
+        }
+      }
+    }
+  },
+  "name": "onnx_ft_int4_test",
+  "model": "models/onnx/ft_int4",
+  "split": "test",
+  "data_dir": "data/v1.2",
+  "prompt": "schema",
+  "target_loss": 0.08222485483527088,
+  "runtime": "onnxruntime 1.31.1 CPUExecutionProvider (2 threads)",
+  "state_dtype": "float32",
+  "gen_wall_s": 3591.4535989761353,
+  "gen_tokens": 10392
+}

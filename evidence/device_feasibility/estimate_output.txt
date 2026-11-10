@@ -1,0 +1,8 @@
+Snapdragon 695 bandwidth  : 17.06 GB/s   (8 Gen 1: 51.2 GB/s, 3.0x more)
+Reference achieved 12.0 tok/s vs theoretical 66 tok/s -> efficiency 18%
+
+model                           ceiling   decode  prefill    TTFT  decode25   total
+LFM3-1.7B (Q4_K_M)                15.5      2.8       29   3.14s     8.93s   12.1s
+Granite-4.0-1B (Q4_K_M)           16.7      3.0       31   2.90s     8.31s   11.2s
+LFM2.5-350M (Q4_K_M)              74.5     13.4      142   0.64s     1.86s    2.5s
+Granite-4.0-H-350M (Q4_K_M)       76.5     13.8      146   0.62s     1.81s    2.4s

@@ -1,0 +1,158 @@
+{
+  "dataset": "tronos-voice-commands",
+  "version": "1.2.0",
+  "seed": 13,
+  "languages": [
+    "en"
+  ],
+  "generator": "scripts/generate_dataset_v12.py",
+  "design": "docs/granite_failure_analysis.md (R1-R10)",
+  "args": {
+    "seed": 13,
+    "per_intent": 500,
+    "split": "0.72,0.12,0.16",
+    "max_per_template_eval": 12,
+    "moonshine_share": 0.7
+  },
+  "templates_per_intent": {
+    "set_alarm": 34,
+    "create_reminder": 34,
+    "open_app": 21,
+    "make_call": 20,
+    "send_message": 21,
+    "unsupported": 75,
+    "change_setting": 54
+  },
+  "total": {
+    "n": 3477,
+    "per_intent": {
+      "set_alarm": 516,
+      "create_reminder": 513,
+      "open_app": 471,
+      "make_call": 469,
+      "send_message": 479,
+      "change_setting": 507,
+      "unsupported": 522
+    },
+    "per_source": {
+      "synthetic_template": 3357,
+      "handwritten": 120
+    },
+    "per_style": {
+      "moonshine": 2312,
+      "robust": 1045,
+      "handwritten": 120
+    },
+    "templates": 260,
+    "signatures": 28,
+    "uses_heldout_value": 129,
+    "with_in_field": 153,
+    "no_optional_field": 2303
+  },
+  "splits": {
+    "train": {
+      "n": 2510,
+      "per_intent": {
+        "set_alarm": 360,
+        "create_reminder": 360,
+        "open_app": 359,
+        "make_call": 359,
+        "send_message": 359,
+        "change_setting": 355,
+        "unsupported": 358
+      },
+      "per_source": {
+        "synthetic_template": 2510
+      },
+      "per_style": {
+        "moonshine": 1731,
+        "robust": 779
+      },
+      "templates": 162,
+      "signatures": 27,
+      "uses_heldout_value": 0,
+      "with_in_field": 112,
+      "no_optional_field": 1636
+    },
+    "val": {
+      "n": 354,
+      "per_intent": {
+        "set_alarm": 60,
+        "create_reminder": 59,
+        "open_app": 36,
+        "make_call": 36,
+        "send_message": 48,
+        "change_setting": 57,
+        "unsupported": 58
+      },
+      "per_source": {
+        "synthetic_template": 354
+      },
+      "per_style": {
+        "robust": 105,
+        "moonshine": 249
+      },
+      "templates": 43,
+      "signatures": 20,
+      "uses_heldout_value": 0,
+      "with_in_field": 17,
+      "no_optional_field": 228
+    },
+    "test": {
+      "n": 613,
+      "per_intent": {
+        "set_alarm": 96,
+        "create_reminder": 94,
+        "open_app": 76,
+        "make_call": 74,
+        "send_message": 72,
+        "change_setting": 95,
+        "unsupported": 106
+      },
+      "per_source": {
+        "synthetic_template": 493,
+        "handwritten": 120
+      },
+      "per_style": {
+        "moonshine": 332,
+        "robust": 161,
+        "handwritten": 120
+      },
+      "templates": 55,
+      "signatures": 24,
+      "uses_heldout_value": 129,
+      "with_in_field": 24,
+      "no_optional_field": 439
+    }
+  },
+  "synthetic_percentage": 96.55,
+  "deduplication": {
+    "exact_duplicates_removed": 818,
+    "normalised_duplicates_removed": 314,
+    "near_duplicates_removed_from_val_test": 6,
+    "remaining_duplicates": 0
+  },
+  "leakage_checks": {
+    "template_overlap_train_val": 0,
+    "template_overlap_train_test": 0,
+    "text_overlap_train_val": 0,
+    "text_overlap_train_test": 0
+  },
+  "files": {
+    "train": {
+      "path": "data/v1.2/train.jsonl",
+      "rows": 2510,
+      "sha256": "c9f568ef54973fda971b8aa4e8fe0bc03e843bca6a22fc56fb64934cdfdf6698"
+    },
+    "val": {
+      "path": "data/v1.2/val.jsonl",
+      "rows": 354,
+      "sha256": "59931b54d6db6728082c8008d619bd5818c249178e2ab711175886f7923812cb"
+    },
+    "test": {
+      "path": "data/v1.2/test.jsonl",
+      "rows": 613,
+      "sha256": "feccf76e0f600a75a03270f36c9d7a8da73692e6306574fe1530472e34d82d76"
+    }
+  }
+}

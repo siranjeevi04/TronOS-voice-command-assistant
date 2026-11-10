@@ -1,0 +1,19 @@
+# secrets
+.env
+*.credential.json
+# large / generated
+models/
+android*/app/build/
+android*/.gradle/
+android*/local.properties
+android*/app/src/main/assets/models/
+android/app/src/int8/
+*.apk
+*.onnx
+*.onnx_data
+logs/
+.venv/
+__pycache__/
+.DS_Store
+# personal voice recordings
+results/stt/audio/

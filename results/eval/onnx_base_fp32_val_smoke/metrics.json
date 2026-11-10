@@ -1,0 +1,108 @@
+{
+  "n": 40,
+  "intent_accuracy": 0.6,
+  "field_accuracy": 0.52,
+  "field_precision": 0.3058823529411765,
+  "spurious_fields": 49,
+  "exact_match": 0.225,
+  "json_validity": 1.0,
+  "unsupported_recall": 0.0,
+  "unsupported_precision": 0.0,
+  "per_intent": {
+    "set_alarm": {
+      "n": 8,
+      "intent_acc": 0.75,
+      "exact": 0.0
+    },
+    "create_reminder": {
+      "n": 3,
+      "intent_acc": 1.0,
+      "exact": 0.0
+    },
+    "open_app": {
+      "n": 4,
+      "intent_acc": 0.5,
+      "exact": 0.5
+    },
+    "make_call": {
+      "n": 7,
+      "intent_acc": 0.8571428571428571,
+      "exact": 0.7142857142857143
+    },
+    "send_message": {
+      "n": 3,
+      "intent_acc": 1.0,
+      "exact": 0.3333333333333333
+    },
+    "change_setting": {
+      "n": 8,
+      "intent_acc": 0.5,
+      "exact": 0.125
+    },
+    "unsupported": {
+      "n": 7,
+      "intent_acc": 0.0,
+      "exact": 0.0
+    }
+  },
+  "by_source": {
+    "synthetic_template": {
+      "n": 40,
+      "intent_accuracy": 0.6,
+      "field_accuracy": 0.52,
+      "field_precision": 0.3058823529411765,
+      "spurious_fields": 49,
+      "exact_match": 0.225,
+      "json_validity": 1.0,
+      "unsupported_recall": 0.0,
+      "unsupported_precision": 0.0,
+      "per_intent": {
+        "set_alarm": {
+          "n": 8,
+          "intent_acc": 0.75,
+          "exact": 0.0
+        },
+        "create_reminder": {
+          "n": 3,
+          "intent_acc": 1.0,
+          "exact": 0.0
+        },
+        "open_app": {
+          "n": 4,
+          "intent_acc": 0.5,
+          "exact": 0.5
+        },
+        "make_call": {
+          "n": 7,
+          "intent_acc": 0.8571428571428571,
+          "exact": 0.7142857142857143
+        },
+        "send_message": {
+          "n": 3,
+          "intent_acc": 1.0,
+          "exact": 0.3333333333333333
+        },
+        "change_setting": {
+          "n": 8,
+          "intent_acc": 0.5,
+          "exact": 0.125
+        },
+        "unsupported": {
+          "n": 7,
+          "intent_acc": 0.0,
+          "exact": 0.0
+        }
+      }
+    }
+  },
+  "name": "onnx_base_fp32_val_smoke",
+  "model": "models/onnx/base_fp32",
+  "split": "val",
+  "data_dir": "data/v1.2",
+  "prompt": "schema",
+  "target_loss": 0.3427507660688889,
+  "runtime": "onnxruntime 1.31.1 CPUExecutionProvider (8 threads)",
+  "state_dtype": "float32",
+  "gen_wall_s": 80.02871084213257,
+  "gen_tokens": 927
+}
