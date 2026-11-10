@@ -147,6 +147,8 @@ Both shortlisted models were tested zero-shot with the same system prompt on 395
 | Fields | **74.4%** | 49.7% | **+24.7 points** |
 | Valid JSON | **98.5%** | 96.5% | +2.0 points |
 | Target loss | **0.167** | 0.326 | 2× lower |
+| Unsupported recall | 42.9% | **58.9%** | −16.0 points (LFM better) |
+| Unsupported precision | 63.2% | **76.7%** | −13.5 points (LFM better) |
 
 Raw results: [`results/eval/zeroshot_val_granite-4.0-h-350m_schema/`](../results/eval/zeroshot_val_granite-4.0-h-350m_schema), [`results/eval/zeroshot_val_LFM2.5-350M_schema/`](../results/eval/zeroshot_val_LFM2.5-350M_schema). Failure counts by type: [`results/error_analysis/`](../results/error_analysis) and [`docs/granite_failure_analysis.md`](../docs/granite_failure_analysis.md).
 
@@ -156,7 +158,9 @@ Error analysis on the same 395 commands: Granite made fewer errors in 5 of 7 err
 - Invented optional fields: 77 vs 92.
 - Wrong intent: 70 vs 84.
 
-**Decision: Granite-4.0-H-350M.** It is better on every accuracy metric on our task, 1 point behind on public function-calling scores, and Apache-2.0 licensed. Its hybrid design also keeps the KV cache tiny on the phone (Section 12).
+**Decision: Granite-4.0-H-350M.** It is better on every metric on our task except unsupported-request detection (recall and precision), including the headline exact JSON match (+12.2 points), 1 point behind on public function-calling scores, and Apache-2.0 licensed. Its hybrid design also keeps the KV cache tiny on the phone (Section 12).
+
+LFM2.5-350M was better at refusing unsupported requests zero-shot. That metric is noisy here: the v1.1 validation set's unsupported commands came from only 10 sentence patterns. Refusal is also what fine-tuning fixed most (Granite reaches 99.1% after LoRA, Section 6).
 
 LFM2.5-350M generated faster in this Mac/PyTorch run (70 s vs 355 s for 395 commands). Granite's Mamba2 layers have no optimized kernel on the Mac GPU. On the phone runtime (ONNX), Granite runs at the speeds measured in Section 13.
 
@@ -302,7 +306,7 @@ Each sample is a chat: the **system prompt** (schema + 7 examples, 490 tokens), 
 | Precision | FP32 | T4 has no BF16; avoids FP16 overflow in the Mamba fallback |
 | Loss | Cross-entropy on JSON tokens only | Teaches the output, not the prompt |
 | Seed | 42 | Reproducibility |
-| Hardware | Kaggle 2× NVIDIA T4 (one run per GPU) | Mac MPS was ~6–9 h per run |
+| Hardware | Kaggle 2× NVIDIA T4 (one run per GPU) | Mac MPS measured 0.87 s/sample, so ~6–9 h for all four runs A–D |
 | Time per experiment | A 51 min, B 52 min, C 61 min, D 61 min | |
 
 **Script:** `scripts/train_lora.py`. The configuration is saved in each `runs/granite/<exp>/train_log.json`.
@@ -877,12 +881,15 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 | call uncle raju | contact "Uncle Raju" | "Raju" | Relationship prefix dropped |
 | call dad on speaker phone | `{"contact": "Dad"}` | extra key `phone_type` | Out-of-schema key |
 
-**Patterns still unlearned** (hard prompts):
-- Negation ("don't set an alarm, remind me instead").
-- A message whose content is itself a command.
-- "Tonight" with no am/pm.
-- "Turn it down to N" read as `set`.
-- Disguised alarms ("make sure I'm awake by 5:15").
+**Hard prompts: what still fails** (`results/hard_prompts_v1_results.json`):
+- **Fails even at FP32 (not learned):**
+  - Negation ("Don't turn on Bluetooth, turn on the Wi-Fi instead").
+  - A message whose content is itself a command ("Text Ravi saying remind me to call mom tomorrow").
+  - "Tonight" with no am/pm ("Remind me tonight at 9:15…" → 09:15).
+- **Correct at FP32, lost at INT8 (quantization error):**
+  - "Bring the volume down to about thirty percent" (`set` 30).
+  - "Arm the home security alarm before I leave" (unsupported).
+- "Make sure I'm awake by 5:15" is correct at both FP32 and INT8 on the Mac. It failed only in the phone run (Section 9.4).
 
 **System limitations:**
 - **Phone vs Mac INT8 drift** (Section 15, observation 6): the phone produced 3 non-JSON outputs in 32 commands, for example "I'm sorry, I can't assist with that." Phone-side accuracy is lower than the Mac-measured 86.3%.

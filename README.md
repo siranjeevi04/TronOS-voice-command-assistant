@@ -81,7 +81,7 @@ Full write-up with every source: report [Section 3](report/TRONX_Technical_Repor
 | **IBM Granite-4.0-H-350M** | 61.27 | 43.07 | **Apache-2.0** | [benchmarks](evidence/llm_selection/01_liquid_lfm2.5-230m_blog_benchmark_tables.png), [IBM card](evidence/llm_selection/03_ibm_granite-4.0-1b_card_nano_benchmarks.png) |
 
    Everything else was weaker on both benchmarks, had no published scores, or had a non-commercial licence.
-4. **Head-to-head on our own task** (same prompt, zero-shot, 395 commands): Granite won every metric.
+4. **Head-to-head on our own task** (same prompt, zero-shot, 395 commands): Granite won every metric except unsupported-request detection, including the headline exact JSON match.
 
 | | Granite-4.0-H-350M | LFM2.5-350M |
 |---|---:|---:|
@@ -89,8 +89,9 @@ Full write-up with every source: report [Section 3](report/TRONX_Technical_Repor
 | Fields | **74.4%** | 49.7% |
 | Intent | **82.3%** | 78.7% |
 | Valid JSON | **98.5%** | 96.5% |
+| Unsupported recall | 42.9% | **58.9%** |
 
-   Granite is also Apache-2.0, so it was selected.
+   LFM was better only at refusing unsupported requests zero-shot. That metric was noisy in this early dataset (10 sentence patterns), and fine-tuning fixed it: Granite reaches 99.1% after LoRA. With the large lead on exact JSON and fields, plus the Apache-2.0 licence, Granite was selected.
 
 ## Consolidated performance report
 
