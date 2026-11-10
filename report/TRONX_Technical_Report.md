@@ -11,15 +11,17 @@
 
 TronOS needs a small model that runs fully on the phone and turns a spoken command into JSON that Android services can execute. We built the full pipeline: microphone, voice activity detection, Moonshine speech-to-text, then a fine-tuned Granite-4.0-H-350M that outputs the JSON. It runs on a mid-range Moto G34 5G with no network permission.
 
-Main results (held-out test set, 613 commands, never used for training or model selection):
+Main results (held-out test set, 613 commands, never used for training or model selection; precision stated per column):
 
-| | Base Granite-4.0-H-350M | Fine-tuned (LoRA D) | Fine-tuned INT8 (deployed) |
-|---|---:|---:|---:|
-| Exact JSON match | 32.5% | **89.1%** | 86.3% |
-| Intent accuracy | 74.2% | 94.9% | 94.3% |
-| Field accuracy | 59.3% | 88.8% | 86.7% |
-| JSON validity | 98.9% | 100% | 100% |
-| Unsupported-request recall | 33.0% | 99.1% | 99.1% |
+| | Base FP32 | Base INT8 | Fine-tuned FP32 (LoRA D, merged) | Fine-tuned INT8 (deployed) |
+|---|---:|---:|---:|---:|
+| Exact JSON match | 32.5% | ⟨pending⟩ | **89.1%** | 86.3% |
+| Intent accuracy | 74.2% | ⟨pending⟩ | 94.9% | 94.3% |
+| Field accuracy | 59.3% | ⟨pending⟩ | 88.8% | 86.7% |
+| JSON validity | 98.9% | ⟨pending⟩ | 100% | 100% |
+| Unsupported-request recall | 33.0% | ⟨pending⟩ | 99.1% | 99.1% |
+
+FP32 = full precision (base: PyTorch; fine-tuned: ONNX Runtime, identical to PyTorch). INT8 = ONNX Runtime CPU, the same quantisation recipe for base and fine-tuned (Section 8).
 
 - LoRA fine-tuning raised exact JSON match from 32.5% to 89.1% (+56.6 points) by training only 1.25% of the parameters (4.26 M).
 - The adapter was merged into the base weights and quantized. INT8 keeps 94% of outputs byte-identical to full precision and loses 2.8 points of exact match. The file shrinks from 1.3 GB (FP32) to 404 MB.
@@ -234,9 +236,11 @@ Four experiments on the same data, hyper-parameters and seed. Only the target mo
 | C | MLP `input_linear`, `output_linear` | 32 | 3,932,160 | 1.16% | 15.0 MB |
 | **D** | **attention q,k,v,o + MLP** | **32** | **4,259,840** | **1.25%** | **16.3 MB** |
 
+All rows FP32, PyTorch, unmerged adapter (identical to merged ONNX FP32).
+
 | Exp | Val exact | Val loss | **Test exact** | Test intent | Test fields | Valid JSON | Unsupported recall |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Base | 30.2% | 0.326 | 32.5% | 74.2% | 59.3% | 98.9% | 33.0% |
+| Base (FP32) | 30.2% | 0.326 | 32.5% | 74.2% | 59.3% | 98.9% | 33.0% |
 | A | 81.6% | 0.0446 | 77.5% | 89.6% | 81.1% | 100% | 81.1% |
 | B | 85.0% | 0.0429 | 81.4% | 91.0% | 83.4% | 100% | 89.6% |
 | C | 91.2% | 0.0229 | 85.5% | 93.6% | 88.7% | 100% | 91.5% |
@@ -371,19 +375,19 @@ Same prompt, same greedy decoding (max 64 new tokens), same scoring code (`scrip
 
 ### 9.1 Before and after fine-tuning and quantization (test set, 613)
 
-| Metric | Base FP32 | Base FP16 | Fine-tuned FP32 | Fine-tuned FP16 | Fine-tuned INT8 | Fine-tuned INT4 |
-|---|---:|---:|---:|---:|---:|---:|
-| Intent accuracy | 74.2% | ⟨pending⟩ | 94.9% | ⟨pending⟩ | 94.3% | 89.9% |
-| Field accuracy | 59.3% | ⟨pending⟩ | 88.8% | ⟨pending⟩ | 86.7% | 82.4% |
-| Exact JSON match | 32.5% | ⟨pending⟩ | 89.1% | ⟨pending⟩ | 86.3% | 77.8% |
-| JSON validity | 98.9% | ⟨pending⟩ | 100% | ⟨pending⟩ | 100% | 99.8% |
-| Unsupported recall | 33.0% | ⟨pending⟩ | 99.1% | ⟨pending⟩ | 99.1% | 78.3% |
+| Metric | Base FP32 | Base FP16 | Base INT8 | Fine-tuned FP32 | Fine-tuned FP16 | Fine-tuned INT8 | Fine-tuned INT4 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Intent accuracy | 74.2% | ⟨pending⟩ | ⟨pending⟩ | 94.9% | ⟨pending⟩ | 94.3% | 89.9% |
+| Field accuracy | 59.3% | ⟨pending⟩ | ⟨pending⟩ | 88.8% | ⟨pending⟩ | 86.7% | 82.4% |
+| Exact JSON match | 32.5% | ⟨pending⟩ | ⟨pending⟩ | 89.1% | ⟨pending⟩ | 86.3% | 77.8% |
+| JSON validity | 98.9% | ⟨pending⟩ | ⟨pending⟩ | 100% | ⟨pending⟩ | 100% | 99.8% |
+| Unsupported recall | 33.0% | ⟨pending⟩ | ⟨pending⟩ | 99.1% | ⟨pending⟩ | 99.1% | 78.3% |
 
-On the 120 hand-written test commands, exact match went from **44.2% (base) to 92.5% (fine-tuned)**. On the template commands, it went from 29.6% to 88.2%.
+On the 120 hand-written test commands, exact match went from **44.2% (base FP32) to 92.5% (fine-tuned FP32)**. On the template commands, it went from 29.6% to 88.2%.
 
 ### 9.2 What changed (real test outputs)
 
-| Command | Base model | Fine-tuned (D) |
+| Command | Base FP32 | Fine-tuned FP32 (D) |
 |---|---|---|
 | enable airplane mode | `{"intent": "set_alarm", "time": "08:00", "date": "today", "in": "relative time"}` | `{"intent": "change_setting", "setting": "airplane_mode", "action": "on"}` |
 | send 2000 to my mom's account | `{"intent": "send_message", "contact": "Mom", "message": "2000"}` | `{"intent": "unsupported"}` |

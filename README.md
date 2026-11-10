@@ -16,12 +16,14 @@ A small LLM that runs fully on an Android phone and turns a spoken command into 
 
 Held-out test set (613 commands, never used for training or model selection):
 
-| | Base model | Fine-tuned (LoRA D) | Fine-tuned INT8 (deployed) |
-|---|---:|---:|---:|
-| Exact JSON match | 32.5% | **89.1%** | 86.3% |
-| Intent accuracy | 74.2% | 94.9% | 94.3% |
-| JSON validity | 98.9% | 100% | 100% |
-| Unsupported-request recall | 33.0% | 99.1% | 99.1% |
+| | Base FP32 | Base INT8 | Fine-tuned FP32 (LoRA D, merged) | Fine-tuned INT8 (deployed) |
+|---|---:|---:|---:|---:|
+| Exact JSON match | 32.5% | ⟨pending⟩ | **89.1%** | 86.3% |
+| Intent accuracy | 74.2% | ⟨pending⟩ | 94.9% | 94.3% |
+| JSON validity | 98.9% | ⟨pending⟩ | 100% | 100% |
+| Unsupported-request recall | 33.0% | ⟨pending⟩ | 99.1% | 99.1% |
+
+FP32 rows: PyTorch (base) and ONNX Runtime (fine-tuned; identical to PyTorch). INT8 rows: ONNX Runtime CPU, same quantisation recipe for base and fine-tuned.
 
 On the Moto G34 5G (Snapdragon 695, ONNX Runtime Android 1.31.1, fine-tuned INT8):
 
