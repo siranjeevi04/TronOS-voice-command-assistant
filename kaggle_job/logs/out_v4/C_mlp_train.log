@@ -1,0 +1,47 @@
+Loading weights:   0%|          | 0/370 [00:00<?, ?it/s]Loading weights:   0%|          | 1/370 [00:00<02:01,  3.04it/s]Loading weights:  55%|█████▌    | 204/370 [00:00<00:00, 578.31it/s]Loading weights:  82%|████████▏ | 303/370 [00:00<00:00, 696.96it/s]Loading weights: 100%|██████████| 370/370 [00:00<00:00, 606.26it/s]
+trainable=3,932,160 total(base)=340,332,224 (1.155%)
+train=2510 val=354 seq_len mean=524.4 max=551
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+initial val_loss=0.3257
+ep 1 step 10/314 loss=0.1775 lr=1.47e-04 elapsed=110s
+ep 1 step 20/314 loss=0.0770 lr=2.00e-04 elapsed=219s
+ep 1 step 30/314 loss=0.0463 lr=1.99e-04 elapsed=328s
+ep 1 step 40/314 loss=0.0267 lr=1.97e-04 elapsed=437s
+ep 1 step 50/314 loss=0.0268 lr=1.93e-04 elapsed=547s
+ep 1 step 60/314 loss=0.0243 lr=1.89e-04 elapsed=656s
+ep 1 step 70/314 loss=0.0180 lr=1.84e-04 elapsed=765s
+ep 1 step 80/314 loss=0.0097 lr=1.78e-04 elapsed=875s
+ep 1 step 90/314 loss=0.0111 lr=1.71e-04 elapsed=984s
+ep 1 step 100/314 loss=0.0155 lr=1.63e-04 elapsed=1093s
+ep 1 step 110/314 loss=0.0091 lr=1.54e-04 elapsed=1202s
+ep 1 step 120/314 loss=0.0059 lr=1.45e-04 elapsed=1312s
+ep 1 step 130/314 loss=0.0064 lr=1.35e-04 elapsed=1421s
+ep 1 step 140/314 loss=0.0066 lr=1.25e-04 elapsed=1530s
+ep 1 step 150/314 loss=0.0048 lr=1.15e-04 elapsed=1640s
+== epoch 1 val_loss=0.0275 elapsed=1819s
+ep 2 step 160/314 loss=0.0014 lr=1.05e-04 elapsed=1852s
+ep 2 step 170/314 loss=0.0019 lr=9.42e-05 elapsed=1961s
+ep 2 step 180/314 loss=0.0008 lr=8.38e-05 elapsed=2071s
+ep 2 step 190/314 loss=0.0006 lr=7.35e-05 elapsed=2180s
+ep 2 step 200/314 loss=0.0014 lr=6.36e-05 elapsed=2289s
+ep 2 step 210/314 loss=0.0005 lr=5.40e-05 elapsed=2398s
+ep 2 step 220/314 loss=0.0005 lr=4.49e-05 elapsed=2506s
+ep 2 step 230/314 loss=0.0030 lr=3.65e-05 elapsed=2616s
+ep 2 step 240/314 loss=0.0012 lr=2.87e-05 elapsed=2725s
+ep 2 step 250/314 loss=0.0007 lr=2.18e-05 elapsed=2835s
+ep 2 step 260/314 loss=0.0009 lr=1.57e-05 elapsed=2943s
+ep 2 step 270/314 loss=0.0014 lr=1.05e-05 elapsed=3052s
+ep 2 step 280/314 loss=0.0003 lr=6.31e-06 elapsed=3162s
+ep 2 step 290/314 loss=0.0003 lr=3.16e-06 elapsed=3272s
+ep 2 step 300/314 loss=0.0006 lr=1.08e-06 elapsed=3381s
+ep 2 step 310/314 loss=0.0006 lr=8.83e-08 elapsed=3490s
+== epoch 2 val_loss=0.0229 elapsed=3637s
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+{
+  "trainable_params": 3932160,
+  "train_time_s": 3636.73304271698,
+  "final_train_loss_full_pass": 0.0003852820276900889,
+  "final_val_loss": 0.022899626079427013,
+  "adapter_bytes": 15746632
+}

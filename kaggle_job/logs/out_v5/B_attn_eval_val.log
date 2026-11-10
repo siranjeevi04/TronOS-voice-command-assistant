@@ -1,0 +1,37 @@
+[B_attn eval val] Loading weights:   0%|          | 0/370 [00:00<?, ?it/s]Loading weights:  26%|██▌       | 96/370 [00:00<00:00, 958.95it/s]Loading weights:  56%|█████▌    | 206/370 [00:00<00:00, 1041.29it/s]Loading weights:  84%|████████▍ | 311/370 [00:00<00:00, 1037.65it/s]Loading weights: 100%|██████████| 370/370 [00:00<00:00, 999.41it/s] 
+[B_attn eval val] [transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[B_attn eval val] [transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+[B_attn eval val] [transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[B_attn eval val] [transformers] `selective_state_update` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+[B_attn eval val] 16/354
+[B_attn eval val] 32/354
+[B_attn eval val] 48/354
+[B_attn eval val] 64/354
+[B_attn eval val] 80/354
+[B_attn eval val] 96/354
+[B_attn eval val] 112/354
+[B_attn eval val] 128/354
+[B_attn eval val] 144/354
+[B_attn eval val] 160/354
+[B_attn eval val] 176/354
+[B_attn eval val] 192/354
+[B_attn eval val] 208/354
+[B_attn eval val] 224/354
+[B_attn eval val] 240/354
+[B_attn eval val] 256/354
+[B_attn eval val] 272/354
+[B_attn eval val] 288/354
+[B_attn eval val] 304/354
+[B_attn eval val] 320/354
+[B_attn eval val] 336/354
+[B_attn eval val] 352/354
+[B_attn eval val] 354/354
+[B_attn eval val] {
+[B_attn eval val]   "n": 354,
+[B_attn eval val]   "intent_accuracy": 0.9463276836158192,
+[B_attn eval val]   "field_accuracy": 0.8864970645792564,
+[B_attn eval val]   "exact_match": 0.8502824858757062,
+[B_attn eval val]   "json_validity": 1.0,
+[B_attn eval val]   "unsupported_recall": 0.9482758620689655,
+[B_attn eval val]   "target_loss": 0.04288837782001474
+[B_attn eval val] }

@@ -1,0 +1,27 @@
+Loading weights:   0%|          | 0/370 [00:00<?, ?it/s]Loading weights:   0%|          | 1/370 [00:00<01:35,  3.85it/s]Loading weights:  74%|███████▎  | 272/370 [00:00<00:00, 960.83it/s]Loading weights: 100%|██████████| 370/370 [00:00<00:00, 797.08it/s]
+trainable=163,840 total(base)=340,332,224 (0.048%)
+train=2510 val=354 seq_len mean=524.4 max=551
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+initial val_loss=0.3257
+ep 1 step 10/314 loss=0.2535 lr=1.47e-04 elapsed=89s
+ep 1 step 20/314 loss=0.1384 lr=2.00e-04 elapsed=177s
+ep 1 step 30/314 loss=0.1052 lr=1.99e-04 elapsed=266s
+ep 1 step 40/314 loss=0.0730 lr=1.97e-04 elapsed=354s
+ep 1 step 50/314 loss=0.0734 lr=1.93e-04 elapsed=442s
+ep 1 step 60/314 loss=0.0680 lr=1.89e-04 elapsed=531s
+ep 1 step 70/314 loss=0.0566 lr=1.84e-04 elapsed=619s
+ep 1 step 80/314 loss=0.0536 lr=1.78e-04 elapsed=708s
+ep 1 step 90/314 loss=0.0474 lr=1.71e-04 elapsed=796s
+ep 1 step 100/314 loss=0.0296 lr=1.63e-04 elapsed=884s
+ep 1 step 110/314 loss=0.0458 lr=1.54e-04 elapsed=972s
+ep 1 step 120/314 loss=0.0326 lr=1.45e-04 elapsed=1061s
+ep 1 step 130/314 loss=0.0301 lr=1.35e-04 elapsed=1149s
+ep 1 step 140/314 loss=0.0383 lr=1.25e-04 elapsed=1237s
+ep 1 step 150/314 loss=0.0292 lr=1.15e-04 elapsed=1325s
+== epoch 1 val_loss=0.0539 elapsed=1488s
+ep 2 step 160/314 loss=0.0280 lr=1.05e-04 elapsed=1515s
+ep 2 step 170/314 loss=0.0156 lr=9.42e-05 elapsed=1603s
+ep 2 step 180/314 loss=0.0164 lr=8.38e-05 elapsed=1692s
+ep 2 step 190/314 loss=0.0146 lr=7.35e-05 elapsed=1780s
+ep 2 step 200/314 loss=0.0176 lr=6.36e-05 elapsed=1868s

@@ -1,0 +1,47 @@
+[A_qv] Loading weights:   0%|          | 0/370 [00:00<?, ?it/s]Loading weights:  31%|███▏      | 116/370 [00:00<00:00, 1157.10it/s]Loading weights:  63%|██████▎   | 232/370 [00:00<00:00, 818.20it/s] Loading weights:  90%|█████████ | 334/370 [00:00<00:00, 893.19it/s]Loading weights: 100%|██████████| 370/370 [00:00<00:00, 919.41it/s]
+[A_qv] trainable=163,840 total(base)=340,332,224 (0.048%)
+[A_qv] train=2510 val=354 seq_len mean=524.4 max=551
+[A_qv] [transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[A_qv] [transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+[A_qv] initial val_loss=0.3257
+[A_qv] ep 1 step 10/314 (3%) loss=0.2535 lr=1.47e-04 elapsed=1.5m eta=46.7m
+[A_qv] ep 1 step 20/314 (6%) loss=0.1384 lr=2.00e-04 elapsed=3.1m eta=44.9m
+[A_qv] ep 1 step 30/314 (10%) loss=0.1052 lr=1.99e-04 elapsed=4.6m eta=43.3m
+[A_qv] ep 1 step 40/314 (13%) loss=0.0730 lr=1.97e-04 elapsed=6.1m eta=41.7m
+[A_qv] ep 1 step 50/314 (16%) loss=0.0734 lr=1.93e-04 elapsed=7.6m eta=40.1m
+[A_qv] ep 1 step 60/314 (19%) loss=0.0680 lr=1.89e-04 elapsed=9.1m eta=38.6m
+[A_qv] ep 1 step 70/314 (22%) loss=0.0566 lr=1.84e-04 elapsed=10.6m eta=37.0m
+[A_qv] ep 1 step 80/314 (25%) loss=0.0536 lr=1.78e-04 elapsed=12.1m eta=35.5m
+[A_qv] ep 1 step 90/314 (29%) loss=0.0474 lr=1.71e-04 elapsed=13.7m eta=34.0m
+[A_qv] ep 1 step 100/314 (32%) loss=0.0296 lr=1.63e-04 elapsed=15.2m eta=32.5m
+[A_qv] ep 1 step 110/314 (35%) loss=0.0458 lr=1.54e-04 elapsed=16.7m eta=30.9m
+[A_qv] ep 1 step 120/314 (38%) loss=0.0326 lr=1.45e-04 elapsed=18.2m eta=29.4m
+[A_qv] ep 1 step 130/314 (41%) loss=0.0301 lr=1.35e-04 elapsed=19.7m eta=27.9m
+[A_qv] ep 1 step 140/314 (45%) loss=0.0383 lr=1.25e-04 elapsed=21.2m eta=26.3m
+[A_qv] ep 1 step 150/314 (48%) loss=0.0292 lr=1.15e-04 elapsed=22.7m eta=24.8m
+[A_qv] == epoch 1 val_loss=0.0539 elapsed=1532s
+[A_qv] ep 2 step 160/314 (51%) loss=0.0280 lr=1.05e-04 elapsed=26.0m eta=25.0m
+[A_qv] ep 2 step 170/314 (54%) loss=0.0156 lr=9.42e-05 elapsed=27.5m eta=23.3m
+[A_qv] ep 2 step 180/314 (57%) loss=0.0164 lr=8.38e-05 elapsed=29.0m eta=21.6m
+[A_qv] ep 2 step 190/314 (61%) loss=0.0146 lr=7.35e-05 elapsed=30.5m eta=19.9m
+[A_qv] ep 2 step 200/314 (64%) loss=0.0176 lr=6.36e-05 elapsed=32.0m eta=18.3m
+[A_qv] ep 2 step 210/314 (67%) loss=0.0172 lr=5.40e-05 elapsed=33.5m eta=16.6m
+[A_qv] ep 2 step 220/314 (70%) loss=0.0185 lr=4.49e-05 elapsed=35.0m eta=15.0m
+[A_qv] ep 2 step 230/314 (73%) loss=0.0167 lr=3.65e-05 elapsed=36.6m eta=13.4m
+[A_qv] ep 2 step 240/314 (76%) loss=0.0150 lr=2.87e-05 elapsed=38.1m eta=11.7m
+[A_qv] ep 2 step 250/314 (80%) loss=0.0161 lr=2.18e-05 elapsed=39.6m eta=10.1m
+[A_qv] ep 2 step 260/314 (83%) loss=0.0179 lr=1.57e-05 elapsed=41.1m eta=8.5m
+[A_qv] ep 2 step 270/314 (86%) loss=0.0125 lr=1.05e-05 elapsed=42.6m eta=6.9m
+[A_qv] ep 2 step 280/314 (89%) loss=0.0122 lr=6.31e-06 elapsed=44.2m eta=5.4m
+[A_qv] ep 2 step 290/314 (92%) loss=0.0087 lr=3.16e-06 elapsed=45.7m eta=3.8m
+[A_qv] ep 2 step 300/314 (96%) loss=0.0142 lr=1.08e-06 elapsed=47.2m eta=2.2m
+[A_qv] ep 2 step 310/314 (99%) loss=0.0127 lr=8.83e-08 elapsed=48.7m eta=0.6m
+[A_qv] == epoch 2 val_loss=0.0446 elapsed=3065s
+[A_qv] Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[A_qv] {
+[A_qv]   "trainable_params": 163840,
+[A_qv]   "train_time_s": 3064.862560749054,
+[A_qv]   "final_train_loss_full_pass": 0.011407681725520962,
+[A_qv]   "final_val_loss": 0.044603006974954694,
+[A_qv]   "adapter_bytes": 657472
+[A_qv] }

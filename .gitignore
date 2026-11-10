@@ -11,7 +11,7 @@ android/app/src/int8/
 *.apk
 *.onnx
 *.onnx_data
-logs/
+/logs/
 .venv/
 __pycache__/
 .DS_Store

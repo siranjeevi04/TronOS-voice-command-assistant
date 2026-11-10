@@ -1,0 +1,53 @@
+[B_attn eval test] Loading weights:   0%|          | 0/370 [00:00<?, ?it/s]Loading weights:  19%|█▉        | 72/370 [00:00<00:00, 719.93it/s]Loading weights:  49%|████▊     | 180/370 [00:00<00:00, 887.79it/s]Loading weights:  77%|███████▋  | 286/370 [00:00<00:00, 942.72it/s]Loading weights: 100%|██████████| 370/370 [00:00<00:00, 957.73it/s]
+[B_attn eval test] [transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[B_attn eval test] [transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+[B_attn eval test] [transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[B_attn eval test] [transformers] `selective_state_update` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+[B_attn eval test] 16/613
+[B_attn eval test] 32/613
+[B_attn eval test] 48/613
+[B_attn eval test] 64/613
+[B_attn eval test] 80/613
+[B_attn eval test] 96/613
+[B_attn eval test] 112/613
+[B_attn eval test] 128/613
+[B_attn eval test] 144/613
+[B_attn eval test] 160/613
+[B_attn eval test] 176/613
+[B_attn eval test] 192/613
+[B_attn eval test] 208/613
+[B_attn eval test] 224/613
+[B_attn eval test] 240/613
+[B_attn eval test] 256/613
+[B_attn eval test] 272/613
+[B_attn eval test] 288/613
+[B_attn eval test] 304/613
+[B_attn eval test] 320/613
+[B_attn eval test] 336/613
+[B_attn eval test] 352/613
+[B_attn eval test] 368/613
+[B_attn eval test] 384/613
+[B_attn eval test] 400/613
+[B_attn eval test] 416/613
+[B_attn eval test] 432/613
+[B_attn eval test] 448/613
+[B_attn eval test] 464/613
+[B_attn eval test] 480/613
+[B_attn eval test] 496/613
+[B_attn eval test] 512/613
+[B_attn eval test] 528/613
+[B_attn eval test] 544/613
+[B_attn eval test] 560/613
+[B_attn eval test] 576/613
+[B_attn eval test] 592/613
+[B_attn eval test] 608/613
+[B_attn eval test] 613/613
+[B_attn eval test] {
+[B_attn eval test]   "n": 613,
+[B_attn eval test]   "intent_accuracy": 0.9102773246329527,
+[B_attn eval test]   "field_accuracy": 0.833555259653795,
+[B_attn eval test]   "exact_match": 0.8140293637846656,
+[B_attn eval test]   "json_validity": 1.0,
+[B_attn eval test]   "unsupported_recall": 0.8962264150943396,
+[B_attn eval test]   "target_loss": 0.07149030854162472
+[B_attn eval test] }

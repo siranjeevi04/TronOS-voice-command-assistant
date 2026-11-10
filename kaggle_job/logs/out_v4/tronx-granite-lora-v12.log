@@ -1,0 +1,6 @@
+[{"stream_name":"stdout","time":1.5140353210000002,"data":"dataset found at /kaggle/input/datasets/siranjeevi029/tronx-granite-v12\n"}
+,{"stream_name":"stdout","time":57.768819017,"data":"accelerate                            1.15.0\n"}
+,{"stream_name":"stdout","time":57.768865997,"data":"peft                                  0.21.2\n"}
+,{"stream_name":"stdout","time":57.76887482,"data":"torch                                 2.11.0+cu130\n"}
+,{"stream_name":"stdout","time":57.768880193,"data":"transformers                          5.22.2\n"}
+]

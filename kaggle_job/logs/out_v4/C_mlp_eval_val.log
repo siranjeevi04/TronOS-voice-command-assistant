@@ -1,0 +1,37 @@
+Loading weights:   0%|          | 0/370 [00:00<?, ?it/s]Loading weights:   0%|          | 1/370 [00:00<00:57,  6.38it/s]Loading weights:  61%|██████    | 225/370 [00:00<00:00, 1056.77it/s]Loading weights:  96%|█████████▌| 354/370 [00:00<00:00, 947.88it/s] Loading weights: 100%|██████████| 370/370 [00:00<00:00, 860.88it/s]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+[transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `selective_state_update` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+16/354
+32/354
+48/354
+64/354
+80/354
+96/354
+112/354
+128/354
+144/354
+160/354
+176/354
+192/354
+208/354
+224/354
+240/354
+256/354
+272/354
+288/354
+304/354
+320/354
+336/354
+352/354
+354/354
+{
+  "n": 354,
+  "intent_accuracy": 0.96045197740113,
+  "field_accuracy": 0.949119373776908,
+  "exact_match": 0.9124293785310734,
+  "json_validity": 1.0,
+  "unsupported_recall": 0.9137931034482759,
+  "target_loss": 0.022899649593957502
+}

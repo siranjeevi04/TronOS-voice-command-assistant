@@ -1,0 +1,53 @@
+Loading weights:   0%|          | 0/370 [00:00<?, ?it/s]Loading weights:  14%|█▎        | 50/370 [00:00<00:00, 499.59it/s]Loading weights:  55%|█████▌    | 204/370 [00:00<00:00, 1101.21it/s]Loading weights:  85%|████████▍ | 314/370 [00:00<00:00, 1042.18it/s]Loading weights: 100%|██████████| 370/370 [00:00<00:00, 1022.95it/s]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+[transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `selective_state_update` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+16/613
+32/613
+48/613
+64/613
+80/613
+96/613
+112/613
+128/613
+144/613
+160/613
+176/613
+192/613
+208/613
+224/613
+240/613
+256/613
+272/613
+288/613
+304/613
+320/613
+336/613
+352/613
+368/613
+384/613
+400/613
+416/613
+432/613
+448/613
+464/613
+480/613
+496/613
+512/613
+528/613
+544/613
+560/613
+576/613
+592/613
+608/613
+613/613
+{
+  "n": 613,
+  "intent_accuracy": 0.9363784665579119,
+  "field_accuracy": 0.8868175765645806,
+  "exact_match": 0.8548123980424144,
+  "json_validity": 1.0,
+  "unsupported_recall": 0.9150943396226415,
+  "target_loss": 0.06633113814620938
+}

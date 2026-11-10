@@ -1,0 +1,53 @@
+[A_qv eval test] Loading weights:   0%|          | 0/370 [00:00<?, ?it/s]Loading weights:  42%|████▏     | 157/370 [00:00<00:00, 1527.83it/s]Loading weights:  84%|████████▍ | 310/370 [00:00<00:00, 1203.06it/s]Loading weights: 100%|██████████| 370/370 [00:00<00:00, 1198.20it/s]
+[A_qv eval test] [transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[A_qv eval test] [transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+[A_qv eval test] [transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[A_qv eval test] [transformers] `selective_state_update` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.
+[A_qv eval test] 16/613
+[A_qv eval test] 32/613
+[A_qv eval test] 48/613
+[A_qv eval test] 64/613
+[A_qv eval test] 80/613
+[A_qv eval test] 96/613
+[A_qv eval test] 112/613
+[A_qv eval test] 128/613
+[A_qv eval test] 144/613
+[A_qv eval test] 160/613
+[A_qv eval test] 176/613
+[A_qv eval test] 192/613
+[A_qv eval test] 208/613
+[A_qv eval test] 224/613
+[A_qv eval test] 240/613
+[A_qv eval test] 256/613
+[A_qv eval test] 272/613
+[A_qv eval test] 288/613
+[A_qv eval test] 304/613
+[A_qv eval test] 320/613
+[A_qv eval test] 336/613
+[A_qv eval test] 352/613
+[A_qv eval test] 368/613
+[A_qv eval test] 384/613
+[A_qv eval test] 400/613
+[A_qv eval test] 416/613
+[A_qv eval test] 432/613
+[A_qv eval test] 448/613
+[A_qv eval test] 464/613
+[A_qv eval test] 480/613
+[A_qv eval test] 496/613
+[A_qv eval test] 512/613
+[A_qv eval test] 528/613
+[A_qv eval test] 544/613
+[A_qv eval test] 560/613
+[A_qv eval test] 576/613
+[A_qv eval test] 592/613
+[A_qv eval test] 608/613
+[A_qv eval test] 613/613
+[A_qv eval test] {
+[A_qv eval test]   "n": 613,
+[A_qv eval test]   "intent_accuracy": 0.8955954323001631,
+[A_qv eval test]   "field_accuracy": 0.810918774966711,
+[A_qv eval test]   "exact_match": 0.7748776508972267,
+[A_qv eval test]   "json_validity": 1.0,
+[A_qv eval test]   "unsupported_recall": 0.8113207547169812,
+[A_qv eval test]   "target_loss": 0.06843266579388702
+[A_qv eval test] }

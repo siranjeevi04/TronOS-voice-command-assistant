@@ -1,0 +1,653 @@
+[{"stream_name":"stdout","time":1.432268835,"data":"dataset found at /kaggle/input/datasets/siranjeevi029/tronx-granite-v12\n"}
+,{"stream_name":"stdout","time":58.54025573,"data":"accelerate                            1.15.0\n"}
+,{"stream_name":"stdout","time":58.54029275,"data":"peft                                  0.21.2\n"}
+,{"stream_name":"stdout","time":58.540296702,"data":"torch                                 2.11.0+cu130\n"}
+,{"stream_name":"stdout","time":58.540299715,"data":"transformers                          5.22.2\n"}
+,{"stream_name":"stdout","time":74.764294328,"data":"[GPU] 0, 0 %, 0 MiB, 15360 MiB, 48, 10.06 W\n"}
+,{"stream_name":"stdout","time":74.773971576,"data":"[GPU] 1, 0 %, 0 MiB, 15360 MiB, 51, 10.16 W\n"}
+,{"stream_name":"stdout","time":83.97170107,"data":"[B_attn] \rLoading weights:   0%|          | 0/370 [00:00\u003c?, ?it/s]\rLoading weights:   0%|          | 1/370 [00:00\u003c01:59,  3.10it/s]\rLoading weights:  61%|██████    | 224/370 [00:00\u003c00:00, 682.29it/s]\rLoading weights:  96%|█████████▌| 354/370 [00:00\u003c00:00, 646.14it/s]\rLoading weights: 100%|██████████| 370/370 [00:00\u003c00:00, 562.06it/s]\n"}
+,{"stream_name":"stdout","time":84.121971489,"data":"[A_qv] \rLoading weights:   0%|          | 0/370 [00:00\u003c?, ?it/s]\rLoading weights:  31%|███▏      | 116/370 [00:00\u003c00:00, 1157.10it/s]\rLoading weights:  63%|██████▎   | 232/370 [00:00\u003c00:00, 818.20it/s] \rLoading weights:  90%|█████████ | 334/370 [00:00\u003c00:00, 893.19it/s]\rLoading weights: 100%|██████████| 370/370 [00:00\u003c00:00, 919.41it/s]\n"}
+,{"stream_name":"stdout","time":84.901759917,"data":"[A_qv] trainable=163,840 total(base)=340,332,224 (0.048%)\n"}
+,{"stream_name":"stdout","time":84.912047663,"data":"[B_attn] trainable=327,680 total(base)=340,332,224 (0.096%)\n"}
+,{"stream_name":"stdout","time":91.987003263,"data":"[B_attn] train=2510 val=354 seq_len mean=524.4 max=551\n"}
+,{"stream_name":"stdout","time":92.035162138,"data":"[A_qv] train=2510 val=354 seq_len mean=524.4 max=551\n"}
+,{"stream_name":"stdout","time":92.554564604,"data":"[B_attn] [transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":92.554591796,"data":"[A_qv] [transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":93.673677735,"data":"[B_attn] [transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":93.673815453,"data":"[A_qv] [transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":104.785271659,"data":"[GPU] 0, 99 %, 3369 MiB, 15360 MiB, 57, 64.89 W\n"}
+,{"stream_name":"stdout","time":104.790708224,"data":"[GPU] 1, 99 %, 3371 MiB, 15360 MiB, 59, 65.93 W\n"}
+,{"stream_name":"stdout","time":134.809100975,"data":"[GPU] 0, 100 %, 4641 MiB, 15360 MiB, 66, 68.72 W\n"}
+,{"stream_name":"stdout","time":134.814949997,"data":"[GPU] 1, 100 %, 4643 MiB, 15360 MiB, 68, 61.95 W\n"}
+,{"stream_name":"stdout","time":164.828936982,"data":"[GPU] 0, 99 %, 4641 MiB, 15360 MiB, 74, 66.06 W\n"}
+,{"stream_name":"stdout","time":164.834572479,"data":"[GPU] 1, 99 %, 4643 MiB, 15360 MiB, 75, 66.02 W\n"}
+,{"stream_name":"stdout","time":194.842864546,"data":"[GPU] 0, 100 %, 5063 MiB, 15360 MiB, 79, 66.81 W\n"}
+,{"stream_name":"stdout","time":194.848116544,"data":"[GPU] 1, 100 %, 5065 MiB, 15360 MiB, 80, 68.68 W\n"}
+,{"stream_name":"stdout","time":195.211473744,"data":"[A_qv] initial val_loss=0.3257\n"}
+,{"stream_name":"stdout","time":196.20788477,"data":"[B_attn] initial val_loss=0.3257\n"}
+,{"stream_name":"stdout","time":224.856994044,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 68.47 W\n"}
+,{"stream_name":"stdout","time":224.86298307,"data":"[GPU] 1, 100 %, 7611 MiB, 15360 MiB, 76, 65.79 W\n"}
+,{"stream_name":"stdout","time":254.872640942,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 76, 65.98 W\n"}
+,{"stream_name":"stdout","time":254.882044626,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 66.92 W\n"}
+,{"stream_name":"stdout","time":284.891427282,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 76, 64.99 W\n"}
+,{"stream_name":"stdout","time":284.900636555,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 77, 67.20 W\n"}
+,{"stream_name":"stdout","time":287.375643828,"data":"[A_qv] ep 1 step 10/314 (3%) loss=0.2535 lr=1.47e-04 elapsed=1.5m eta=46.7m\n"}
+,{"stream_name":"stdout","time":289.366877579,"data":"[B_attn] ep 1 step 10/314 (3%) loss=0.2351 lr=1.47e-04 elapsed=1.6m eta=47.2m\n"}
+,{"stream_name":"stdout","time":314.909283366,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 67.00 W\n"}
+,{"stream_name":"stdout","time":314.915487489,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 76, 66.86 W\n"}
+,{"stream_name":"stdout","time":344.925046922,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 76, 66.22 W\n"}
+,{"stream_name":"stdout","time":344.93306524,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 70.84 W\n"}
+,{"stream_name":"stdout","time":374.947429267,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 66.75 W\n"}
+,{"stream_name":"stdout","time":374.959331643,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 77, 64.95 W\n"}
+,{"stream_name":"stdout","time":378.347646655,"data":"[A_qv] ep 1 step 20/314 (6%) loss=0.1384 lr=2.00e-04 elapsed=3.1m eta=44.9m\n"}
+,{"stream_name":"stdout","time":381.593225328,"data":"[B_attn] ep 1 step 20/314 (6%) loss=0.1124 lr=2.00e-04 elapsed=3.1m eta=45.4m\n"}
+,{"stream_name":"stdout","time":404.968623201,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 76, 66.75 W\n"}
+,{"stream_name":"stdout","time":404.973598114,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 78, 65.44 W\n"}
+,{"stream_name":"stdout","time":434.985888855,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 61.89 W\n"}
+,{"stream_name":"stdout","time":434.987889759,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 61.20 W\n"}
+,{"stream_name":"stdout","time":464.997131553,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 65.89 W\n"}
+,{"stream_name":"stdout","time":465.002385292,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.93 W\n"}
+,{"stream_name":"stdout","time":469.40370873,"data":"[A_qv] ep 1 step 30/314 (10%) loss=0.1052 lr=1.99e-04 elapsed=4.6m eta=43.3m\n"}
+,{"stream_name":"stdout","time":474.012011615,"data":"[B_attn] ep 1 step 30/314 (10%) loss=0.0783 lr=1.99e-04 elapsed=4.6m eta=43.8m\n"}
+,{"stream_name":"stdout","time":495.011945896,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 60.97 W\n"}
+,{"stream_name":"stdout","time":495.021251915,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.04 W\n"}
+,{"stream_name":"stdout","time":525.029552094,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 65.57 W\n"}
+,{"stream_name":"stdout","time":525.036196175,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.30 W\n"}
+,{"stream_name":"stdout","time":555.044865524,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 65.98 W\n"}
+,{"stream_name":"stdout","time":555.051011626,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.14 W\n"}
+,{"stream_name":"stdout","time":560.069948926,"data":"[A_qv] ep 1 step 40/314 (13%) loss=0.0730 lr=1.97e-04 elapsed=6.1m eta=41.7m\n"}
+,{"stream_name":"stdout","time":566.273421301,"data":"[B_attn] ep 1 step 40/314 (13%) loss=0.0545 lr=1.97e-04 elapsed=6.2m eta=42.2m\n"}
+,{"stream_name":"stdout","time":585.065720062,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 65.57 W\n"}
+,{"stream_name":"stdout","time":585.071628673,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 78, 65.83 W\n"}
+,{"stream_name":"stdout","time":615.082675656,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 66.81 W\n"}
+,{"stream_name":"stdout","time":615.094095287,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 62.69 W\n"}
+,{"stream_name":"stdout","time":645.102521793,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 65.42 W\n"}
+,{"stream_name":"stdout","time":645.107420784,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.44 W\n"}
+,{"stream_name":"stdout","time":650.816251759,"data":"[A_qv] ep 1 step 50/314 (16%) loss=0.0734 lr=1.93e-04 elapsed=7.6m eta=40.1m\n"}
+,{"stream_name":"stdout","time":658.607696658,"data":"[B_attn] ep 1 step 50/314 (16%) loss=0.0533 lr=1.93e-04 elapsed=7.7m eta=40.7m\n"}
+,{"stream_name":"stdout","time":675.11915938,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 66.02 W\n"}
+,{"stream_name":"stdout","time":675.130944657,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 77, 60.71 W\n"}
+,{"stream_name":"stdout","time":705.139303455,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 66.71 W\n"}
+,{"stream_name":"stdout","time":705.144747943,"data":"[GPU] 1, 97 %, 7613 MiB, 15360 MiB, 77, 65.53 W\n"}
+,{"stream_name":"stdout","time":735.157595951,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 68.14 W\n"}
+,{"stream_name":"stdout","time":735.163585132,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 67.30 W\n"}
+,{"stream_name":"stdout","time":741.757507551,"data":"[A_qv] ep 1 step 60/314 (19%) loss=0.0680 lr=1.89e-04 elapsed=9.1m eta=38.6m\n"}
+,{"stream_name":"stdout","time":751.16395309,"data":"[B_attn] ep 1 step 60/314 (19%) loss=0.0452 lr=1.89e-04 elapsed=9.2m eta=39.2m\n"}
+,{"stream_name":"stdout","time":765.173007011,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 67.63 W\n"}
+,{"stream_name":"stdout","time":765.1780743,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 67.16 W\n"}
+,{"stream_name":"stdout","time":795.18795234,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 64.65 W\n"}
+,{"stream_name":"stdout","time":795.195326358,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 67.40 W\n"}
+,{"stream_name":"stdout","time":825.206973381,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 72.60 W\n"}
+,{"stream_name":"stdout","time":825.212328633,"data":"[GPU] 1, 97 %, 7613 MiB, 15360 MiB, 76, 64.32 W\n"}
+,{"stream_name":"stdout","time":832.386182448,"data":"[A_qv] ep 1 step 70/314 (22%) loss=0.0566 lr=1.84e-04 elapsed=10.6m eta=37.0m\n"}
+,{"stream_name":"stdout","time":843.467176889,"data":"[B_attn] ep 1 step 70/314 (22%) loss=0.0396 lr=1.84e-04 elapsed=10.8m eta=37.6m\n"}
+,{"stream_name":"stdout","time":855.2249734,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 65.57 W\n"}
+,{"stream_name":"stdout","time":855.230010294,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 78, 66.71 W\n"}
+,{"stream_name":"stdout","time":885.242832418,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 64.81 W\n"}
+,{"stream_name":"stdout","time":885.252712131,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.53 W\n"}
+,{"stream_name":"stdout","time":915.261955112,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 64.42 W\n"}
+,{"stream_name":"stdout","time":915.26658531,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 77, 66.32 W\n"}
+,{"stream_name":"stdout","time":924.028909967,"data":"[A_qv] ep 1 step 80/314 (25%) loss=0.0536 lr=1.78e-04 elapsed=12.1m eta=35.5m\n"}
+,{"stream_name":"stdout","time":936.590368221,"data":"[B_attn] ep 1 step 80/314 (25%) loss=0.0309 lr=1.78e-04 elapsed=12.3m eta=36.1m\n"}
+,{"stream_name":"stdout","time":945.27605558,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 66.36 W\n"}
+,{"stream_name":"stdout","time":945.28341649,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 67.69 W\n"}
+,{"stream_name":"stdout","time":975.291965715,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 76, 65.91 W\n"}
+,{"stream_name":"stdout","time":975.296692131,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 78, 66.12 W\n"}
+,{"stream_name":"stdout","time":1005.305927184,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 66.46 W\n"}
+,{"stream_name":"stdout","time":1005.311167316,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 68.91 W\n"}
+,{"stream_name":"stdout","time":1015.010224935,"data":"[A_qv] ep 1 step 90/314 (29%) loss=0.0474 lr=1.71e-04 elapsed=13.7m eta=34.0m\n"}
+,{"stream_name":"stdout","time":1029.182419161,"data":"[B_attn] ep 1 step 90/314 (29%) loss=0.0377 lr=1.71e-04 elapsed=13.9m eta=34.6m\n"}
+,{"stream_name":"stdout","time":1035.320577047,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 64.59 W\n"}
+,{"stream_name":"stdout","time":1035.326189678,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.53 W\n"}
+,{"stream_name":"stdout","time":1065.335230515,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 67.04 W\n"}
+,{"stream_name":"stdout","time":1065.340428008,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.48 W\n"}
+,{"stream_name":"stdout","time":1095.352860416,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 74, 65.49 W\n"}
+,{"stream_name":"stdout","time":1095.357584493,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 77, 65.67 W\n"}
+,{"stream_name":"stdout","time":1105.036176667,"data":"[A_qv] ep 1 step 100/314 (32%) loss=0.0296 lr=1.63e-04 elapsed=15.2m eta=32.5m\n"}
+,{"stream_name":"stdout","time":1120.771819301,"data":"[B_attn] ep 1 step 100/314 (32%) loss=0.0168 lr=1.63e-04 elapsed=15.4m eta=33.0m\n"}
+,{"stream_name":"stdout","time":1125.366694133,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 74, 65.30 W\n"}
+,{"stream_name":"stdout","time":1125.372582074,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 66.81 W\n"}
+,{"stream_name":"stdout","time":1155.385336974,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 74, 66.26 W\n"}
+,{"stream_name":"stdout","time":1155.390951228,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.40 W\n"}
+,{"stream_name":"stdout","time":1185.404223645,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 72.21 W\n"}
+,{"stream_name":"stdout","time":1185.416824766,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.69 W\n"}
+,{"stream_name":"stdout","time":1194.912650791,"data":"[A_qv] ep 1 step 110/314 (35%) loss=0.0458 lr=1.54e-04 elapsed=16.7m eta=30.9m\n"}
+,{"stream_name":"stdout","time":1212.493070084,"data":"[B_attn] ep 1 step 110/314 (35%) loss=0.0311 lr=1.54e-04 elapsed=16.9m eta=31.4m\n"}
+,{"stream_name":"stdout","time":1215.428232632,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 65.87 W\n"}
+,{"stream_name":"stdout","time":1215.435135786,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 66.08 W\n"}
+,{"stream_name":"stdout","time":1245.444416827,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 66.40 W\n"}
+,{"stream_name":"stdout","time":1245.450389886,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 66.91 W\n"}
+,{"stream_name":"stdout","time":1275.460930571,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 66.22 W\n"}
+,{"stream_name":"stdout","time":1275.470915847,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 73.43 W\n"}
+,{"stream_name":"stdout","time":1286.165653494,"data":"[A_qv] ep 1 step 120/314 (38%) loss=0.0326 lr=1.45e-04 elapsed=18.2m eta=29.4m\n"}
+,{"stream_name":"stdout","time":1305.47988865,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 65.77 W\n"}
+,{"stream_name":"stdout","time":1305.486060184,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 61.98 W\n"}
+,{"stream_name":"stdout","time":1305.697803808,"data":"[B_attn] ep 1 step 120/314 (38%) loss=0.0198 lr=1.45e-04 elapsed=18.5m eta=29.9m\n"}
+,{"stream_name":"stdout","time":1335.494436539,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 64.22 W\n"}
+,{"stream_name":"stdout","time":1335.506051264,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 77, 67.94 W\n"}
+,{"stream_name":"stdout","time":1365.515826277,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 74, 64.79 W\n"}
+,{"stream_name":"stdout","time":1365.521162772,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 77, 67.12 W\n"}
+,{"stream_name":"stdout","time":1376.516674278,"data":"[A_qv] ep 1 step 130/314 (41%) loss=0.0301 lr=1.35e-04 elapsed=19.7m eta=27.9m\n"}
+,{"stream_name":"stdout","time":1395.535070645,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 74, 65.57 W\n"}
+,{"stream_name":"stdout","time":1395.541347771,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.34 W\n"}
+,{"stream_name":"stdout","time":1397.887750306,"data":"[B_attn] ep 1 step 130/314 (41%) loss=0.0165 lr=1.35e-04 elapsed=20.0m eta=28.3m\n"}
+,{"stream_name":"stdout","time":1425.550834638,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 74, 65.53 W\n"}
+,{"stream_name":"stdout","time":1425.55611109,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 66.81 W\n"}
+,{"stream_name":"stdout","time":1455.565210964,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 65.08 W\n"}
+,{"stream_name":"stdout","time":1455.577453578,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 61.69 W\n"}
+,{"stream_name":"stdout","time":1466.676148145,"data":"[A_qv] ep 1 step 140/314 (45%) loss=0.0383 lr=1.25e-04 elapsed=21.2m eta=26.3m\n"}
+,{"stream_name":"stdout","time":1485.58623831,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 74, 65.89 W\n"}
+,{"stream_name":"stdout","time":1485.592888679,"data":"[GPU] 1, 98 %, 7613 MiB, 15360 MiB, 76, 65.44 W\n"}
+,{"stream_name":"stdout","time":1489.966458999,"data":"[B_attn] ep 1 step 140/314 (45%) loss=0.0219 lr=1.25e-04 elapsed=21.6m eta=26.8m\n"}
+,{"stream_name":"stdout","time":1515.60203475,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 74, 66.75 W\n"}
+,{"stream_name":"stdout","time":1515.60685981,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 77, 68.47 W\n"}
+,{"stream_name":"stdout","time":1545.617607524,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 66.91 W\n"}
+,{"stream_name":"stdout","time":1545.625843714,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 70.15 W\n"}
+,{"stream_name":"stdout","time":1557.672313284,"data":"[A_qv] ep 1 step 150/314 (48%) loss=0.0292 lr=1.15e-04 elapsed=22.7m eta=24.8m\n"}
+,{"stream_name":"stdout","time":1575.635015623,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 66.91 W\n"}
+,{"stream_name":"stdout","time":1575.639888535,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.40 W\n"}
+,{"stream_name":"stdout","time":1582.843777057,"data":"[B_attn] ep 1 step 150/314 (48%) loss=0.0186 lr=1.15e-04 elapsed=23.1m eta=25.3m\n"}
+,{"stream_name":"stdout","time":1605.648280681,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 68.12 W\n"}
+,{"stream_name":"stdout","time":1605.655796419,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 65.14 W\n"}
+,{"stream_name":"stdout","time":1635.671137384,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 67.04 W\n"}
+,{"stream_name":"stdout","time":1635.682733675,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 66.51 W\n"}
+,{"stream_name":"stdout","time":1665.697102234,"data":"[GPU] 0, 99 %, 7589 MiB, 15360 MiB, 75, 74.26 W\n"}
+,{"stream_name":"stdout","time":1665.703502307,"data":"[GPU] 1, 99 %, 7613 MiB, 15360 MiB, 77, 67.49 W\n"}
+,{"stream_name":"stdout","time":1695.711901567,"data":"[GPU] 0, 100 %, 7589 MiB, 15360 MiB, 75, 66.81 W\n"}
+,{"stream_name":"stdout","time":1695.718162748,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 60.02 W\n"}
+,{"stream_name":"stdout","time":1725.727244177,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 67.24 W\n"}
+,{"stream_name":"stdout","time":1725.738178353,"data":"[GPU] 1, 100 %, 7613 MiB, 15360 MiB, 77, 66.22 W\n"}
+,{"stream_name":"stdout","time":1726.723139896,"data":"[A_qv] == epoch 1 val_loss=0.0539 elapsed=1532s\n"}
+,{"stream_name":"stdout","time":1754.005322769,"data":"[A_qv] ep 2 step 160/314 (51%) loss=0.0280 lr=1.05e-04 elapsed=26.0m eta=25.0m\n"}
+,{"stream_name":"stdout","time":1755.749072608,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.73 W\n"}
+,{"stream_name":"stdout","time":1755.760191441,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.91 W\n"}
+,{"stream_name":"stdout","time":1757.036265973,"data":"[B_attn] == epoch 1 val_loss=0.0493 elapsed=1561s\n"}
+,{"stream_name":"stdout","time":1784.717248575,"data":"[B_attn] ep 2 step 160/314 (51%) loss=0.0124 lr=1.05e-04 elapsed=26.5m eta=25.5m\n"}
+,{"stream_name":"stdout","time":1785.77085825,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 74, 64.95 W\n"}
+,{"stream_name":"stdout","time":1785.776855007,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 65.44 W\n"}
+,{"stream_name":"stdout","time":1815.785511182,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 64.16 W\n"}
+,{"stream_name":"stdout","time":1815.792599266,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 65.14 W\n"}
+,{"stream_name":"stdout","time":1844.332097409,"data":"[A_qv] ep 2 step 170/314 (54%) loss=0.0156 lr=9.42e-05 elapsed=27.5m eta=23.3m\n"}
+,{"stream_name":"stdout","time":1845.803651241,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 61.49 W\n"}
+,{"stream_name":"stdout","time":1845.808911577,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 72.11 W\n"}
+,{"stream_name":"stdout","time":1875.8177224,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 68.61 W\n"}
+,{"stream_name":"stdout","time":1875.828792269,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 65.98 W\n"}
+,{"stream_name":"stdout","time":1876.737128444,"data":"[B_attn] ep 2 step 170/314 (54%) loss=0.0085 lr=9.42e-05 elapsed=28.0m eta=23.7m\n"}
+,{"stream_name":"stdout","time":1905.837256236,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 73.82 W\n"}
+,{"stream_name":"stdout","time":1905.846187574,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.57 W\n"}
+,{"stream_name":"stdout","time":1935.654569635,"data":"[A_qv] ep 2 step 180/314 (57%) loss=0.0164 lr=8.38e-05 elapsed=29.0m eta=21.6m\n"}
+,{"stream_name":"stdout","time":1935.855426144,"data":"[GPU] 0, 97 %, 8011 MiB, 15360 MiB, 75, 65.48 W\n"}
+,{"stream_name":"stdout","time":1935.861186989,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 64.79 W\n"}
+,{"stream_name":"stdout","time":1965.878113365,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 67.40 W\n"}
+,{"stream_name":"stdout","time":1965.882423651,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 65.53 W\n"}
+,{"stream_name":"stdout","time":1969.635750218,"data":"[B_attn] ep 2 step 180/314 (57%) loss=0.0093 lr=8.38e-05 elapsed=29.6m eta=22.0m\n"}
+,{"stream_name":"stdout","time":1995.89181561,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 67.20 W\n"}
+,{"stream_name":"stdout","time":1995.899780185,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 67.04 W\n"}
+,{"stream_name":"stdout","time":2025.910293141,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 61.55 W\n"}
+,{"stream_name":"stdout","time":2025.918993443,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 67.00 W\n"}
+,{"stream_name":"stdout","time":2026.067382609,"data":"[A_qv] ep 2 step 190/314 (61%) loss=0.0146 lr=7.35e-05 elapsed=30.5m eta=19.9m\n"}
+,{"stream_name":"stdout","time":2055.927182443,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 64.79 W\n"}
+,{"stream_name":"stdout","time":2055.93191887,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 78, 64.95 W\n"}
+,{"stream_name":"stdout","time":2061.782603414,"data":"[B_attn] ep 2 step 190/314 (61%) loss=0.0072 lr=7.35e-05 elapsed=31.1m eta=20.3m\n"}
+,{"stream_name":"stdout","time":2085.944932828,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 67.00 W\n"}
+,{"stream_name":"stdout","time":2085.952117611,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.08 W\n"}
+,{"stream_name":"stdout","time":2115.960975482,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 66.06 W\n"}
+,{"stream_name":"stdout","time":2115.966819582,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 60.71 W\n"}
+,{"stream_name":"stdout","time":2116.901178355,"data":"[A_qv] ep 2 step 200/314 (64%) loss=0.0176 lr=6.36e-05 elapsed=32.0m eta=18.3m\n"}
+,{"stream_name":"stdout","time":2145.97622569,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 64.95 W\n"}
+,{"stream_name":"stdout","time":2145.981518769,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 67.84 W\n"}
+,{"stream_name":"stdout","time":2154.06360876,"data":"[B_attn] ep 2 step 200/314 (64%) loss=0.0091 lr=6.36e-05 elapsed=32.6m eta=18.6m\n"}
+,{"stream_name":"stdout","time":2175.989652033,"data":"[GPU] 0, 98 %, 8011 MiB, 15360 MiB, 75, 64.06 W\n"}
+,{"stream_name":"stdout","time":2175.995209076,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 67.20 W\n"}
+,{"stream_name":"stdout","time":2206.00428827,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 66.12 W\n"}
+,{"stream_name":"stdout","time":2206.011752388,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 60.71 W\n"}
+,{"stream_name":"stdout","time":2208.044501796,"data":"[A_qv] ep 2 step 210/314 (67%) loss=0.0172 lr=5.40e-05 elapsed=33.5m eta=16.6m\n"}
+,{"stream_name":"stdout","time":2236.022073653,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 66.61 W\n"}
+,{"stream_name":"stdout","time":2236.02930974,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 64.91 W\n"}
+,{"stream_name":"stdout","time":2246.765959326,"data":"[B_attn] ep 2 step 210/314 (67%) loss=0.0062 lr=5.40e-05 elapsed=34.2m eta=16.9m\n"}
+,{"stream_name":"stdout","time":2266.03960807,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 60.51 W\n"}
+,{"stream_name":"stdout","time":2266.045415304,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 66.67 W\n"}
+,{"stream_name":"stdout","time":2296.060100299,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 65.16 W\n"}
+,{"stream_name":"stdout","time":2296.0659964,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 66.42 W\n"}
+,{"stream_name":"stdout","time":2298.180340916,"data":"[A_qv] ep 2 step 220/314 (70%) loss=0.0185 lr=4.49e-05 elapsed=35.0m eta=15.0m\n"}
+,{"stream_name":"stdout","time":2326.074659829,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 66.12 W\n"}
+,{"stream_name":"stdout","time":2326.086245848,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 67.94 W\n"}
+,{"stream_name":"stdout","time":2338.352912164,"data":"[B_attn] ep 2 step 220/314 (70%) loss=0.0090 lr=4.49e-05 elapsed=35.7m eta=15.3m\n"}
+,{"stream_name":"stdout","time":2356.101183678,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 74, 64.95 W\n"}
+,{"stream_name":"stdout","time":2356.107467744,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 76, 66.57 W\n"}
+,{"stream_name":"stdout","time":2386.123168965,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 64.20 W\n"}
+,{"stream_name":"stdout","time":2386.128762826,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.65 W\n"}
+,{"stream_name":"stdout","time":2388.911775558,"data":"[A_qv] ep 2 step 230/314 (73%) loss=0.0167 lr=3.65e-05 elapsed=36.6m eta=13.4m\n"}
+,{"stream_name":"stdout","time":2416.138179888,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 76, 64.55 W\n"}
+,{"stream_name":"stdout","time":2416.15035726,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.77 W\n"}
+,{"stream_name":"stdout","time":2430.833230026,"data":"[B_attn] ep 2 step 230/314 (73%) loss=0.0082 lr=3.65e-05 elapsed=37.2m eta=13.6m\n"}
+,{"stream_name":"stdout","time":2446.159000793,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.38 W\n"}
+,{"stream_name":"stdout","time":2446.165107887,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 64.30 W\n"}
+,{"stream_name":"stdout","time":2476.174235569,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.53 W\n"}
+,{"stream_name":"stdout","time":2476.180004979,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 67.04 W\n"}
+,{"stream_name":"stdout","time":2480.153512512,"data":"[A_qv] ep 2 step 240/314 (76%) loss=0.0150 lr=2.87e-05 elapsed=38.1m eta=11.7m\n"}
+,{"stream_name":"stdout","time":2506.189765973,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.48 W\n"}
+,{"stream_name":"stdout","time":2506.195531791,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 66.96 W\n"}
+,{"stream_name":"stdout","time":2523.291167055,"data":"[B_attn] ep 2 step 240/314 (76%) loss=0.0068 lr=2.87e-05 elapsed=38.8m eta=12.0m\n"}
+,{"stream_name":"stdout","time":2536.205077675,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 66.12 W\n"}
+,{"stream_name":"stdout","time":2536.210390247,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 66.61 W\n"}
+,{"stream_name":"stdout","time":2566.219533268,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 66.02 W\n"}
+,{"stream_name":"stdout","time":2566.225644154,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 66.42 W\n"}
+,{"stream_name":"stdout","time":2571.373964349,"data":"[A_qv] ep 2 step 250/314 (80%) loss=0.0161 lr=2.18e-05 elapsed=39.6m eta=10.1m\n"}
+,{"stream_name":"stdout","time":2596.234342862,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 60.02 W\n"}
+,{"stream_name":"stdout","time":2596.241164662,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 66.02 W\n"}
+,{"stream_name":"stdout","time":2615.932628361,"data":"[B_attn] ep 2 step 250/314 (80%) loss=0.0110 lr=2.18e-05 elapsed=40.3m eta=10.3m\n"}
+,{"stream_name":"stdout","time":2626.252858862,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 64.95 W\n"}
+,{"stream_name":"stdout","time":2626.259598414,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 66.18 W\n"}
+,{"stream_name":"stdout","time":2656.269576141,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.93 W\n"}
+,{"stream_name":"stdout","time":2656.273253826,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 66.12 W\n"}
+,{"stream_name":"stdout","time":2662.116495301,"data":"[A_qv] ep 2 step 260/314 (83%) loss=0.0179 lr=1.57e-05 elapsed=41.1m eta=8.5m\n"}
+,{"stream_name":"stdout","time":2686.281637082,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 67.40 W\n"}
+,{"stream_name":"stdout","time":2686.286782807,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 67.10 W\n"}
+,{"stream_name":"stdout","time":2708.135370964,"data":"[B_attn] ep 2 step 260/314 (83%) loss=0.0084 lr=1.57e-05 elapsed=41.9m eta=8.7m\n"}
+,{"stream_name":"stdout","time":2716.295655026,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 76, 64.75 W\n"}
+,{"stream_name":"stdout","time":2716.300805675,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 78, 66.95 W\n"}
+,{"stream_name":"stdout","time":2746.310088253,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 66.22 W\n"}
+,{"stream_name":"stdout","time":2746.323892609,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 65.38 W\n"}
+,{"stream_name":"stdout","time":2753.111782896,"data":"[A_qv] ep 2 step 270/314 (86%) loss=0.0125 lr=1.05e-05 elapsed=42.6m eta=6.9m\n"}
+,{"stream_name":"stdout","time":2776.333232365,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 61.20 W\n"}
+,{"stream_name":"stdout","time":2776.339052263,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 65.63 W\n"}
+,{"stream_name":"stdout","time":2800.247415852,"data":"[B_attn] ep 2 step 270/314 (86%) loss=0.0036 lr=1.05e-05 elapsed=43.4m eta=7.1m\n"}
+,{"stream_name":"stdout","time":2806.35120619,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.34 W\n"}
+,{"stream_name":"stdout","time":2806.356717029,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 64.85 W\n"}
+,{"stream_name":"stdout","time":2836.368576872,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 67.94 W\n"}
+,{"stream_name":"stdout","time":2836.376829699,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.12 W\n"}
+,{"stream_name":"stdout","time":2844.609646239,"data":"[A_qv] ep 2 step 280/314 (89%) loss=0.0122 lr=6.31e-06 elapsed=44.2m eta=5.4m\n"}
+,{"stream_name":"stdout","time":2866.387385812,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 64.55 W\n"}
+,{"stream_name":"stdout","time":2866.392757554,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.26 W\n"}
+,{"stream_name":"stdout","time":2893.177450929,"data":"[B_attn] ep 2 step 280/314 (89%) loss=0.0041 lr=6.31e-06 elapsed=44.9m eta=5.5m\n"}
+,{"stream_name":"stdout","time":2896.409289769,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 65.77 W\n"}
+,{"stream_name":"stdout","time":2896.417140035,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.71 W\n"}
+,{"stream_name":"stdout","time":2926.430825607,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 65.83 W\n"}
+,{"stream_name":"stdout","time":2926.442105247,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 63.87 W\n"}
+,{"stream_name":"stdout","time":2935.893674033,"data":"[A_qv] ep 2 step 290/314 (92%) loss=0.0087 lr=3.16e-06 elapsed=45.7m eta=3.8m\n"}
+,{"stream_name":"stdout","time":2956.45113132,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 76, 64.75 W\n"}
+,{"stream_name":"stdout","time":2956.456419022,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.02 W\n"}
+,{"stream_name":"stdout","time":2986.030411724,"data":"[B_attn] ep 2 step 290/314 (92%) loss=0.0044 lr=3.16e-06 elapsed=46.5m eta=3.8m\n"}
+,{"stream_name":"stdout","time":2986.465146212,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 63.12 W\n"}
+,{"stream_name":"stdout","time":2986.476233498,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 65.57 W\n"}
+,{"stream_name":"stdout","time":3016.484811409,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.73 W\n"}
+,{"stream_name":"stdout","time":3016.490159876,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 65.93 W\n"}
+,{"stream_name":"stdout","time":3027.382858589,"data":"[A_qv] ep 2 step 300/314 (96%) loss=0.0142 lr=1.08e-06 elapsed=47.2m eta=2.2m\n"}
+,{"stream_name":"stdout","time":3046.503524009,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.59 W\n"}
+,{"stream_name":"stdout","time":3046.509473706,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 60.12 W\n"}
+,{"stream_name":"stdout","time":3076.518924845,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 67.24 W\n"}
+,{"stream_name":"stdout","time":3076.530086645,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 66.18 W\n"}
+,{"stream_name":"stdout","time":3078.817133597,"data":"[B_attn] ep 2 step 300/314 (96%) loss=0.0061 lr=1.08e-06 elapsed=48.0m eta=2.2m\n"}
+,{"stream_name":"stdout","time":3106.538116559,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 61.75 W\n"}
+,{"stream_name":"stdout","time":3106.549414123,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.81 W\n"}
+,{"stream_name":"stdout","time":3118.474121758,"data":"[A_qv] ep 2 step 310/314 (99%) loss=0.0127 lr=8.83e-08 elapsed=48.7m eta=0.6m\n"}
+,{"stream_name":"stdout","time":3136.561723954,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 60.35 W\n"}
+,{"stream_name":"stdout","time":3136.566800811,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 61.95 W\n"}
+,{"stream_name":"stdout","time":3166.577620357,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 63.55 W\n"}
+,{"stream_name":"stdout","time":3166.583288811,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.65 W\n"}
+,{"stream_name":"stdout","time":3171.331805413,"data":"[B_attn] ep 2 step 310/314 (99%) loss=0.0047 lr=8.83e-08 elapsed=49.6m eta=0.6m\n"}
+,{"stream_name":"stdout","time":3196.593017966,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.40 W\n"}
+,{"stream_name":"stdout","time":3196.598032797,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.22 W\n"}
+,{"stream_name":"stdout","time":3226.612123081,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 68.92 W\n"}
+,{"stream_name":"stdout","time":3226.61815758,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 67.10 W\n"}
+,{"stream_name":"stdout","time":3256.630333161,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 65.87 W\n"}
+,{"stream_name":"stdout","time":3256.638870993,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 65.53 W\n"}
+,{"stream_name":"stdout","time":3260.075775893,"data":"[A_qv] == epoch 2 val_loss=0.0446 elapsed=3065s\n"}
+,{"stream_name":"stdout","time":3286.658364297,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.57 W\n"}
+,{"stream_name":"stdout","time":3286.664304172,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.57 W\n"}
+,{"stream_name":"stdout","time":3316.673051257,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 66.96 W\n"}
+,{"stream_name":"stdout","time":3316.678812959,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 67.75 W\n"}
+,{"stream_name":"stdout","time":3317.751093783,"data":"[B_attn] == epoch 2 val_loss=0.0429 elapsed=3122s\n"}
+,{"stream_name":"stdout","time":3346.692708844,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 68.24 W\n"}
+,{"stream_name":"stdout","time":3346.698214543,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 65.63 W\n"}
+,{"stream_name":"stdout","time":3376.708723723,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.34 W\n"}
+,{"stream_name":"stdout","time":3376.715301268,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 63.91 W\n"}
+,{"stream_name":"stdout","time":3406.724089149,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 62.38 W\n"}
+,{"stream_name":"stdout","time":3406.730636479,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 72.11 W\n"}
+,{"stream_name":"stdout","time":3436.739628111,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.24 W\n"}
+,{"stream_name":"stdout","time":3436.745152484,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 67.65 W\n"}
+,{"stream_name":"stdout","time":3466.754889239,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 64.85 W\n"}
+,{"stream_name":"stdout","time":3466.761345699,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 64.75 W\n"}
+,{"stream_name":"stdout","time":3496.772220029,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 62.87 W\n"}
+,{"stream_name":"stdout","time":3496.777452403,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 67.65 W\n"}
+,{"stream_name":"stdout","time":3526.788317158,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 65.44 W\n"}
+,{"stream_name":"stdout","time":3526.80012061,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 67.79 W\n"}
+,{"stream_name":"stdout","time":3556.813603495,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 63.16 W\n"}
+,{"stream_name":"stdout","time":3556.81967082,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.14 W\n"}
+,{"stream_name":"stdout","time":3586.828637288,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 62.67 W\n"}
+,{"stream_name":"stdout","time":3586.835619026,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 66.38 W\n"}
+,{"stream_name":"stdout","time":3616.84423634,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 76, 67.00 W\n"}
+,{"stream_name":"stdout","time":3616.849267315,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 78, 58.19 W\n"}
+,{"stream_name":"stdout","time":3646.857439755,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 64.10 W\n"}
+,{"stream_name":"stdout","time":3646.862425033,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 69.41 W\n"}
+,{"stream_name":"stdout","time":3676.880320328,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 68.86 W\n"}
+,{"stream_name":"stdout","time":3676.886294073,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 64.75 W\n"}
+,{"stream_name":"stdout","time":3706.89703921,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 64.04 W\n"}
+,{"stream_name":"stdout","time":3706.903240951,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 66.81 W\n"}
+,{"stream_name":"stdout","time":3736.916934915,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.18 W\n"}
+,{"stream_name":"stdout","time":3736.924937389,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 65.04 W\n"}
+,{"stream_name":"stdout","time":3766.933465868,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 64.69 W\n"}
+,{"stream_name":"stdout","time":3766.938717731,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 68.04 W\n"}
+,{"stream_name":"stdout","time":3796.952619015,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 66.42 W\n"}
+,{"stream_name":"stdout","time":3796.96113823,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 67.00 W\n"}
+,{"stream_name":"stdout","time":3826.970167744,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 64.69 W\n"}
+,{"stream_name":"stdout","time":3826.97564684,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 64.89 W\n"}
+,{"stream_name":"stdout","time":3856.983940547,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 65.57 W\n"}
+,{"stream_name":"stdout","time":3856.996244428,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 68.08 W\n"}
+,{"stream_name":"stdout","time":3887.007438449,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 75, 65.18 W\n"}
+,{"stream_name":"stdout","time":3887.012631912,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 59.83 W\n"}
+,{"stream_name":"stdout","time":3917.020849148,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 67.98 W\n"}
+,{"stream_name":"stdout","time":3917.026365226,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 66.77 W\n"}
+,{"stream_name":"stdout","time":3947.034467447,"data":"[GPU] 0, 99 %, 8011 MiB, 15360 MiB, 75, 64.65 W\n"}
+,{"stream_name":"stdout","time":3947.044289005,"data":"[GPU] 1, 99 %, 8035 MiB, 15360 MiB, 77, 64.75 W\n"}
+,{"stream_name":"stdout","time":3977.06047394,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 76, 65.03 W\n"}
+,{"stream_name":"stdout","time":3977.065315549,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 65.53 W\n"}
+,{"stream_name":"stdout","time":4007.074504059,"data":"[GPU] 0, 100 %, 8011 MiB, 15360 MiB, 76, 66.16 W\n"}
+,{"stream_name":"stdout","time":4007.083673521,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 64.36 W\n"}
+,{"stream_name":"stdout","time":4020.580656306,"data":"[A_qv] Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n"}
+,{"stream_name":"stdout","time":4020.775176473,"data":"[A_qv] {\n"}
+,{"stream_name":"stdout","time":4020.775197742,"data":"[A_qv]   \"trainable_params\": 163840,\n"}
+,{"stream_name":"stdout","time":4020.775383228,"data":"[A_qv]   \"train_time_s\": 3064.862560749054,\n"}
+,{"stream_name":"stdout","time":4020.77539263,"data":"[A_qv]   \"final_train_loss_full_pass\": 0.011407681725520962,\n"}
+,{"stream_name":"stdout","time":4020.775408046,"data":"[A_qv]   \"final_val_loss\": 0.044603006974954694,\n"}
+,{"stream_name":"stdout","time":4020.77541131,"data":"[A_qv]   \"adapter_bytes\": 657472\n"}
+,{"stream_name":"stdout","time":4020.775414455,"data":"[A_qv] }\n"}
+,{"stream_name":"stdout","time":4030.206662177,"data":"[A_qv eval val] \rLoading weights:   0%|          | 0/370 [00:00\u003c?, ?it/s]\rLoading weights:   0%|          | 1/370 [00:00\u003c01:52,  3.27it/s]\rLoading weights:  80%|████████  | 296/370 [00:00\u003c00:00, 937.71it/s]\rLoading weights: 100%|██████████| 370/370 [00:00\u003c00:00, 783.12it/s]\n"}
+,{"stream_name":"stdout","time":4031.600313945,"data":"[A_qv eval val] [transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4031.624287323,"data":"[A_qv eval val] [transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4035.759882892,"data":"[A_qv eval val] [transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4035.760296482,"data":"[A_qv eval val] [transformers] `selective_state_update` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4037.085064854,"data":"[A_qv eval val] 16/354\n"}
+,{"stream_name":"stdout","time":4037.09581491,"data":"[GPU] 0, 96 %, 5949 MiB, 15360 MiB, 72, 66.81 W\n"}
+,{"stream_name":"stdout","time":4037.104797363,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 64.75 W\n"}
+,{"stream_name":"stdout","time":4041.698840962,"data":"[A_qv eval val] 32/354\n"}
+,{"stream_name":"stdout","time":4047.141995353,"data":"[A_qv eval val] 48/354\n"}
+,{"stream_name":"stdout","time":4052.022720234,"data":"[A_qv eval val] 64/354\n"}
+,{"stream_name":"stdout","time":4057.645133897,"data":"[A_qv eval val] 80/354\n"}
+,{"stream_name":"stdout","time":4063.215950381,"data":"[A_qv eval val] 96/354\n"}
+,{"stream_name":"stdout","time":4067.115581573,"data":"[GPU] 0, 96 %, 5949 MiB, 15360 MiB, 73, 66.71 W\n"}
+,{"stream_name":"stdout","time":4067.120358797,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 65.63 W\n"}
+,{"stream_name":"stdout","time":4067.975513575,"data":"[A_qv eval val] 112/354\n"}
+,{"stream_name":"stdout","time":4073.560308574,"data":"[A_qv eval val] 128/354\n"}
+,{"stream_name":"stdout","time":4079.17186206,"data":"[A_qv eval val] 144/354\n"}
+,{"stream_name":"stdout","time":4084.765514179,"data":"[A_qv eval val] 160/354\n"}
+,{"stream_name":"stdout","time":4089.422829148,"data":"[A_qv eval val] 176/354\n"}
+,{"stream_name":"stdout","time":4094.10375329,"data":"[A_qv eval val] 192/354\n"}
+,{"stream_name":"stdout","time":4097.137599065,"data":"[GPU] 0, 100 %, 5949 MiB, 15360 MiB, 74, 71.13 W\n"}
+,{"stream_name":"stdout","time":4097.143176749,"data":"[GPU] 1, 100 %, 8035 MiB, 15360 MiB, 77, 64.06 W\n"}
+,{"stream_name":"stdout","time":4099.441241747,"data":"[A_qv eval val] 208/354\n"}
+,{"stream_name":"stdout","time":4104.068280421,"data":"[A_qv eval val] 224/354\n"}
+,{"stream_name":"stdout","time":4104.300025399,"data":"[B_attn] Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n"}
+,{"stream_name":"stdout","time":4104.465363558,"data":"[B_attn] {\n"}
+,{"stream_name":"stdout","time":4104.465395643,"data":"[B_attn]   \"trainable_params\": 327680,\n"}
+,{"stream_name":"stdout","time":4104.465401331,"data":"[B_attn]   \"train_time_s\": 3121.5409486293793,\n"}
+,{"stream_name":"stdout","time":4104.465406126,"data":"[B_attn]   \"final_train_loss_full_pass\": 0.004573007782996047,\n"}
+,{"stream_name":"stdout","time":4104.465410925,"data":"[B_attn]   \"final_val_loss\": 0.04288825436999308,\n"}
+,{"stream_name":"stdout","time":4104.465415391,"data":"[B_attn]   \"adapter_bytes\": 1314928\n"}
+,{"stream_name":"stdout","time":4104.465419966,"data":"[B_attn] }\n"}
+,{"stream_name":"stdout","time":4109.741833432,"data":"[A_qv eval val] 240/354\n"}
+,{"stream_name":"stdout","time":4114.034351165,"data":"[B_attn eval val] \rLoading weights:   0%|          | 0/370 [00:00\u003c?, ?it/s]\rLoading weights:  26%|██▌       | 96/370 [00:00\u003c00:00, 958.95it/s]\rLoading weights:  56%|█████▌    | 206/370 [00:00\u003c00:00, 1041.29it/s]\rLoading weights:  84%|████████▍ | 311/370 [00:00\u003c00:00, 1037.65it/s]\rLoading weights: 100%|██████████| 370/370 [00:00\u003c00:00, 999.41it/s] \n"}
+,{"stream_name":"stdout","time":4115.314217347,"data":"[B_attn eval val] [transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4115.334982859,"data":"[B_attn eval val] [transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4115.430915638,"data":"[A_qv eval val] 256/354\n"}
+,{"stream_name":"stdout","time":4119.552961546,"data":"[B_attn eval val] [transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4119.553601008,"data":"[B_attn eval val] [transformers] `selective_state_update` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4120.913941617,"data":"[B_attn eval val] 16/354\n"}
+,{"stream_name":"stdout","time":4121.289362715,"data":"[A_qv eval val] 272/354\n"}
+,{"stream_name":"stdout","time":4125.540955893,"data":"[B_attn eval val] 32/354\n"}
+,{"stream_name":"stdout","time":4126.089684705,"data":"[A_qv eval val] 288/354\n"}
+,{"stream_name":"stdout","time":4127.152772428,"data":"[GPU] 0, 100 %, 5949 MiB, 15360 MiB, 76, 68.38 W\n"}
+,{"stream_name":"stdout","time":4127.158286492,"data":"[GPU] 1, 100 %, 5949 MiB, 15360 MiB, 76, 68.33 W\n"}
+,{"stream_name":"stdout","time":4131.133606717,"data":"[A_qv eval val] 304/354\n"}
+,{"stream_name":"stdout","time":4131.337676842,"data":"[B_attn eval val] 48/354\n"}
+,{"stream_name":"stdout","time":4136.06968876,"data":"[A_qv eval val] 320/354\n"}
+,{"stream_name":"stdout","time":4136.538613474,"data":"[B_attn eval val] 64/354\n"}
+,{"stream_name":"stdout","time":4141.403702869,"data":"[A_qv eval val] 336/354\n"}
+,{"stream_name":"stdout","time":4142.711497662,"data":"[B_attn eval val] 80/354\n"}
+,{"stream_name":"stdout","time":4147.46379444,"data":"[A_qv eval val] 352/354\n"}
+,{"stream_name":"stdout","time":4148.215843978,"data":"[A_qv eval val] 354/354\n"}
+,{"stream_name":"stdout","time":4148.889887072,"data":"[B_attn eval val] 96/354\n"}
+,{"stream_name":"stdout","time":4154.12473149,"data":"[B_attn eval val] 112/354\n"}
+,{"stream_name":"stdout","time":4157.166627854,"data":"[GPU] 0, 100 %, 8427 MiB, 15360 MiB, 78, 64.36 W\n"}
+,{"stream_name":"stdout","time":4157.178610443,"data":"[GPU] 1, 100 %, 5949 MiB, 15360 MiB, 79, 65.98 W\n"}
+,{"stream_name":"stdout","time":4160.157521274,"data":"[B_attn eval val] 128/354\n"}
+,{"stream_name":"stdout","time":4166.100374615,"data":"[B_attn eval val] 144/354\n"}
+,{"stream_name":"stdout","time":4172.019909106,"data":"[B_attn eval val] 160/354\n"}
+,{"stream_name":"stdout","time":4176.890505512,"data":"[B_attn eval val] 176/354\n"}
+,{"stream_name":"stdout","time":4182.043619248,"data":"[B_attn eval val] 192/354\n"}
+,{"stream_name":"stdout","time":4187.188579727,"data":"[GPU] 0, 100 %, 10111 MiB, 15360 MiB, 75, 64.40 W\n"}
+,{"stream_name":"stdout","time":4187.194032002,"data":"[GPU] 1, 93 %, 5949 MiB, 15360 MiB, 76, 67.57 W\n"}
+,{"stream_name":"stdout","time":4187.562166368,"data":"[B_attn eval val] 208/354\n"}
+,{"stream_name":"stdout","time":4192.352061628,"data":"[B_attn eval val] 224/354\n"}
+,{"stream_name":"stdout","time":4198.160762967,"data":"[B_attn eval val] 240/354\n"}
+,{"stream_name":"stdout","time":4203.952458817,"data":"[B_attn eval val] 256/354\n"}
+,{"stream_name":"stdout","time":4209.92142034,"data":"[B_attn eval val] 272/354\n"}
+,{"stream_name":"stdout","time":4214.873549419,"data":"[B_attn eval val] 288/354\n"}
+,{"stream_name":"stdout","time":4217.209807718,"data":"[GPU] 0, 100 %, 10111 MiB, 15360 MiB, 76, 66.46 W\n"}
+,{"stream_name":"stdout","time":4217.220468035,"data":"[GPU] 1, 100 %, 5949 MiB, 15360 MiB, 77, 60.12 W\n"}
+,{"stream_name":"stdout","time":4219.998895533,"data":"[B_attn eval val] 304/354\n"}
+,{"stream_name":"stdout","time":4224.912263653,"data":"[B_attn eval val] 320/354\n"}
+,{"stream_name":"stdout","time":4229.926121631,"data":"[B_attn eval val] 336/354\n"}
+,{"stream_name":"stdout","time":4235.784787075,"data":"[B_attn eval val] 352/354\n"}
+,{"stream_name":"stdout","time":4237.449394019,"data":"[B_attn eval val] 354/354\n"}
+,{"stream_name":"stdout","time":4247.230520247,"data":"[GPU] 0, 100 %, 11799 MiB, 15360 MiB, 76, 64.50 W\n"}
+,{"stream_name":"stdout","time":4247.238039272,"data":"[GPU] 1, 100 %, 8429 MiB, 15360 MiB, 77, 64.00 W\n"}
+,{"stream_name":"stdout","time":4255.82493887,"data":"[A_qv eval val] {\n"}
+,{"stream_name":"stdout","time":4255.824963064,"data":"[A_qv eval val]   \"n\": 354,\n"}
+,{"stream_name":"stdout","time":4255.82518507,"data":"[A_qv eval val]   \"intent_accuracy\": 0.9350282485875706,\n"}
+,{"stream_name":"stdout","time":4255.825203476,"data":"[A_qv eval val]   \"field_accuracy\": 0.8610567514677103,\n"}
+,{"stream_name":"stdout","time":4255.825208455,"data":"[A_qv eval val]   \"exact_match\": 0.8163841807909604,\n"}
+,{"stream_name":"stdout","time":4255.825212919,"data":"[A_qv eval val]   \"json_validity\": 1.0,\n"}
+,{"stream_name":"stdout","time":4255.825217269,"data":"[A_qv eval val]   \"unsupported_recall\": 0.9137931034482759,\n"}
+,{"stream_name":"stdout","time":4255.825221768,"data":"[A_qv eval val]   \"target_loss\": 0.044603080098177594\n"}
+,{"stream_name":"stdout","time":4255.825226114,"data":"[A_qv eval val] }\n"}
+,{"stream_name":"stdout","time":4265.334126624,"data":"[A_qv eval test] \rLoading weights:   0%|          | 0/370 [00:00\u003c?, ?it/s]\rLoading weights:  42%|████▏     | 157/370 [00:00\u003c00:00, 1527.83it/s]\rLoading weights:  84%|████████▍ | 310/370 [00:00\u003c00:00, 1203.06it/s]\rLoading weights: 100%|██████████| 370/370 [00:00\u003c00:00, 1198.20it/s]\n"}
+,{"stream_name":"stdout","time":4266.642820077,"data":"[A_qv eval test] [transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4266.663307786,"data":"[A_qv eval test] [transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4270.11591009,"data":"[A_qv eval test] [transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4270.116772881,"data":"[A_qv eval test] [transformers] `selective_state_update` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4271.322809707,"data":"[A_qv eval test] 16/613\n"}
+,{"stream_name":"stdout","time":4275.908238014,"data":"[A_qv eval test] 32/613\n"}
+,{"stream_name":"stdout","time":4277.246481463,"data":"[GPU] 0, 100 %, 4737 MiB, 15360 MiB, 73, 59.37 W\n"}
+,{"stream_name":"stdout","time":4277.250866282,"data":"[GPU] 1, 100 %, 10113 MiB, 15360 MiB, 77, 66.22 W\n"}
+,{"stream_name":"stdout","time":4280.427321486,"data":"[A_qv eval test] 48/613\n"}
+,{"stream_name":"stdout","time":4285.921634619,"data":"[A_qv eval test] 64/613\n"}
+,{"stream_name":"stdout","time":4291.254280357,"data":"[A_qv eval test] 80/613\n"}
+,{"stream_name":"stdout","time":4296.75605568,"data":"[A_qv eval test] 96/613\n"}
+,{"stream_name":"stdout","time":4302.144495142,"data":"[A_qv eval test] 112/613\n"}
+,{"stream_name":"stdout","time":4307.268446524,"data":"[GPU] 0, 96 %, 7329 MiB, 15360 MiB, 73, 68.18 W\n"}
+,{"stream_name":"stdout","time":4307.275230047,"data":"[GPU] 1, 100 %, 10113 MiB, 15360 MiB, 76, 65.44 W\n"}
+,{"stream_name":"stdout","time":4307.74320091,"data":"[A_qv eval test] 128/613\n"}
+,{"stream_name":"stdout","time":4312.568704264,"data":"[A_qv eval test] 144/613\n"}
+,{"stream_name":"stdout","time":4317.478157526,"data":"[A_qv eval test] 160/613\n"}
+,{"stream_name":"stdout","time":4323.107988118,"data":"[A_qv eval test] 176/613\n"}
+,{"stream_name":"stdout","time":4327.917015225,"data":"[A_qv eval test] 192/613\n"}
+,{"stream_name":"stdout","time":4333.596359344,"data":"[A_qv eval test] 208/613\n"}
+,{"stream_name":"stdout","time":4337.283245986,"data":"[GPU] 0, 100 %, 7329 MiB, 15360 MiB, 75, 68.47 W\n"}
+,{"stream_name":"stdout","time":4337.292371506,"data":"[GPU] 1, 100 %, 11801 MiB, 15360 MiB, 77, 67.55 W\n"}
+,{"stream_name":"stdout","time":4339.262167843,"data":"[A_qv eval test] 224/613\n"}
+,{"stream_name":"stdout","time":4343.983526756,"data":"[A_qv eval test] 240/613\n"}
+,{"stream_name":"stdout","time":4347.102888325,"data":"[B_attn eval val] {\n"}
+,{"stream_name":"stdout","time":4347.102914425,"data":"[B_attn eval val]   \"n\": 354,\n"}
+,{"stream_name":"stdout","time":4347.103138751,"data":"[B_attn eval val]   \"intent_accuracy\": 0.9463276836158192,\n"}
+,{"stream_name":"stdout","time":4347.10315635,"data":"[B_attn eval val]   \"field_accuracy\": 0.8864970645792564,\n"}
+,{"stream_name":"stdout","time":4347.103160999,"data":"[B_attn eval val]   \"exact_match\": 0.8502824858757062,\n"}
+,{"stream_name":"stdout","time":4347.103164994,"data":"[B_attn eval val]   \"json_validity\": 1.0,\n"}
+,{"stream_name":"stdout","time":4347.103190274,"data":"[B_attn eval val]   \"unsupported_recall\": 0.9482758620689655,\n"}
+,{"stream_name":"stdout","time":4347.103193743,"data":"[B_attn eval val]   \"target_loss\": 0.04288837782001474\n"}
+,{"stream_name":"stdout","time":4347.10319697,"data":"[B_attn eval val] }\n"}
+,{"stream_name":"stdout","time":4349.387482006,"data":"[A_qv eval test] 256/613\n"}
+,{"stream_name":"stdout","time":4354.293820728,"data":"[A_qv eval test] 272/613\n"}
+,{"stream_name":"stdout","time":4356.576126085,"data":"[B_attn eval test] \rLoading weights:   0%|          | 0/370 [00:00\u003c?, ?it/s]\rLoading weights:  19%|█▉        | 72/370 [00:00\u003c00:00, 719.93it/s]\rLoading weights:  49%|████▊     | 180/370 [00:00\u003c00:00, 887.79it/s]\rLoading weights:  77%|███████▋  | 286/370 [00:00\u003c00:00, 942.72it/s]\rLoading weights: 100%|██████████| 370/370 [00:00\u003c00:00, 957.73it/s]\n"}
+,{"stream_name":"stdout","time":4357.865023956,"data":"[B_attn eval test] [transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4357.88635152,"data":"[B_attn eval test] [transformers] `mamba_chunk_scan_combined` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4359.014349644,"data":"[A_qv eval test] 288/613\n"}
+,{"stream_name":"stdout","time":4361.438026418,"data":"[B_attn eval test] [transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4361.438459093,"data":"[B_attn eval test] [transformers] `selective_state_update` is falling back to its reference PyTorch implementation because `mamba_ssm` is not installed. This is correct but much slower; install `mamba_ssm` for the optimized kernel.\n"}
+,{"stream_name":"stdout","time":4362.606585198,"data":"[B_attn eval test] 16/613\n"}
+,{"stream_name":"stdout","time":4363.759245339,"data":"[A_qv eval test] 304/613\n"}
+,{"stream_name":"stdout","time":4367.304712705,"data":"[GPU] 0, 100 %, 7329 MiB, 15360 MiB, 76, 70.59 W\n"}
+,{"stream_name":"stdout","time":4367.313510176,"data":"[GPU] 1, 95 %, 4737 MiB, 15360 MiB, 76, 66.22 W\n"}
+,{"stream_name":"stdout","time":4367.564039097,"data":"[B_attn eval test] 32/613\n"}
+,{"stream_name":"stdout","time":4369.585311157,"data":"[A_qv eval test] 320/613\n"}
+,{"stream_name":"stdout","time":4372.32758368,"data":"[B_attn eval test] 48/613\n"}
+,{"stream_name":"stdout","time":4374.596155225,"data":"[A_qv eval test] 336/613\n"}
+,{"stream_name":"stdout","time":4378.150726047,"data":"[B_attn eval test] 64/613\n"}
+,{"stream_name":"stdout","time":4380.557145422,"data":"[A_qv eval test] 352/613\n"}
+,{"stream_name":"stdout","time":4384.195184686,"data":"[B_attn eval test] 80/613\n"}
+,{"stream_name":"stdout","time":4386.355738105,"data":"[A_qv eval test] 368/613\n"}
+,{"stream_name":"stdout","time":4390.130232752,"data":"[B_attn eval test] 96/613\n"}
+,{"stream_name":"stdout","time":4392.123736056,"data":"[A_qv eval test] 384/613\n"}
+,{"stream_name":"stdout","time":4395.89662119,"data":"[B_attn eval test] 112/613\n"}
+,{"stream_name":"stdout","time":4397.237223976,"data":"[A_qv eval test] 400/613\n"}
+,{"stream_name":"stdout","time":4397.323797031,"data":"[GPU] 0, 97 %, 7329 MiB, 15360 MiB, 77, 66.61 W\n"}
+,{"stream_name":"stdout","time":4397.3279528,"data":"[GPU] 1, 100 %, 7329 MiB, 15360 MiB, 77, 67.55 W\n"}
+,{"stream_name":"stdout","time":4401.759666946,"data":"[B_attn eval test] 128/613\n"}
+,{"stream_name":"stdout","time":4402.713240406,"data":"[A_qv eval test] 416/613\n"}
+,{"stream_name":"stdout","time":4406.877159448,"data":"[B_attn eval test] 144/613\n"}
+,{"stream_name":"stdout","time":4408.508045399,"data":"[A_qv eval test] 432/613\n"}
+,{"stream_name":"stdout","time":4412.119448275,"data":"[B_attn eval test] 160/613\n"}
+,{"stream_name":"stdout","time":4414.277204612,"data":"[A_qv eval test] 448/613\n"}
+,{"stream_name":"stdout","time":4417.937279575,"data":"[B_attn eval test] 176/613\n"}
+,{"stream_name":"stdout","time":4419.763607119,"data":"[A_qv eval test] 464/613\n"}
+,{"stream_name":"stdout","time":4422.937174059,"data":"[B_attn eval test] 192/613\n"}
+,{"stream_name":"stdout","time":4425.547409142,"data":"[A_qv eval test] 480/613\n"}
+,{"stream_name":"stdout","time":4427.336308171,"data":"[GPU] 0, 100 %, 7329 MiB, 15360 MiB, 76, 68.86 W\n"}
+,{"stream_name":"stdout","time":4427.341338459,"data":"[GPU] 1, 100 %, 7329 MiB, 15360 MiB, 76, 66.42 W\n"}
+,{"stream_name":"stdout","time":4428.794156916,"data":"[B_attn eval test] 208/613\n"}
+,{"stream_name":"stdout","time":4431.180788803,"data":"[A_qv eval test] 496/613\n"}
+,{"stream_name":"stdout","time":4434.571719403,"data":"[B_attn eval test] 224/613\n"}
+,{"stream_name":"stdout","time":4435.95953419,"data":"[A_qv eval test] 512/613\n"}
+,{"stream_name":"stdout","time":4439.42552803,"data":"[B_attn eval test] 240/613\n"}
+,{"stream_name":"stdout","time":4441.505843425,"data":"[A_qv eval test] 528/613\n"}
+,{"stream_name":"stdout","time":4444.973190446,"data":"[B_attn eval test] 256/613\n"}
+,{"stream_name":"stdout","time":4447.283861729,"data":"[A_qv eval test] 544/613\n"}
+,{"stream_name":"stdout","time":4450.052949034,"data":"[B_attn eval test] 272/613\n"}
+,{"stream_name":"stdout","time":4453.036887929,"data":"[A_qv eval test] 560/613\n"}
+,{"stream_name":"stdout","time":4454.93944616,"data":"[B_attn eval test] 288/613\n"}
+,{"stream_name":"stdout","time":4457.361984561,"data":"[GPU] 0, 100 %, 7329 MiB, 15360 MiB, 76, 59.67 W\n"}
+,{"stream_name":"stdout","time":4457.366803336,"data":"[GPU] 1, 100 %, 7329 MiB, 15360 MiB, 77, 67.30 W\n"}
+,{"stream_name":"stdout","time":4458.792594123,"data":"[A_qv eval test] 576/613\n"}
+,{"stream_name":"stdout","time":4459.854809543,"data":"[B_attn eval test] 304/613\n"}
+,{"stream_name":"stdout","time":4463.604319994,"data":"[A_qv eval test] 592/613\n"}
+,{"stream_name":"stdout","time":4465.923154001,"data":"[B_attn eval test] 320/613\n"}
+,{"stream_name":"stdout","time":4469.235725923,"data":"[A_qv eval test] 608/613\n"}
+,{"stream_name":"stdout","time":4471.014357793,"data":"[B_attn eval test] 336/613\n"}
+,{"stream_name":"stdout","time":4471.315074016,"data":"[A_qv eval test] 613/613\n"}
+,{"stream_name":"stdout","time":4476.921185337,"data":"[B_attn eval test] 352/613\n"}
+,{"stream_name":"stdout","time":4482.511239742,"data":"[B_attn eval test] 368/613\n"}
+,{"stream_name":"stdout","time":4487.375692203,"data":"[GPU] 0, 94 %, 12261 MiB, 15360 MiB, 76, 64.50 W\n"}
+,{"stream_name":"stdout","time":4487.380359074,"data":"[GPU] 1, 95 %, 7329 MiB, 15360 MiB, 77, 67.06 W\n"}
+,{"stream_name":"stdout","time":4488.355424093,"data":"[B_attn eval test] 384/613\n"}
+,{"stream_name":"stdout","time":4493.420737256,"data":"[B_attn eval test] 400/613\n"}
+,{"stream_name":"stdout","time":4498.900946114,"data":"[B_attn eval test] 416/613\n"}
+,{"stream_name":"stdout","time":4504.709021512,"data":"[B_attn eval test] 432/613\n"}
+,{"stream_name":"stdout","time":4510.577622777,"data":"[B_attn eval test] 448/613\n"}
+,{"stream_name":"stdout","time":4516.162774427,"data":"[B_attn eval test] 464/613\n"}
+,{"stream_name":"stdout","time":4517.389320633,"data":"[GPU] 0, 94 %, 5829 MiB, 15360 MiB, 75, 67.00 W\n"}
+,{"stream_name":"stdout","time":4517.396074486,"data":"[GPU] 1, 100 %, 7329 MiB, 15360 MiB, 77, 68.49 W\n"}
+,{"stream_name":"stdout","time":4522.108625011,"data":"[B_attn eval test] 480/613\n"}
+,{"stream_name":"stdout","time":4527.596831726,"data":"[B_attn eval test] 496/613\n"}
+,{"stream_name":"stdout","time":4532.441618581,"data":"[B_attn eval test] 512/613\n"}
+,{"stream_name":"stdout","time":4538.051041575,"data":"[B_attn eval test] 528/613\n"}
+,{"stream_name":"stdout","time":4543.949646555,"data":"[B_attn eval test] 544/613\n"}
+,{"stream_name":"stdout","time":4547.406509431,"data":"[GPU] 0, 94 %, 7525 MiB, 15360 MiB, 76, 68.24 W\n"}
+,{"stream_name":"stdout","time":4547.411435094,"data":"[GPU] 1, 100 %, 7329 MiB, 15360 MiB, 77, 69.66 W\n"}
+,{"stream_name":"stdout","time":4549.826225634,"data":"[B_attn eval test] 560/613\n"}
+,{"stream_name":"stdout","time":4555.698579882,"data":"[B_attn eval test] 576/613\n"}
+,{"stream_name":"stdout","time":4560.640251197,"data":"[B_attn eval test] 592/613\n"}
+,{"stream_name":"stdout","time":4566.208387373,"data":"[B_attn eval test] 608/613\n"}
+,{"stream_name":"stdout","time":4568.299698976,"data":"[B_attn eval test] 613/613\n"}
+,{"stream_name":"stdout","time":4577.422249983,"data":"[GPU] 0, 100 %, 7525 MiB, 15360 MiB, 76, 66.32 W\n"}
+,{"stream_name":"stdout","time":4577.428586376,"data":"[GPU] 1, 100 %, 12261 MiB, 15360 MiB, 77, 63.77 W\n"}
+,{"stream_name":"stdout","time":4607.442973169,"data":"[GPU] 0, 94 %, 7525 MiB, 15360 MiB, 75, 64.75 W\n"}
+,{"stream_name":"stdout","time":4607.454718648,"data":"[GPU] 1, 100 %, 5829 MiB, 15360 MiB, 77, 66.77 W\n"}
+,{"stream_name":"stdout","time":4637.464282927,"data":"[GPU] 0, 100 %, 7525 MiB, 15360 MiB, 76, 65.44 W\n"}
+,{"stream_name":"stdout","time":4637.469670192,"data":"[GPU] 1, 100 %, 7525 MiB, 15360 MiB, 77, 62.14 W\n"}
+,{"stream_name":"stdout","time":4655.429479753,"data":"[A_qv eval test] {\n"}
+,{"stream_name":"stdout","time":4655.429504818,"data":"[A_qv eval test]   \"n\": 613,\n"}
+,{"stream_name":"stdout","time":4655.429510029,"data":"[A_qv eval test]   \"intent_accuracy\": 0.8955954323001631,\n"}
+,{"stream_name":"stdout","time":4655.429515009,"data":"[A_qv eval test]   \"field_accuracy\": 0.810918774966711,\n"}
+,{"stream_name":"stdout","time":4655.429519228,"data":"[A_qv eval test]   \"exact_match\": 0.7748776508972267,\n"}
+,{"stream_name":"stdout","time":4655.429523851,"data":"[A_qv eval test]   \"json_validity\": 1.0,\n"}
+,{"stream_name":"stdout","time":4655.429528013,"data":"[A_qv eval test]   \"unsupported_recall\": 0.8113207547169812,\n"}
+,{"stream_name":"stdout","time":4655.429555556,"data":"[A_qv eval test]   \"target_loss\": 0.06843266579388702\n"}
+,{"stream_name":"stdout","time":4655.429709841,"data":"[A_qv eval test] }\n"}
+,{"stream_name":"stdout","time":4667.479874987,"data":"[GPU] 0, 0 %, 0 MiB, 15360 MiB, 67, 11.45 W\n"}
+,{"stream_name":"stdout","time":4667.486694793,"data":"[GPU] 1, 94 %, 7525 MiB, 15360 MiB, 77, 66.60 W\n"}
+,{"stream_name":"stdout","time":4697.497495078,"data":"[GPU] 0, 0 %, 0 MiB, 15360 MiB, 56, 10.75 W\n"}
+,{"stream_name":"stdout","time":4697.502386212,"data":"[GPU] 1, 100 %, 7525 MiB, 15360 MiB, 77, 66.16 W\n"}
+,{"stream_name":"stdout","time":4727.5125961,"data":"[GPU] 0, 0 %, 0 MiB, 15360 MiB, 50, 10.26 W\n"}
+,{"stream_name":"stdout","time":4727.517938957,"data":"[GPU] 1, 100 %, 7525 MiB, 15360 MiB, 77, 65.24 W\n"}
+,{"stream_name":"stdout","time":4757.526156555,"data":"[B_attn eval test] {\n"}
+,{"stream_name":"stdout","time":4757.526201943,"data":"[B_attn eval test]   \"n\": 613,\n"}
+,{"stream_name":"stdout","time":4757.526207809,"data":"[B_attn eval test]   \"intent_accuracy\": 0.9102773246329527,\n"}
+,{"stream_name":"stdout","time":4757.526213075,"data":"[B_attn eval test]   \"field_accuracy\": 0.833555259653795,\n"}
+,{"stream_name":"stdout","time":4757.526218295,"data":"[B_attn eval test]   \"exact_match\": 0.8140293637846656,\n"}
+,{"stream_name":"stdout","time":4757.526223589,"data":"[B_attn eval test]   \"json_validity\": 1.0,\n"}
+,{"stream_name":"stdout","time":4757.526228945,"data":"[B_attn eval test]   \"unsupported_recall\": 0.8962264150943396,\n"}
+,{"stream_name":"stdout","time":4757.526234264,"data":"[B_attn eval test]   \"target_loss\": 0.07149030854162472\n"}
+,{"stream_name":"stdout","time":4757.52625712,"data":"[B_attn eval test] }\n"}
+,{"stream_name":"stdout","time":4757.528930933,"data":"[GPU] 0, 0 %, 0 MiB, 15360 MiB, 45, 10.15 W\n"}
+,{"stream_name":"stdout","time":4757.533268234,"data":"[GPU] 1, 100 %, 7551 MiB, 15360 MiB, 77, 67.40 W\n"}
+,{"stream_name":"stdout","time":4758.620810229,"data":"{\n"}
+,{"stream_name":"stdout","time":4758.620837475,"data":"  \"wall_s\": 4683.901179790497,\n"}
+,{"stream_name":"stdout","time":4758.620842556,"data":"  \"A_qv\": {\n"}
+,{"stream_name":"stdout","time":4758.620846021,"data":"    \"trainable_params\": 163840,\n"}
+,{"stream_name":"stdout","time":4758.620849684,"data":"    \"train_time_s\": 3064.862560749054,\n"}
+,{"stream_name":"stdout","time":4758.620853208,"data":"    \"final_train_loss_full_pass\": 0.011407681725520962,\n"}
+,{"stream_name":"stdout","time":4758.620856669,"data":"    \"final_val_loss\": 0.044603006974954694,\n"}
+,{"stream_name":"stdout","time":4758.620860266,"data":"    \"adapter_bytes\": 657472,\n"}
+,{"stream_name":"stdout","time":4758.620863821,"data":"    \"val\": {\n"}
+,{"stream_name":"stdout","time":4758.620867105,"data":"      \"intent_accuracy\": 0.9350282485875706,\n"}
+,{"stream_name":"stdout","time":4758.620871186,"data":"      \"field_accuracy\": 0.8610567514677103,\n"}
+,{"stream_name":"stdout","time":4758.620875201,"data":"      \"exact_match\": 0.8163841807909604,\n"}
+,{"stream_name":"stdout","time":4758.620879013,"data":"      \"json_validity\": 1.0,\n"}
+,{"stream_name":"stdout","time":4758.620883133,"data":"      \"unsupported_recall\": 0.9137931034482759,\n"}
+,{"stream_name":"stdout","time":4758.620887242,"data":"      \"target_loss\": 0.044603080098177594,\n"}
+,{"stream_name":"stdout","time":4758.620890693,"data":"      \"gen_wall_s\": 116.9667432308197\n"}
+,{"stream_name":"stdout","time":4758.620894113,"data":"    },\n"}
+,{"stream_name":"stdout","time":4758.620897256,"data":"    \"test\": {\n"}
+,{"stream_name":"stdout","time":4758.620900537,"data":"      \"intent_accuracy\": 0.8955954323001631,\n"}
+,{"stream_name":"stdout","time":4758.620903904,"data":"      \"field_accuracy\": 0.810918774966711,\n"}
+,{"stream_name":"stdout","time":4758.620907361,"data":"      \"exact_match\": 0.7748776508972267,\n"}
+,{"stream_name":"stdout","time":4758.620910725,"data":"      \"json_validity\": 1.0,\n"}
+,{"stream_name":"stdout","time":4758.620914023,"data":"      \"unsupported_recall\": 0.8113207547169812,\n"}
+,{"stream_name":"stdout","time":4758.620917337,"data":"      \"target_loss\": 0.06843266579388702,\n"}
+,{"stream_name":"stdout","time":4758.620922258,"data":"      \"gen_wall_s\": 204.99773859977722\n"}
+,{"stream_name":"stdout","time":4758.620925614,"data":"    }\n"}
+,{"stream_name":"stdout","time":4758.620928866,"data":"  },\n"}
+,{"stream_name":"stdout","time":4758.620932094,"data":"  \"B_attn\": {\n"}
+,{"stream_name":"stdout","time":4758.620948103,"data":"    \"trainable_params\": 327680,\n"}
+,{"stream_name":"stdout","time":4758.620950888,"data":"    \"train_time_s\": 3121.5409486293793,\n"}
+,{"stream_name":"stdout","time":4758.620967968,"data":"    \"final_train_loss_full_pass\": 0.004573007782996047,\n"}
+,{"stream_name":"stdout","time":4758.620972036,"data":"    \"final_val_loss\": 0.04288825436999308,\n"}
+,{"stream_name":"stdout","time":4758.620976005,"data":"    \"adapter_bytes\": 1314928,\n"}
+,{"stream_name":"stdout","time":4758.620979847,"data":"    \"val\": {\n"}
+,{"stream_name":"stdout","time":4758.620984821,"data":"      \"intent_accuracy\": 0.9463276836158192,\n"}
+,{"stream_name":"stdout","time":4758.620988666,"data":"      \"field_accuracy\": 0.8864970645792564,\n"}
+,{"stream_name":"stdout","time":4758.620992093,"data":"      \"exact_match\": 0.8502824858757062,\n"}
+,{"stream_name":"stdout","time":4758.620995441,"data":"      \"json_validity\": 1.0,\n"}
+,{"stream_name":"stdout","time":4758.620998795,"data":"      \"unsupported_recall\": 0.9482758620689655,\n"}
+,{"stream_name":"stdout","time":4758.621002031,"data":"      \"target_loss\": 0.04288837782001474,\n"}
+,{"stream_name":"stdout","time":4758.621005358,"data":"      \"gen_wall_s\": 122.45930910110474\n"}
+,{"stream_name":"stdout","time":4758.621008695,"data":"    },\n"}
+,{"stream_name":"stdout","time":4758.621011781,"data":"    \"test\": {\n"}
+,{"stream_name":"stdout","time":4758.621014919,"data":"      \"intent_accuracy\": 0.9102773246329527,\n"}
+,{"stream_name":"stdout","time":4758.621021506,"data":"      \"field_accuracy\": 0.833555259653795,\n"}
+,{"stream_name":"stdout","time":4758.621024797,"data":"      \"exact_match\": 0.8140293637846656,\n"}
+,{"stream_name":"stdout","time":4758.621028233,"data":"      \"json_validity\": 1.0,\n"}
+,{"stream_name":"stdout","time":4758.621031527,"data":"      \"unsupported_recall\": 0.8962264150943396,\n"}
+,{"stream_name":"stdout","time":4758.621034852,"data":"      \"target_loss\": 0.07149030854162472,\n"}
+,{"stream_name":"stdout","time":4758.621038258,"data":"      \"gen_wall_s\": 210.75604939460754\n"}
+,{"stream_name":"stdout","time":4758.621041905,"data":"    }\n"}
+,{"stream_name":"stdout","time":4758.62104518,"data":"  }\n"}
+,{"stream_name":"stdout","time":4758.621048243,"data":"}\n"}
+,{"stream_name":"stderr","time":4760.813254017,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":4760.813288883,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":4761.113645296,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":4761.113670623,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":4761.945617027,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":4763.018962499,"data":"[NbConvertApp] Writing 290465 bytes to __results__.html\n"}
+]
