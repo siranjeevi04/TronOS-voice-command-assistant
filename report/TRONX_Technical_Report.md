@@ -29,7 +29,7 @@ FP32 = full precision (base: PyTorch; fine-tuned: ONNX Runtime, identical to PyT
 - **Recommended configuration for TronOS: fine-tuned INT8** (Section 17). INT4 is 37% smaller but loses 11 points and starts acting on out-of-scope requests.
 - Main limitations (Section 16): phone INT8 output differs from Mac INT8 for the same file, the long system prompt makes time to first token slow, and some phrasing patterns are still unlearned.
 
-**Measured vs estimated:** every number in this report is measured unless it is explicitly marked **Estimate**. Estimates appear only in Section 3 (device feasibility), Section 10 (voice-app memory total) and Section 18 (future optimizations).
+**Measured vs estimated:** every number in this report is measured unless it is explicitly marked **Estimate**. Estimates appear only in Section 3 (device feasibility) and Section 18 (future optimizations).
 
 ---
 
@@ -502,7 +502,12 @@ Two Android apps were built: Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, mod
 - **Packaging:** models are stored uncompressed in the APK assets and copied once to app-private storage on first launch (ONNX Runtime needs a file path for external weights). Uninstalling the app removes them.
 - **Privacy:** no network permission. The ONNX Runtime library's `INTERNET`, `ACCESS_NETWORK_STATE` and telemetry initializer were removed from the merged manifest. The only permission is `RECORD_AUDIO`, in the voice app.
 - **Identical input:** the on-device tokenizer runs a start-up self-check against Mac token ids (20/20 identical). Prompt token counts matched the Mac on every phone command.
-- **Memory budget (voice app):** LLM about 0.9 GB process peak, STT q8 158 MB on disk, VAD 2 MB. **Estimate, not measured:** the total is about 1.1–1.2 GB on an 8 GB phone (LLM peak measured; STT and VAD added from file sizes).
+- **Voice app measured on the phone** (7 spoken commands, screen recording `deliverables/demo/tronx-voice-command-assistant-demo.mp4`):
+  - whole-app process RAM with VAD + speech-to-text + LLM loaded: **1,059–1,257 MB**
+  - speech-to-text **0.6–1.3 s** (average 0.9 s)
+  - LLM **6.5–9.6 s** (average 7.9 s)
+  - speech → JSON **7.2–10.5 s** (average 8.8 s)
+  - **6 of 7 correct.** The miss: "arm the security alarm before I leave the house" → `change_setting` / `arm` instead of unsupported. The same request phrased "arm the home security alarm" → unsupported ✅.
 
 ---
 

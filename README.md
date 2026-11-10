@@ -12,6 +12,34 @@ A small LLM that runs fully on an Android phone and turns a spoken command into 
 
 **Final report:** [`report/TRONX_Technical_Report.md`](report/TRONX_Technical_Report.md) (18 sections)
 
+## Phone demo (Moto G34 5G, fully on-device, no network)
+
+[![TronX Voice running on the phone: tap to open the full video](deliverables/demo/demo-preview.gif)](deliverables/demo/tronx-voice-command-assistant-demo.mp4)
+
+*Preview at 4× speed. Full recording (2 min 31 s, muted): [`deliverables/demo/tronx-voice-command-assistant-demo.mp4`](deliverables/demo/tronx-voice-command-assistant-demo.mp4).*
+
+The app in the video is **TronX Voice**. Source: [`android_voice/`](android_voice) (Kotlin; [`MainActivity.kt`](android_voice/app/src/main/java/com/tronx/voice/MainActivity.kt), [`Speech.kt`](android_voice/app/src/main/java/com/tronx/voice/Speech.kt) for VAD + speech-to-text, [`LlmEngine.kt`](android_voice/app/src/main/java/com/tronx/voice/LlmEngine.kt) for the LLM, [`Tokens.kt`](android_voice/app/src/main/java/com/tronx/voice/Tokens.kt) for the on-device tokenizer). Build steps are in the [Android section](#android-app-build-and-install) below.
+
+Pipeline: tap the mic and speak → Silero VAD detects 2 s of silence → Moonshine speech-to-text → fine-tuned Granite INT8 → JSON. Every reply card shows the JSON plus RAM and timings. Measured values from the video:
+
+| What was said (speech-to-text output) | JSON from the fine-tuned INT8 model | Correct | Speech → JSON | Speech-to-text | LLM | First token | App RAM |
+|---|---|:-:|---:|---:|---:|---:|---:|
+| Hey Kenny, please launch the camera. I just want to take a picture. | `{"intent": "open_app", "app_name": "Camera"}` | ✅ | 10.0 s | 1.0 s | 9.0 s | 7.8 s | 1,059 MB |
+| The volume is 2 I can you bring it down to 30% | `{"intent": "change_setting", "setting": "volume", "action": "set", "value": 30}` | ✅ | 10.5 s | 0.9 s | 9.6 s | 6.8 s | 1,152 MB |
+| Or can you like set an alarm for 7? No wait it's 7:45 in the evening | `{"intent": "set_alarm", "time": "19:45"}` | ✅ | 9.2 s | 1.3 s | 7.9 s | 6.6 s | 1,238 MB |
+| Um okay can you video call my grandma | `{"intent": "make_call", "contact": "Grandma"}` | ✅ | 7.2 s | 0.6 s | 6.6 s | 5.4 s | 1,240 MB |
+| Okay can you please text my mom that I'm going to work | `{"intent": "send_message", "contact": "Mom", "message": "I'm going to work"}` | ✅ | 8.9 s | 1.1 s | 7.8 s | 5.8 s | 1,244 MB |
+| Okay, can you arm the security alarm before I leave the house? | `{"intent": "change_setting", "setting": "security", "action": "arm"}` | ❌ (should be unsupported) | 8.5 s | 0.9 s | 7.6 s | 5.9 s | 1,245 MB |
+| Can you please arm the home security alarm before I leave? | `{"intent": "unsupported"}` | ✅ | 7.2 s | 0.7 s | 6.5 s | 6.0 s | 1,257 MB |
+
+**Averages over the 7 commands:**
+- Speech → JSON: **8.8 s**
+- Speech-to-text: **0.9 s**
+- LLM: **7.9 s**
+- Whole app (speech-to-text + VAD + LLM loaded): **1.06–1.26 GB RAM**
+
+The model copes with filler words ("um", "like"), a self-correction ("7? No wait 7:45") and speech-to-text noise ("The volume is 2 I…"). It still gets 6 of 7 right.
+
 ## Headline results
 
 Held-out test set (613 commands, never used for training or model selection):
@@ -160,7 +188,8 @@ python scripts/eval_onnx.py --model models/onnx/ft_int8 --split test --name onnx
 python scripts/bench_mac.py
 ```
 
-### Android (Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, Gradle 8.7, AGP 8.5.2, minSdk 29)
+### Android app: build and install
+Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, Gradle 8.7, AGP 8.5.2, minSdk 29.
 1. `python scripts/make_app_assets.py` writes the pre-tokenised prompts and tokenizer files into `android/app/src/main/assets/`.
 2. Copy the model into the app assets:
    - Bench app: `models/onnx/ft_int8/*` → `android/app/src/quant/assets/models/3_ft_int8/` (for the `int8` flavor, link or copy the same folder to `android/app/src/int8/assets/models/3_ft_int8/`).
