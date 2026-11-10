@@ -134,7 +134,7 @@ Notes:
 - It keeps 97% of full-precision exact match (86.3% vs 89.1%) and the same 99.1% refusal of unsupported requests.
 - It is 1.6× smaller than FP16 and uses about half the RAM of FP16 on CPU.
 - It has the fastest time to first token of all variants.
-- INT4 is smaller and decodes faster, but loses 11 points and starts acting on unsupported requests. Full justification: report Section 17.
+- INT4 is smaller and decodes faster, but loses 8.5 points vs INT8 (−11.3 vs FP32) and starts acting on unsupported requests. Full justification: report Section 17.
 
 ## Results in charts
 
@@ -154,7 +154,7 @@ All four runs converge smoothly. Validation loss keeps falling through epoch 2 (
 ![LoRA learning curves](results/plots/lora_training_curves.png)
 
 ### 4. Quantisation: what precision costs
-FP16 is identical to FP32 (89.1%). INT8 keeps almost all of the quality (−2.8 points exact JSON) at 31% of the FP32 size. INT4 saves another 152 MiB but loses 11 points and starts acting on unsupported requests (recall 99% → 78%).
+FP16 is identical to FP32 (89.1%). INT8 keeps almost all of the quality (−2.8 points exact JSON) at 31% of the FP32 size. INT4 saves another 152 MiB but loses 8.5 points vs INT8 (−11.3 vs FP32) and starts acting on unsupported requests (recall 99% → 78%).
 
 ![Quality after quantisation](results/plots/quant_quality.png)
 

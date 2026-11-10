@@ -26,7 +26,7 @@ FP32 = full precision (base: PyTorch; fine-tuned: ONNX Runtime, identical to PyT
 - LoRA fine-tuning raised exact JSON match from 32.5% to 89.1% (+56.6 points) by training only 1.25% of the parameters (4.26 M).
 - The adapter was merged into the base weights and quantized. INT8 keeps 94% of outputs byte-identical to full precision and loses 2.8 points of exact match. The file shrinks from 1.27 GiB (FP32) to 404 MiB.
 - On the Moto G34 the INT8 model loads in 4.1 s and uses about 0.9 GB of process RAM. Time to first token is 5.9 s and decode speed is 9.8 tokens/s. A 10-minute sustained test caused mild throttling (−8% decode speed).
-- **Recommended configuration for TronOS: fine-tuned INT8** (Section 17). INT4 is 37% smaller but loses 11 points and starts acting on out-of-scope requests.
+- **Recommended configuration for TronOS: fine-tuned INT8** (Section 17). INT4 is 38% smaller than INT8 but loses 8.5 points vs INT8 (−11.3 vs FP32) and starts acting on out-of-scope requests.
 - Main limitations (Section 16): phone INT8 output differs from Mac INT8 for the same file, the long system prompt makes time to first token slow, and some phrasing patterns are still unlearned.
 
 **Measured vs estimated:** every number in this report is measured unless it is explicitly marked **Estimate**. Estimates appear only in Section 3 (device feasibility) and Section 18 (future optimizations).
@@ -306,8 +306,13 @@ Each sample is a chat: the **system prompt** (schema + 7 examples, 490 tokens), 
 | Precision | FP32 | T4 has no BF16; avoids FP16 overflow in the Mamba fallback |
 | Loss | Cross-entropy on JSON tokens only | Teaches the output, not the prompt |
 | Seed | 42 | Reproducibility |
-| Hardware | Kaggle 2× NVIDIA T4 (one run per GPU) | Mac MPS measured 0.87 s/sample, so ~6–9 h for all four runs A–D |
+| Hardware | Kaggle 2× NVIDIA T4 (one run per GPU). T4: Turing, 2,560 CUDA cores, 16 GB GDDR6 (320 GB/s), 8.1 TFLOPS FP32 | Mac MPS measured 0.87 s/sample, so ~6–9 h for all four runs A–D |
 | Time per experiment | A 51 min, B 52 min, C 61 min, D 61 min | |
+| Trainable parameters | D: 4,259,840 (1.25%). A 163,840 · B 327,680 · C 3,932,160 | Section 6 |
+| Total parameters | 340,332,224 (base, frozen) | |
+| Adapter size | D: 16.3 MiB (17,061,608 bytes, FP32 safetensors). A 0.6 · B 1.3 · C 15.0 MiB | |
+| Final training loss | D: 0.0003 (full pass over the training set after epoch 2). A 0.0114 · B 0.0046 · C 0.0004 | `runs/granite/<exp>/train_log.json` |
+| Validation loss | D: 0.0215 (after epoch 2; 0.326 before training). A 0.0446 · B 0.0429 · C 0.0229 | |
 
 **Script:** `scripts/train_lora.py`. The configuration is saved in each `runs/granite/<exp>/train_log.json`.
 
@@ -480,7 +485,7 @@ Error breakdown against FP32 (`results/quant/quant_error_breakdown.json`):
 - 8-bit per-channel weights keep the small LoRA correction almost intact.
 - 4-bit blocks (16 levels per 32 weights) round part of it away, so behaviour drifts back toward the base model. The clearest sign: the base model's habit of acting on unsupported requests returns.
 - **Did INT8 reduce accuracy?** Slightly: −2.8 points exact match. Unsupported recall stays at 99.1%, but unsupported precision falls from 93.8% to 89.7%. INT8 refuses a few more valid commands, a safe failure, since nothing wrong gets executed.
-- **Did INT4 reduce accuracy?** Yes: −11.3 points exact match. Unsupported recall drops to 78.3%, so INT4 executes requests it should refuse, an unsafe failure.
+- **Did INT4 reduce accuracy?** Yes: −11.3 points exact match vs FP32 (−8.5 vs INT8). Unsupported recall drops to 78.3%, so INT4 executes requests it should refuse, an unsafe failure.
 
 ---
 
@@ -850,12 +855,14 @@ Notes:
 - It keeps 97% of full-precision exact match (86.3% vs 89.1%) and the same 99.1% refusal of unsupported requests.
 - It is 1.6× smaller than FP16 and uses about half the RAM of FP16 on CPU.
 - It has the fastest time to first token of all variants.
-- INT4 is smaller and decodes faster, but loses 11 points and starts acting on unsupported requests. Full justification: Section 17.
+- INT4 is smaller and decodes faster, but loses 8.5 points vs INT8 (−11.3 vs FP32) and starts acting on unsupported requests. Full justification: Section 17.
 
+
+### Observations
 
 1. **Fine-tuning is the biggest lever.** +56.6 points exact match with 1.25% of parameters trained. The prompt alone gives the format; LoRA teaches the schema rules: no invented fields, 24 h times, refusing unsupported requests.
 2. **Target-module choice matters on a hybrid model.** With only 4 attention layers, attention-only LoRA is capacity-limited. The MLP adapter reaches all 32 layers. Attention + MLP (D) is best, especially for refusing unsupported requests (99.1%).
-3. **INT8 is the sweet spot.** −2.8 points for a 3.2× smaller file than FP32 (1.6× smaller than FP16). INT4 saves another 152 MiB but loses 8.5 more points, and its errors are the dangerous kind: acting on unsupported requests.
+3. **INT8 is the sweet spot.** −2.8 points for a 3.2× smaller file than FP32 (1.6× smaller than FP16). INT4 saves another 152 MiB but loses 8.5 more points vs INT8 (−11.3 vs FP32), and its errors are the dangerous kind: acting on unsupported requests.
 4. **The hybrid architecture suits phones.** The KV cache is only 8 KB/token and decode speed stays constant from 512 to 2,048 tokens of context.
 5. **Latency is dominated by the long system prompt.** Prefill takes about 85 tok/s on the phone, so 490 prompt tokens take about 5.7 s. Decode of a 15-token answer takes about 1.5 s.
 6. **The same INT8 file behaves differently on the phone.** Over 32 commands where we compared outputs, exact match was 75.0% on the Mac and 50.0% on the phone; only 14 of 32 outputs were identical. Inputs were verified identical and the Mac is deterministic. The cause is dynamic INT8 activation quantization: activations are rounded at run time, and different ARM kernels (Snapdragon 695 vs Apple M5) produce slightly different values that flip close greedy choices. Accuracy measured off-device over-estimates phone accuracy for dynamic INT8.
@@ -918,7 +925,7 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 
 **Rejected alternatives:**
 - **FP16:** the same accuracy as FP32 (89.1%), only 2.8 points above INT8, but the file is 1.6× larger. On CPU it needs about 1.3 GB of RAM (converted to FP32 at load) and is the slowest variant: time to first token 2.8× INT8, decode 0.57× INT8 on the Mac.
-- **INT4:** saves 152 MiB but loses 8.5 points and is unsafe on unsupported requests. Use it only if storage is critical, and then only with quantization-aware fine-tuning.
+- **INT4:** saves 152 MiB vs INT8 but loses 8.5 points vs INT8 (−11.3 vs FP32) and is unsafe on unsupported requests. Use it only if storage is critical, and then only with quantization-aware fine-tuning.
 
 **Two changes recommended before shipping** (Section 18): JSON-constrained decoding and system-prompt caching.
 
