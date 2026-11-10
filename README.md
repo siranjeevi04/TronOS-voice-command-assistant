@@ -64,6 +64,34 @@ On the Moto G34 5G (Snapdragon 695, ONNX Runtime Android 1.31.1, fine-tuned INT8
 | Decode speed | 9.8 tok/s |
 | 10-min thermal | −8% decode speed, 3% battery |
 
+## How the model was chosen
+
+Full write-up with every source: report [Section 3](report/TRONX_Technical_Report.md#3-base-model-selection). Proof screenshots: [`evidence/`](evidence).
+
+1. **Size limit from the phone: about 350 M parameters.**
+   - The Moto G34's Snapdragon 695 has only 17 GB/s memory bandwidth ([Qualcomm brief](evidence/device_feasibility/01_qualcomm_snapdragon-695_product_brief.pdf)), and every generated token reads all the weights.
+   - Scaling a measured 1 B model ([proof](evidence/device_feasibility/02_measured_llama-3.2-1b_q4_0_snapdragon-8gen1.png), [estimate script](evidence/device_feasibility/estimate_moto_g34.py)) gives about 11–12 s per command for 1 B-class models vs about 2.4 s for 350 M (estimates).
+   - Measured afterwards: our 350 M INT8 model decodes at 9.8 tok/s on the phone.
+2. **Benchmarks used:** IFEval (strict format following, as needed for JSON-only output) and BFCL v3/v4 (function calling, the same skill as intent + fields).
+3. **All 13 open models at or below 400 M were compared** ([matrix with sources](evidence/llm_selection/ELIMINATION_MATRIX.md)). The two best:
+
+| Model | IFEval | BFCL v3 | Licence | Proof |
+|---|---:|---:|---|---|
+| LiquidAI LFM2.5-350M | 76.96 | 44.11 | LFM Open License (commercial only if revenue ≤ $10 M) | [benchmarks](evidence/llm_selection/07_liquid_benchmark_chart_official.png), [licence](evidence/llm_selection/06_liquid_lfm-license.png) |
+| **IBM Granite-4.0-H-350M** | 61.27 | 43.07 | **Apache-2.0** | [benchmarks](evidence/llm_selection/01_liquid_lfm2.5-230m_blog_benchmark_tables.png), [IBM card](evidence/llm_selection/03_ibm_granite-4.0-1b_card_nano_benchmarks.png) |
+
+   Everything else was weaker on both benchmarks, had no published scores, or had a non-commercial licence.
+4. **Head-to-head on our own task** (same prompt, zero-shot, 395 commands): Granite won every metric.
+
+| | Granite-4.0-H-350M | LFM2.5-350M |
+|---|---:|---:|
+| Exact JSON | **41.8%** | 29.6% |
+| Fields | **74.4%** | 49.7% |
+| Intent | **82.3%** | 78.7% |
+| Valid JSON | **98.5%** | 96.5% |
+
+   Granite is also Apache-2.0, so it was selected.
+
 ## Consolidated performance report
 
 **Table 1: model variants.** Accuracy is on the held-out test set (613 commands). Device measurements are from the **phone** (Moto G34 5G) for the deployed INT8 model and from the **Mac** (Apple M5) for all variants. All runs use ONNX Runtime 1.31.1 CPU with 4 threads.
@@ -96,10 +124,10 @@ Notes:
 
 | Exp | Target modules | Trainable params | Adapter | Training time | Val exact | Test exact | JSON validity | Unsupported recall | Inference (T4, per command) |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| A | q, v | 163,840 | 0.6 MB | 51 min | 81.6% | 77.5% | 100% | 81.1% | 334 ms |
-| B | q, k, v, o | 327,680 | 1.3 MB | 52 min | 85.0% | 81.4% | 100% | 89.6% | 344 ms |
-| C | MLP | 3,932,160 | 15.0 MB | 61 min | 91.2% | 85.5% | 100% | 91.5% | 338 ms |
-| **D** | **attention + MLP** | **4,259,840** | **16.3 MB** | 61 min | **91.2%** | **89.1%** | **100%** | **99.1%** | 348 ms |
+| A | q, v | 163,840 | 0.6 MiB | 51 min | 81.6% | 77.5% | 100% | 81.1% | 334 ms |
+| B | q, k, v, o | 327,680 | 1.3 MiB | 52 min | 85.0% | 81.4% | 100% | 89.6% | 344 ms |
+| C | MLP | 3,932,160 | 15.0 MiB | 61 min | 91.2% | 85.5% | 100% | 91.5% | 338 ms |
+| **D** | **attention + MLP** | **4,259,840** | **16.3 MiB** | 61 min | **91.2%** | **89.1%** | **100%** | **99.1%** | 348 ms |
 
 **Best configuration for TronOS: LoRA D, merged, INT8.**
 - It keeps 97% of full-precision exact match (86.3% vs 89.1%) and the same 99.1% refusal of unsupported requests.
@@ -125,7 +153,7 @@ All four runs converge smoothly. Validation loss keeps falling through epoch 2 (
 ![LoRA learning curves](results/plots/lora_training_curves.png)
 
 ### 4. Quantisation: what precision costs
-FP16 is identical to FP32 (89.1%). INT8 keeps almost all of the quality (−2.8 points exact JSON) at 31% of the FP32 size. INT4 saves another 151 MiB but loses 11 points and starts acting on unsupported requests (recall 99% → 78%).
+FP16 is identical to FP32 (89.1%). INT8 keeps almost all of the quality (−2.8 points exact JSON) at 31% of the FP32 size. INT4 saves another 152 MiB but loses 11 points and starts acting on unsupported requests (recall 99% → 78%).
 
 ![Quality after quantisation](results/plots/quant_quality.png)
 
@@ -168,8 +196,8 @@ The same model file and the same input token ids were used on both devices; only
 |---|---:|---:|---:|---:|
 | Demo prompts (where the base model fails) | 10 | 0 | 9 | 7 |
 | Hard commands (typos, informal, self-corrections) | 11 | 4 | 6 | 5 |
-| Free-typed commands in the phone app | 11 | 6 | 8 | 4 |
-| **Total** | **32** | **10 (31%)** | **23 (72%)** | **16 (50%)** |
+| Free-typed commands in the phone app | 11 | 6 | 9 | 4 |
+| **Total** | **32** | **10 (31%)** | **24 (75%)** | **16 (50%)** |
 
 The fine-tuned model is better than the base model on both devices. On the full 613-command test set, the gap is much larger (32.5% → 86.3% for INT8).
 
@@ -188,7 +216,7 @@ The fine-tuned model is better than the base model on both devices. On the full 
 
 | Attachment | Where |
 |---|---|
-| Dataset and dataset manifest | [`data/v1.2/`](data/v1.2): `train.jsonl` (2,510), `val.jsonl` (354), `test.jsonl` (613), [`manifest.json`](data/v1.2/manifest.json) (counts, dedup, leakage checks, sha256) |
+| Dataset and dataset manifest | [`data/v1.2/`](data/v1.2): `train.jsonl` (2,510), `val.jsonl` (354), `test.jsonl` (613), [`manifest.json`](data/v1.2/manifest.json) (counts, dedup, leakage checks, sha256); hand-written test commands source [`data/raw/handwritten.jsonl`](data/raw/handwritten.jsonl) |
 | Dataset preparation | [`scripts/generate_dataset_v12.py`](scripts/generate_dataset_v12.py), design docs in [`docs/`](docs) |
 | Training (overview) | **[`training/README.md`](training/README.md)**: script, configs, hyper-parameters, adapters, logs and curves in one page |
 | Training scripts | [`scripts/train_lora.py`](scripts/train_lora.py), Kaggle GPU runner [`kaggle_job/kernel/run.py`](kaggle_job/kernel/run.py), raw training logs [`kaggle_job/logs/`](kaggle_job/logs) |
@@ -210,9 +238,13 @@ python3.12 -m venv .venv && source .venv/bin/activate && pip install -r requirem
 # 0. base model + reference ONNX graph (Hugging Face)
 huggingface-cli download ibm-granite/granite-4.0-h-350m --local-dir models/granite-4.0-h-350m
 huggingface-cli download onnx-community/granite-4.0-h-350m-ONNX --local-dir models/onnx_ref
+# speech-to-text (Moonshine v2 streaming small, ONNX) + voice activity detection (Silero VAD v5), used by the voice app
+huggingface-cli download Workmind/moonshine-streaming-small-ONNX --local-dir models/stt/moonshine-streaming-small-ONNX
+huggingface-cli download istupakov/silero-vad-onnx silero_vad.onnx --local-dir models/vad
 
-# 1. dataset (deterministic, seed 13) -> data/v1.2/
+# 1. dataset (deterministic, seed 13) -> data/v1.2/   (reads data/raw/handwritten.jsonl; output is byte-identical to the committed files)
 python scripts/generate_dataset_v12.py
+#    (the model bake-off in report Section 3.5 used the earlier v1.1 dataset: scripts/generate_dataset.py)
 
 # 2. LoRA training (one experiment; ran on a Kaggle T4, ~1 h each)
 python scripts/train_lora.py --config configs/granite__v12__lora_D_attn_mlp.json
@@ -227,6 +259,10 @@ python scripts/export_onnx.py onnx  --hf models/merged/D --out models/onnx/ft_fp
 python scripts/export_onnx.py onnx16 --hf models/merged/D --out models/onnx/ft_fp16
 python scripts/export_onnx.py quant --src models/onnx/ft_fp32 --out-root models/onnx --prefix ft
 python scripts/eval_onnx.py --model models/onnx/ft_int8 --split test --name onnx_ft_int8_test --threads 4
+# base model in FP16: ONNX file (for the benchmark) + accuracy
+python scripts/export_onnx.py verify16          # -> models/onnx/base_fp16
+python scripts/eval_hf.py --model models/granite-4.0-h-350m --data-dir data/v1.2 --prompt schema --split test \
+       --dtype fp16 --name granite_v12_base_fp16_test
 
 # 5. Mac counterpart of the on-device benchmark (same prompts and method as the app)
 python scripts/bench_mac.py
@@ -234,10 +270,10 @@ python scripts/bench_mac.py
 
 ### Android app: build and install
 Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, Gradle 8.7, AGP 8.5.2, minSdk 29.
-1. `python scripts/make_app_assets.py` writes the pre-tokenised prompts and tokenizer files into `android/app/src/main/assets/`.
+1. `python scripts/make_app_assets.py` regenerates every tokenizer and prompt asset of both apps (`prompts.json`, `vocab.json`, `merges.txt`, and `stt_vocab.json` for the voice app). The output is identical to the committed files.
 2. Copy the model into the app assets:
    - Bench app: `models/onnx/ft_int8/*` → `android/app/src/quant/assets/models/3_ft_int8/` (for the `int8` flavor, link or copy the same folder to `android/app/src/int8/assets/models/3_ft_int8/`).
-   - Voice app: the same INT8 files → `android_voice/app/src/main/assets/models/llm/`. Moonshine q8 encoder/decoder (`Workmind/moonshine-streaming-small-ONNX`) → `.../models/stt/`. Silero VAD v5 ONNX → `.../models/vad/`.
+   - Voice app: the same INT8 files → `android_voice/app/src/main/assets/models/llm/`. Moonshine q8 files `onnx/encoder_model_quantized.onnx` → `.../models/stt/encoder.onnx` and `onnx/decoder_model_merged_quantized.onnx` → `.../models/stt/decoder.onnx`. `models/vad/silero_vad.onnx` → `.../models/vad/`.
 3. Build:
    - Bench app: `gradle -p android assembleInt8Debug`
    - Voice app: `gradle -p android_voice assembleDebug`

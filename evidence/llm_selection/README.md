@@ -1,4 +1,4 @@
-# Evidence for LLM shortlist (captured 2026-11-10, live fetch via Firecrawl, full-page screenshots)
+# Evidence for LLM shortlist (captured 2026-11-10, full-page screenshots of the live pages)
 
 | File | Source URL | What it proves |
 |---|---|---|

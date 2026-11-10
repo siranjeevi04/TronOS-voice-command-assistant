@@ -17,5 +17,5 @@ __pycache__/
 .DS_Store
 # personal voice recordings
 results/stt/audio/
-# local-only agent instructions
+# local notes
 pushing_github.md

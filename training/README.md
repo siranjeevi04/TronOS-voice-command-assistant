@@ -5,7 +5,7 @@ LoRA fine-tuning of `ibm-granite/granite-4.0-h-350m` on the TronOS command datas
 | What | Where |
 |---|---|
 | Training script | [`scripts/train_lora.py`](../scripts/train_lora.py) |
-| Kaggle runner (installs, launches A–D, streams logs) | [`kaggle_job/kernel/run.py`](../kaggle_job/kernel/run.py) |
+| Kaggle runner (installs packages, runs training + evaluation, streams logs; the committed version is the second run, which trained A and B; the first run trained C and D) | [`kaggle_job/kernel/run.py`](../kaggle_job/kernel/run.py) |
 | LoRA configs (hyper-parameters + target modules) | [`configs/granite__v12__lora_{A_qv,B_attn,C_mlp,D_attn_mlp}.json`](../configs) |
 | Training data | [`data/v1.2/train.jsonl`](../data/v1.2/train.jsonl) (2,510), [`val.jsonl`](../data/v1.2/val.jsonl) (354) |
 | Trained adapters | [`runs/granite/<exp>/adapter/`](../runs/granite) (`adapter_config.json` + `adapter_model.safetensors`) |

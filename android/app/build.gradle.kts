@@ -16,10 +16,9 @@ android {
         buildConfigField("String", "ORT_VERSION", "\"$ortVersion\"")
     }
     buildFeatures { buildConfig = true }
-    // Models ship INSIDE the APK (like llm-chat-app): 2 APKs because all 4 variants (~2 GB) are too big for one.
+    // Models ship INSIDE the APK (copied from src/<flavor>/assets/models/ at build time; see README "Android app").
     flavorDimensions += "models"
     productFlavors {
-        create("fp16") { dimension = "models"; applicationIdSuffix = ".fp16"; resValue("string", "app_name", "TronX Bench A (FP16)") }
         create("quant") { dimension = "models"; applicationIdSuffix = ".quant"; resValue("string", "app_name", "TronX Bench B (INT8+INT4)") }
         create("int8") { dimension = "models"; applicationIdSuffix = ".int8"; resValue("string", "app_name", "TronX Bench (INT8)") }
     }

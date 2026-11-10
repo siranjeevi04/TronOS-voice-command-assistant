@@ -48,7 +48,7 @@ fig.tight_layout(); fig.savefig(OUT / "improvement_per_intent.png", dpi=160); pl
 # ---- 2. same INT8 file, same prompts: Mac vs phone (quality + speed as small multiples, no dual axis)
 fig, ax = plt.subplots(1, 3, figsize=(10.5, 3.6))
 lab = ["Mac M5", "Moto G34"]; col = [S1, S2]
-q = {"Exact JSON": (23 / 32 * 100, 16 / 32 * 100), "Valid JSON": (100.0, 29 / 32 * 100)}
+q = {"Exact JSON": (24 / 32 * 100, 16 / 32 * 100), "Valid JSON": (100.0, 29 / 32 * 100)}
 x = range(len(q)); w = 0.36
 for j in range(2):
     xs = [i + (j - 0.5) * w for i in x]; ys = [v[j] for v in q.values()]

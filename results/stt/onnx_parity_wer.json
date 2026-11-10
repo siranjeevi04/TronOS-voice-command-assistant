@@ -1,0 +1,21 @@
+{
+ "method": "WER after Whisper English normaliser + '6 30'->'630' join (same as scripts/stt_benchmark.py); 150 TTS clips (5 voices x 30 commands)",
+ "pytorch": {
+  "clips": 150,
+  "errors": 77,
+  "ref_words": 915,
+  "wer_pct": 8.42
+ },
+ "onnx_fp32": {
+  "clips": 150,
+  "errors": 78,
+  "ref_words": 915,
+  "wer_pct": 8.52
+ },
+ "onnx_q8": {
+  "clips": 150,
+  "errors": 84,
+  "ref_words": 915,
+  "wer_pct": 9.18
+ }
+}

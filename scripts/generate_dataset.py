@@ -1,6 +1,9 @@
 """Synthetic + hand-written dataset generator for the TronOS voice-command parser.
 
-Design (see report §4 for the full discussion):
+Dataset v1.1 generator. Superseded by generate_dataset_v12.py (dataset v1.2, used for all training and test results);
+kept because its validation split (395 commands) was used for the zero-shot model bake-off (report Section 3.5).
+
+Design (see report Section 4 for the full discussion):
   * Every utterance comes from a *template* (string with slots). Template IDs are
     partitioned per intent into disjoint train / val / test pools, so test phrasings
     are never seen during training or hyper-parameter selection.

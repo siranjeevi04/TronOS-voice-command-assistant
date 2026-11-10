@@ -1,0 +1,120 @@
+{"text": "Set an alarm for 6:30 AM tomorrow.", "output": {"intent": "set_alarm", "time": "06:30", "date": "tomorrow"}, "lang": "en"}
+{"text": "Open YouTube and play latest song.", "output": {"intent": "open_app", "app_name": "YouTube"}, "lang": "en"}
+{"text": "Transfer money to Ravi.", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "i have a flight tomorrow so wake me at 4:15 am", "output": {"intent": "set_alarm", "time": "04:15", "date": "tomorrow"}, "lang": "en"}
+{"text": "alarm 5 45 am", "output": {"intent": "set_alarm", "time": "05:45"}, "lang": "en"}
+{"text": "could u put an alarm 7 o clock in the morning", "output": {"intent": "set_alarm", "time": "07:00"}, "lang": "en"}
+{"text": "set alarm for ten pm tonight", "output": {"intent": "set_alarm", "time": "22:00", "date": "today"}, "lang": "en"}
+{"text": "need to be up by 6 on saturday", "output": {"intent": "set_alarm", "time": "06:00", "date": "saturday"}, "lang": "en"}
+{"text": "hey tron alarm for quarter past five am", "output": {"intent": "set_alarm", "time": "05:15"}, "lang": "en"}
+{"text": "set an alarm for 2:30 in the afternoon", "output": {"intent": "set_alarm", "time": "14:30"}, "lang": "en"}
+{"text": "wake me up in the morning at 8", "output": {"intent": "set_alarm", "time": "08:00"}, "lang": "en"}
+{"text": "alarm please", "output": {"intent": "set_alarm"}, "lang": "en"}
+{"text": "set an alarm called gym at 6 am on monday", "output": {"intent": "set_alarm", "time": "06:00", "date": "monday", "label": "gym"}, "lang": "en"}
+{"text": "set an alarm for 11:59 pm", "output": {"intent": "set_alarm", "time": "23:59"}, "lang": "en"}
+{"text": "set my alarm to 6 30 am tomorrow and play music", "output": {"intent": "set_alarm", "time": "06:30", "date": "tomorrow"}, "lang": "en"}
+{"text": "wake me at 9 tomorrow morning", "output": {"intent": "set_alarm", "time": "09:00", "date": "tomorrow"}, "lang": "en"}
+{"text": "i want an alarm on sunday at 10 am", "output": {"intent": "set_alarm", "time": "10:00", "date": "sunday"}, "lang": "en"}
+{"text": "alarm at 19:45", "output": {"intent": "set_alarm", "time": "19:45"}, "lang": "en"}
+{"text": "remind me to call the dentist tomorrow at 11 am", "output": {"intent": "create_reminder", "task": "call the dentist", "time": "11:00", "date": "tomorrow"}, "lang": "en"}
+{"text": "don't let me forget my umbrella", "output": {"intent": "create_reminder", "task": "my umbrella"}, "lang": "en"}
+{"text": "remind me about the electricity bill on friday", "output": {"intent": "create_reminder", "task": "the electricity bill", "date": "friday"}, "lang": "en"}
+{"text": "remind me at 9 pm to lock the car", "output": {"intent": "create_reminder", "task": "lock the car", "time": "21:00"}, "lang": "en"}
+{"text": "set a reminder to send the rent at 10 am", "output": {"intent": "create_reminder", "task": "send the rent", "time": "10:00"}, "lang": "en"}
+{"text": "hey tron remind me to stretch every evening", "output": {"intent": "create_reminder", "task": "stretch every evening"}, "lang": "en"}
+{"text": "remind me to switch off the heater", "output": {"intent": "create_reminder", "task": "switch off the heater"}, "lang": "en"}
+{"text": "remind me to text ravi tomorrow", "output": {"intent": "create_reminder", "task": "text ravi", "date": "tomorrow"}, "lang": "en"}
+{"text": "create reminder buy eggs", "output": {"intent": "create_reminder", "task": "buy eggs"}, "lang": "en"}
+{"text": "can you remind me to take my pills at 8 30 pm", "output": {"intent": "create_reminder", "task": "take my pills", "time": "20:30"}, "lang": "en"}
+{"text": "remind me to call mom at 6 pm today", "output": {"intent": "create_reminder", "task": "call mom", "time": "18:00", "date": "today"}, "lang": "en"}
+{"text": "i need a reminder", "output": {"intent": "create_reminder"}, "lang": "en"}
+{"text": "remind me to pay the credit card bill on the 5th", "output": {"intent": "create_reminder", "task": "pay the credit card bill on the 5th"}, "lang": "en"}
+{"text": "remind me to feed the cat at noon", "output": {"intent": "create_reminder", "task": "feed the cat", "time": "12:00"}, "lang": "en"}
+{"text": "remind me on monday to submit the timesheet", "output": {"intent": "create_reminder", "task": "submit the timesheet", "date": "monday"}, "lang": "en"}
+{"text": "open whatsapp", "output": {"intent": "open_app", "app_name": "WhatsApp"}, "lang": "en"}
+{"text": "launch the camera i want to take a picture", "output": {"intent": "open_app", "app_name": "Camera"}, "lang": "en"}
+{"text": "open google pay", "output": {"intent": "open_app", "app_name": "Google Pay"}, "lang": "en"}
+{"text": "can you open spotify and play my liked songs", "output": {"intent": "open_app", "app_name": "Spotify"}, "lang": "en"}
+{"text": "open maps and navigate home", "output": {"intent": "open_app", "app_name": "Google Maps"}, "lang": "en"}
+{"text": "hey tron open insta", "output": {"intent": "open_app", "app_name": "Instagram"}, "lang": "en"}
+{"text": "start netflix", "output": {"intent": "open_app", "app_name": "Netflix"}, "lang": "en"}
+{"text": "open the calculator app", "output": {"intent": "open_app", "app_name": "Calculator"}, "lang": "en"}
+{"text": "open zoom", "output": {"intent": "open_app", "app_name": "Zoom"}, "lang": "en"}
+{"text": "open my gallery", "output": {"intent": "open_app", "app_name": "Gallery"}, "lang": "en"}
+{"text": "go to settings", "output": {"intent": "open_app", "app_name": "Settings"}, "lang": "en"}
+{"text": "launch microsoft teams", "output": {"intent": "open_app", "app_name": "Microsoft Teams"}, "lang": "en"}
+{"text": "open amazon and search for headphones", "output": {"intent": "open_app", "app_name": "Amazon"}, "lang": "en"}
+{"text": "open an app", "output": {"intent": "open_app"}, "lang": "en"}
+{"text": "open chrome browser", "output": {"intent": "open_app", "app_name": "Chrome"}, "lang": "en"}
+{"text": "open the play store", "output": {"intent": "open_app", "app_name": "Play Store"}, "lang": "en"}
+{"text": "call mom", "output": {"intent": "make_call", "contact": "Mom"}, "lang": "en"}
+{"text": "call dad on speaker phone", "output": {"intent": "make_call", "contact": "Dad"}, "lang": "en"}
+{"text": "ring my brother ravi", "output": {"intent": "make_call", "contact": "Ravi"}, "lang": "en"}
+{"text": "phone priya now", "output": {"intent": "make_call", "contact": "Priya"}, "lang": "en"}
+{"text": "dial 9876543210", "output": {"intent": "make_call", "contact": "9876543210"}, "lang": "en"}
+{"text": "can you call karthik for me", "output": {"intent": "make_call", "contact": "Karthik"}, "lang": "en"}
+{"text": "hey tron call siddharth", "output": {"intent": "make_call", "contact": "Siddharth"}, "lang": "en"}
+{"text": "call the office", "output": {"intent": "make_call", "contact": "office"}, "lang": "en"}
+{"text": "make a call", "output": {"intent": "make_call"}, "lang": "en"}
+{"text": "call arjun and tell him i am late", "output": {"intent": "make_call", "contact": "Arjun"}, "lang": "en"}
+{"text": "video call grandma", "output": {"intent": "make_call", "contact": "Grandma"}, "lang": "en"}
+{"text": "call 100", "output": {"intent": "make_call", "contact": "100"}, "lang": "en"}
+{"text": "give imran a ring", "output": {"intent": "make_call", "contact": "Imran"}, "lang": "en"}
+{"text": "call uncle raju", "output": {"intent": "make_call", "contact": "Uncle Raju"}, "lang": "en"}
+{"text": "text priya i'll be there in ten", "output": {"intent": "send_message", "contact": "Priya", "message": "i'll be there in ten"}, "lang": "en"}
+{"text": "send a whatsapp to rahul saying happy anniversary", "output": {"intent": "send_message", "contact": "Rahul", "message": "happy anniversary", "app": "WhatsApp"}, "lang": "en"}
+{"text": "message mom that i reached the hostel", "output": {"intent": "send_message", "contact": "Mom", "message": "i reached the hostel"}, "lang": "en"}
+{"text": "tell dad i need the car tonight", "output": {"intent": "send_message", "contact": "Dad", "message": "i need the car tonight"}, "lang": "en"}
+{"text": "send a message", "output": {"intent": "send_message"}, "lang": "en"}
+{"text": "text sneha", "output": {"intent": "send_message", "contact": "Sneha"}, "lang": "en"}
+{"text": "send fatima a message on telegram saying the class is cancelled", "output": {"intent": "send_message", "contact": "Fatima", "message": "the class is cancelled", "app": "Telegram"}, "lang": "en"}
+{"text": "whatsapp karthik ok done", "output": {"intent": "send_message", "contact": "Karthik", "message": "ok done", "app": "WhatsApp"}, "lang": "en"}
+{"text": "let joseph know the meeting moved to 4", "output": {"intent": "send_message", "contact": "Joseph", "message": "the meeting moved to 4"}, "lang": "en"}
+{"text": "send an sms to ananya saying call me", "output": {"intent": "send_message", "contact": "Ananya", "message": "call me", "app": "SMS"}, "lang": "en"}
+{"text": "reply to meera saying sure", "output": {"intent": "send_message", "contact": "Meera", "message": "sure"}, "lang": "en"}
+{"text": "text balaji the wifi password is on the fridge", "output": {"intent": "send_message", "contact": "Balaji", "message": "the wifi password is on the fridge"}, "lang": "en"}
+{"text": "turn on wifi", "output": {"intent": "change_setting", "setting": "wifi", "action": "on"}, "lang": "en"}
+{"text": "switch off bluetooth", "output": {"intent": "change_setting", "setting": "bluetooth", "action": "off"}, "lang": "en"}
+{"text": "put the phone on silent", "output": {"intent": "change_setting", "setting": "do_not_disturb", "action": "on"}, "lang": "en"}
+{"text": "brightness 30 percent", "output": {"intent": "change_setting", "setting": "brightness", "action": "set", "value": 30}, "lang": "en"}
+{"text": "turn the volume all the way down", "output": {"intent": "change_setting", "setting": "volume", "action": "set", "value": 0}, "lang": "en"}
+{"text": "it's too dark increase brightness", "output": {"intent": "change_setting", "setting": "brightness", "action": "increase"}, "lang": "en"}
+{"text": "enable airplane mode", "output": {"intent": "change_setting", "setting": "airplane_mode", "action": "on"}, "lang": "en"}
+{"text": "torch on", "output": {"intent": "change_setting", "setting": "flashlight", "action": "on"}, "lang": "en"}
+{"text": "turn off the flashlight", "output": {"intent": "change_setting", "setting": "flashlight", "action": "off"}, "lang": "en"}
+{"text": "switch on hotspot", "output": {"intent": "change_setting", "setting": "hotspot", "action": "on"}, "lang": "en"}
+{"text": "turn on battery saver mode", "output": {"intent": "change_setting", "setting": "battery_saver", "action": "on"}, "lang": "en"}
+{"text": "make the volume 60 percent", "output": {"intent": "change_setting", "setting": "volume", "action": "set", "value": 60}, "lang": "en"}
+{"text": "turn off mobile data", "output": {"intent": "change_setting", "setting": "mobile_data", "action": "off"}, "lang": "en"}
+{"text": "enable dark mode", "output": {"intent": "change_setting", "setting": "dark_mode", "action": "on"}, "lang": "en"}
+{"text": "lower the volume", "output": {"intent": "change_setting", "setting": "volume", "action": "decrease"}, "lang": "en"}
+{"text": "disable location", "output": {"intent": "change_setting", "setting": "location", "action": "off"}, "lang": "en"}
+{"text": "turn off do not disturb", "output": {"intent": "change_setting", "setting": "do_not_disturb", "action": "off"}, "lang": "en"}
+{"text": "stop auto rotate", "output": {"intent": "change_setting", "setting": "auto_rotate", "action": "off"}, "lang": "en"}
+{"text": "turn up the volume and open spotify", "output": {"intent": "change_setting", "setting": "volume", "action": "increase"}, "lang": "en"}
+{"text": "pay ravi 500 rupees on gpay", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "send 2000 to my mom's account", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "what is the weather in chennai", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "order a coffee", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "book an uber to the station", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "delete my 7 am alarm", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "turn off all alarms", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "what's 25 times 4", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "tell me a story", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "switch on the bedroom fan", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "how many steps did i walk today", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "uninstall facebook", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "read my last message", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "find my phone", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "set a timer for five minutes", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "who is the prime minister of india", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "buy movie tickets for tonight", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "uh", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "sorry wrong button", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "hello", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "send money to priya and text her", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "play despacito", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "what's my next meeting", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "check my bank balance", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "cancel the reminder for tomorrow", "output": {"intent": "unsupported"}, "lang": "en"}
+{"text": "hack into my neighbours wifi", "output": {"intent": "unsupported"}, "lang": "en"}

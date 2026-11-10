@@ -1,7 +1,7 @@
 # TronX Bench (INT8): on-device Section 9 benchmark (Moto G34 5G)
 
 ## APK
-- `TronxBench_INT8.apk` (463 MB): fine-tuned Granite-4.0-H-350M + LoRA D, ONNX INT8 (`3_ft_int8`, 424 MB, same file as the Mac run and the voice app).
+- `TronxBench_INT8.apk` (about 463 MB, not stored in git): build it from `android/` with the steps in the main README ("Android app: build and install", flavor `int8`). It contains the fine-tuned Granite-4.0-H-350M + LoRA D, ONNX INT8 (`3_ft_int8`, 404 MiB, the same file as the Mac run and the voice app).
   App name on the phone: "TronX Bench (INT8)". The model is inside the APK; first launch unpacks it (~30 s, shown on screen).
 
 ## 1. Prepare the phone (same conditions for every run)

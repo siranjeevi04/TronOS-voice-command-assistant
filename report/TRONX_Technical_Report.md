@@ -24,7 +24,7 @@ Main results (held-out test set, 613 commands, never used for training or model 
 FP32 = full precision (base: PyTorch; fine-tuned: ONNX Runtime, identical to PyTorch). INT8 = ONNX Runtime CPU (Section 8).
 
 - LoRA fine-tuning raised exact JSON match from 32.5% to 89.1% (+56.6 points) by training only 1.25% of the parameters (4.26 M).
-- The adapter was merged into the base weights and quantized. INT8 keeps 94% of outputs byte-identical to full precision and loses 2.8 points of exact match. The file shrinks from 1.3 GB (FP32) to 404 MB.
+- The adapter was merged into the base weights and quantized. INT8 keeps 94% of outputs byte-identical to full precision and loses 2.8 points of exact match. The file shrinks from 1.27 GiB (FP32) to 404 MiB.
 - On the Moto G34 the INT8 model loads in 4.1 s and uses about 0.9 GB of process RAM. Time to first token is 5.9 s and decode speed is 9.8 tokens/s. A 10-minute sustained test caused mild throttling (−8% decode speed).
 - **Recommended configuration for TronOS: fine-tuned INT8** (Section 17). INT4 is 37% smaller but loses 11 points and starts acting on out-of-scope requests.
 - Main limitations (Section 16): phone INT8 output differs from Mac INT8 for the same file, the long system prompt makes time to first token slow, and some phrasing patterns are still unlearned.
@@ -70,46 +70,118 @@ Project decisions beyond the problem statement:
 
 ## 3. Base model selection
 
-**Selection rules:**
-1. At most about 400 M parameters. **Estimate, not measured:** a 1 B-class model would take 11–12 s per command on the Moto G34, because decode speed is limited by memory bandwidth (17 GB/s). Derived from a published Snapdragon 8 Gen 1 measurement scaled by bandwidth (`evidence/device_feasibility/estimate_moto_g34.py`).
-2. Strongest published instruction-following (IFEval) and function-calling (BFCL) scores.
-3. A licence that allows commercial use.
-4. Mature tooling for export to a mobile runtime.
+The model was chosen in four steps:
+1. Size limit set by the phone.
+2. Shortlist by published benchmarks.
+3. Licence and runtime filter.
+4. Head-to-head test on our own task.
 
-We surveyed every published model at or below 400 M (evidence screenshots are in `evidence/llm_selection/`):
+Proof files are in [`evidence/`](../evidence). Every claim below links to a screenshot or a source page.
 
-| Model | Params | IFEval | BFCL v3 | Licence | Verdict |
-|---|---:|---:|---:|---|---|
-| LiquidAI LFM2.5-350M | 350 M | 76.96 | 44.11 | LFM Open License (commercial only if revenue ≤ $10 M) | Finalist |
-| **IBM Granite-4.0-H-350M** | 340 M | 61.3 | 43.1 | **Apache-2.0** | **Finalist → selected** |
-| LFM2.5-230M | 230 M | 71.71 | 43.26 | LFM Open License | Dropped (same family, weaker) |
-| Granite-4.0-350M (dense) | 350 M | 53.48 | 39.58 | Apache-2.0 | Reserve |
-| Gemma-3-270M-it | 270 M | 51.2 | n/a | Gemma terms, gated | Dropped |
-| SmolLM2-360M-Instruct | 360 M | 41.0 | n/a | Apache-2.0 | Dropped |
-| MobileLLM-R1-360M | 360 M | n/a | n/a | Non-commercial | Dropped |
-| Qwen3.5-0.8B | 800 M | 59.94 | 35.08 | Apache-2.0 | Too large, lower BFCL |
+### 3.1 Why the model must be about 350 M parameters (phone limit)
 
-**Bake-off of the two finalists:** same system prompt, zero-shot, 395 validation commands.
+The target phone is a Moto G34 5G: Snapdragon 695, 2× Cortex-A78 + 6× Cortex-A55, 8 GB LPDDR4X.
 
-| | Granite-4.0-H-350M | LFM2.5-350M |
+**Speed is set by memory bandwidth.** Generating each token reads all the weights once, so the maximum speed is tokens/s ≤ memory bandwidth ÷ model size in bytes. The Snapdragon 695 has only **17.06 GB/s** ([Qualcomm product brief](../evidence/device_feasibility/01_qualcomm_snapdragon-695_product_brief.pdf)). That is 3× less than a flagship Snapdragon 8 Gen 1 (51.2 GB/s).
+
+**Measured reference point:** Llama-3.2-1B (4-bit) on a Snapdragon 8 Gen 1 reached 12 tok/s decode ([screenshot](../evidence/device_feasibility/02_measured_llama-3.2-1b_q4_0_snapdragon-8gen1.png)). Scaled to the G34's bandwidth ([`estimate_moto_g34.py`](../evidence/device_feasibility/estimate_moto_g34.py), [output](../evidence/device_feasibility/estimate_output.txt)):
+
+| Model (4-bit) | **Estimate:** decode tok/s on G34 | **Estimate:** time per command |
 |---|---:|---:|
-| Exact JSON | **41.8%** | 29.6% |
-| Intent | **82.3%** | 78.7% |
-| Fields | **74.4%** | 49.7% |
-| Valid JSON | **98.5%** | 96.5% |
-| Target loss | **0.167** | 0.326 |
+| LFM3-1.7B | 2.8 | ~12 s |
+| Granite-4.0-1B | 3.0 | ~11 s |
+| LFM2.5-350M | 13.4 | ~2.5 s |
+| Granite-4.0-H-350M | 13.8 | ~2.4 s |
 
-**Granite-4.0-H-350M won on every metric** and has the permissive Apache-2.0 licence, so it was selected.
+A 1 B-class model would take 4–5× longer per command than a 350 M model, even at 4 bits, so the size limit was set to **≤ 400 M parameters**.
 
-Granite-4.0-H-350M architecture (verified in `results/model_inspection/`):
+**Measured confirmation (after deployment):** the chosen 350 M model at INT8 decodes at **9.8 tok/s** on this phone (Section 13). That is in line with the estimate. A model 3× larger would fall to about 3 tok/s.
+
+### 3.2 Benchmarks used to rank candidates
+
+No public benchmark measures our exact task (one spoken command → intent + fields as JSON). We used the two closest proxies:
+
+| Benchmark | What it measures | Why it matters for TronOS |
+|---|---|---|
+| **IFEval** | Following strict format instructions | The model must output *only* a JSON object, in our schema |
+| **BFCL v3 / v4** (Berkeley Function-Calling Leaderboard) | Picking the right function and filling its arguments | The same skill as intent (function) + fields (arguments) |
+
+Sources:
+- **Same-harness comparison** run by Liquid AI: [chart](../evidence/llm_selection/07_liquid_benchmark_chart_official.png) and [tables](../evidence/llm_selection/01_liquid_lfm2.5-230m_blog_benchmark_tables.png), from https://www.liquid.ai/blog/lfm2-5-230m.
+- **Model cards:** IBM ([screenshot](../evidence/llm_selection/03_ibm_granite-4.0-1b_card_nano_benchmarks.png)), Qwen ([screenshot](../evidence/llm_selection/04_qwen3.5-0.8b_card_benchmarks.png)), Google, Hugging Face, Apple, Meta.
+- **Third-party leaderboard:** BFCL v4 on llm-stats.com ([screenshot](../evidence/llm_selection/02_llm-stats_bfcl-v4_leaderboard.png)).
+
+The Liquid AI table is vendor-run, so it may favour Liquid's own models. IBM's own card gives nearly identical Granite numbers (IFEval 61.63, BFCL v3 43.32), which cross-checks it.
+
+### 3.3 Every candidate at or below 400 M parameters
+
+Full matrix with sources: [`evidence/llm_selection/ELIMINATION_MATRIX.md`](../evidence/llm_selection/ELIMINATION_MATRIX.md).
+
+| Model | Params | IFEval | BFCL v3 | Licence | Verdict | Reason | Proof |
+|---|---:|---:|---:|---|---|---|---|
+| LiquidAI LFM2.5-350M | 350 M | **76.96** | **44.11** | LFM Open License (commercial use only if revenue ≤ $10 M) | **Shortlisted** | Best scores in the size range | [07](../evidence/llm_selection/07_liquid_benchmark_chart_official.png), [01](../evidence/llm_selection/01_liquid_lfm2.5-230m_blog_benchmark_tables.png), [05](../evidence/llm_selection/05_lfm2.5-350m_card.png), [licence](../evidence/llm_selection/06_liquid_lfm-license.png) |
+| **IBM Granite-4.0-H-350M** | 340 M | 61.27 (IBM: 61.63) | 43.07 (IBM: 43.32) | **Apache-2.0** | **Shortlisted → selected** | 2nd-best function calling (1 point behind); best fully permissive licence | [07](../evidence/llm_selection/07_liquid_benchmark_chart_official.png), [03](../evidence/llm_selection/03_ibm_granite-4.0-1b_card_nano_benchmarks.png), [13](../evidence/llm_selection/13_granite-4.0-h-350m_card.png) |
+| LiquidAI LFM2.5-230M | 230 M | 71.71 | 43.26 | LFM Open License | Dropped | Same family and licence as LFM2.5-350M, lower on every score | [01](../evidence/llm_selection/01_liquid_lfm2.5-230m_blog_benchmark_tables.png) |
+| IBM Granite-4.0-350M (dense) | 350 M | 53.48 | 39.58 | Apache-2.0 | Reserve | Lower than its hybrid sibling | [03](../evidence/llm_selection/03_ibm_granite-4.0-1b_card_nano_benchmarks.png) |
+| LiquidAI LFM2-350M | 350 M | 64.96 | 22.95 | LFM Open License | Dropped | Older version; half the BFCL score | [01](../evidence/llm_selection/01_liquid_lfm2.5-230m_blog_benchmark_tables.png) |
+| Google Gemma-3-270M-it | 270 M | 51.2 | not published | Gemma terms, gated | Dropped | 25.8 IFEval points below the leader; no function-calling score | [10](../evidence/llm_selection/10_gemma-3-270m-it_card_IFEval-51.2.png) |
+| Google FunctionGemma-270M | 270 M | not published | not published | Gemma terms, gated | Dropped | Built for phone actions, but no comparable scores; its own call format, not JSON | [12](../evidence/llm_selection/12_functiongemma-270m-it_card.png) |
+| SmolLM2-360M-Instruct | 360 M | 41.0 | not published | Apache-2.0 | Dropped | Lowest IFEval in range; no function-calling evaluation | [11](../evidence/llm_selection/11_smollm2-360m-instruct_card_IFEval-41.0.png) |
+| Meta MobileLLM-R1-360M | 360 M | not published | not published | Non-commercial | Dropped | Licence forbids commercial use; a math/code model | [08](../evidence/llm_selection/08_mobilellm-r1-360m_card_FAIR-NC-license.png) |
+| Apple OpenELM-270M-Instruct | 270 M | not published | not published | Research licence | Dropped | No instruction-following or function-calling scores | [09](../evidence/llm_selection/09_openelm-270m-instruct_card.png) |
+| Qwen3.5-0.8B (and Qwen2.5-0.5B, Qwen3-0.6B) | 0.5–0.8 B | 59.94 | 35.08 | Apache-2.0 | Out of range | Over 400 M, and still below both shortlisted models on BFCL v3 | [07](../evidence/llm_selection/07_liquid_benchmark_chart_official.png), [04](../evidence/llm_selection/04_qwen3.5-0.8b_card_benchmarks.png) |
+
+### 3.4 Why these two were shortlisted
+- **LFM2.5-350M** is the strongest model in the size range on every published benchmark. Its licence limits commercial use to companies with revenue up to $10 M, a risk for TRONX.
+- **Granite-4.0-H-350M** is essentially tied on function calling (43.1 vs 44.1 BFCL v3) and has a fully permissive Apache-2.0 licence. Two independent sources (Liquid and IBM) agree on its numbers.
+- Every other model was either weaker on both benchmarks, had no comparable scores, or had a licence that blocks commercial use.
+
+### 3.5 Head-to-head on our task: Granite wins
+
+Both shortlisted models were tested zero-shot with the same system prompt on 395 validation commands from the earlier dataset version v1.1 (`scripts/generate_dataset.py`; the final dataset v1.2 came later):
+
+| | **Granite-4.0-H-350M** | LFM2.5-350M | Granite better by |
+|---|---:|---:|---:|
+| Exact JSON | **41.8%** | 29.6% | **+12.2 points** |
+| Intent | **82.3%** | 78.7% | +3.6 points |
+| Fields | **74.4%** | 49.7% | **+24.7 points** |
+| Valid JSON | **98.5%** | 96.5% | +2.0 points |
+| Target loss | **0.167** | 0.326 | 2× lower |
+
+Raw results: [`results/eval/zeroshot_val_granite-4.0-h-350m_schema/`](../results/eval/zeroshot_val_granite-4.0-h-350m_schema), [`results/eval/zeroshot_val_LFM2.5-350M_schema/`](../results/eval/zeroshot_val_LFM2.5-350M_schema). Failure counts by type: [`results/error_analysis/`](../results/error_analysis) and [`docs/granite_failure_analysis.md`](../docs/granite_failure_analysis.md).
+
+Error analysis on the same 395 commands: Granite made fewer errors in 5 of 7 error types.
+- Dropped stated fields: 36 vs 93.
+- Copied values from the prompt examples: 2 vs 31.
+- Invented optional fields: 77 vs 92.
+- Wrong intent: 70 vs 84.
+
+**Decision: Granite-4.0-H-350M.** It is better on every accuracy metric on our task, 1 point behind on public function-calling scores, and Apache-2.0 licensed. Its hybrid design also keeps the KV cache tiny on the phone (Section 12).
+
+LFM2.5-350M generated faster in this Mac/PyTorch run (70 s vs 355 s for 395 commands). Granite's Mamba2 layers have no optimized kernel on the Mac GPU. On the phone runtime (ONNX), Granite runs at the speeds measured in Section 13.
+
+### 3.6 The selected model
+
+**Why it suits this task:**
+1. **JSON output:** IFEval 61.6 (IBM) and 98.5% valid JSON zero-shot (Section 3.5).
+2. **Intent classification + field extraction:** BFCL v3 43.3, close to the best in class. Zero-shot it already reaches 82% intent and 74% fields.
+3. **On-device:** 340 M parameters, only 4 attention layers (small KV cache), INT8 file 404 MiB.
+4. **Fine-tuning:** standard Hugging Face model, supported by PEFT LoRA. The attention and MLP module names are inspectable (Section 6).
+5. **Quantization:** an official ONNX export exists (`onnx-community/granite-4.0-h-350m-ONNX`), and its graph runs on ONNX Runtime Android with INT8/INT4 operators (Section 8).
+
+Granite-4.0-H-350M facts (verified in `results/model_inspection/`):
 
 | Property | Value |
 |---|---|
+| Exact name and source | `ibm-granite/granite-4.0-h-350m`, https://huggingface.co/ibm-granite/granite-4.0-h-350m (Apache-2.0) |
+| Original file | `model.safetensors`, 680,704,864 bytes (649.2 MiB), BF16 |
 | Parameters | 340,332,224 |
 | Layers | 32 hybrid: **28 Mamba2** (state-space) + **4 attention** (layers 10, 13, 17, 27) |
 | Hidden size / heads / KV heads | 768 / 12 / 4 (grouped-query attention) |
 | MLP in every layer | `shared_mlp.input_linear` 768→4096 (fused gate + up), `output_linear` 2048→768, SwiGLU |
 | Vocabulary | 100,352 (tied embeddings) |
+| Context length | Native 32,768 tokens. Configured: training max length 640; on device each request is about 501–521 prompt tokens + ≤ 64 output; tested up to 2,048 (Section 12) |
+| Hardware requirement | Training: 1× NVIDIA T4 16 GB, about 1 h per LoRA run, FP32. Inference: any arm64 CPU with ONNX Runtime; INT8 needs 404 MiB storage and about 0.9 GB process RAM (1.06–1.26 GB with speech-to-text) |
 | Why it suits the phone | Only 4 layers keep a KV cache that grows with context; the 28 Mamba layers keep a fixed-size state |
 
 ---
@@ -135,7 +207,24 @@ The generator `scripts/generate_dataset_v12.py` (seed 13) was designed from a fa
 
 ### 4.2 Cleaning, normalisation, duplicates
 - **Canonical values:** a dictionary for apps and settings ("file manager" → `Files`, "Wi-Fi" → `wifi`). Task and message text is kept verbatim. Times are always HH:MM in 24 h.
-- **Duplicates removed:** 818 exact, 314 after normalisation (case, punctuation, spaces), and 6 near-duplicates between evaluation splits. **0 duplicates remain.**
+- **Duplicates removed:**
+  - 818 exact duplicates.
+  - 314 duplicates after normalisation (lower-case, punctuation and spaces removed).
+  - 6 near-duplicates: validation/test commands whose word-set Jaccard similarity to any training command is ≥ 0.9 (`generate_dataset_v12.py`).
+  - **0 duplicates remain.**
+
+### 4.2a Invalid and ambiguous commands
+| Case | Example | Label |
+|---|---|---|
+| Out-of-scope request | "Show missed calls from Amma." | `{"intent": "unsupported"}` |
+| Unsafe / payment | "send 2000 to my mom's account" | `{"intent": "unsupported"}` |
+| Question / chit-chat | "what's 25 times 4", "hey, how are you?" | `{"intent": "unsupported"}` |
+| Incomplete but valid intent | "alarm please", "make a call", "remind me" | intent only, no invented fields: `{"intent": "set_alarm"}`, `{"intent": "make_call"}` |
+| Time without am/pm | "alarm for 7" | literal hour `"07:00"` (Android can confirm) |
+| Several actions | "Turn off Wi-Fi and open WhatsApp" | first action decides: `change_setting` wifi off |
+| First action unsupported | "send money to priya and text her" | `{"intent": "unsupported"}` |
+| Relative time | "remind me in 20 minutes" | `"in": "00:20"` instead of an invented clock time |
+| Empty or no-letter speech-to-text output | silence, noise | discarded by the app before the LLM (Section 10) |
 
 ### 4.3 Splits and leakage prevention
 - **Split by template, not by sentence:** a template appears in only one split, so test sentences are new wordings, not paraphrases of training rows. The split is stratified by intent and field set.
@@ -201,13 +290,15 @@ Each sample is a chat: the **system prompt** (schema + 7 examples, 490 tokens), 
 
 | Setting | Value | Why |
 |---|---|---|
-| Method | LoRA (PEFT 0.21), base frozen | Required; small adapter, fast, no catastrophic forgetting |
-| Rank r / alpha | 16 / 32 (scale α/r = 2) | Common setting for small models; enough capacity (4.26 M params for D) with a 17 MB adapter |
+| Method | LoRA, base frozen | Required; small adapter, fast, no catastrophic forgetting |
+| Framework | PyTorch 2.11 (CUDA, Kaggle), Transformers 5.22.2, PEFT 0.21.2, Accelerate | Granite-H is supported natively in Transformers 5 |
+| Dataset | `data/v1.2` (tronos-voice-commands 1.2.0, seed 13): 2,510 train / 354 validation; sha256 per file in `manifest.json` | Test split (613) never seen in training or selection |
+| Rank r / alpha | 16 / 32 (scale α/r = 2) | Common setting for small models; enough capacity (4.26 M params for D) with a 16.3 MiB (17.1 MB) adapter |
 | Dropout | 0.05 | Light regularisation for a 2.5 k-sample dataset |
 | Learning rate | 2e-4, cosine, 5% warm-up | Standard LoRA learning rate; validation loss fell smoothly without spikes |
 | Epochs | 2 (314 steps) | Validation loss for D: 0.326 → 0.031 (epoch 1) → 0.0215 (epoch 2); the gain was flattening |
 | Effective batch | 16 (micro-batch 1 × gradient accumulation 16) | T4 16 GB memory: Mamba2 runs a PyTorch fallback with large activations |
-| Max length | 640 tokens | Longest sample is 553 tokens (system prompt 490) |
+| Max length | 640 tokens | Longest training/validation sample is 551 tokens (system prompt 490) |
 | Precision | FP32 | T4 has no BF16; avoids FP16 overflow in the Mamba fallback |
 | Loss | Cross-entropy on JSON tokens only | Teaches the output, not the prompt |
 | Seed | 42 | Reproducibility |
@@ -232,10 +323,10 @@ Four experiments on the same data, hyper-parameters and seed. Only the target mo
 
 | Exp | Target modules (actual Granite names) | Layers touched | Rank / alpha / dropout | Trainable params | % of base | Adapter size | Training time (T4) |
 |---|---|---|---|---:|---:|---:|---:|
-| A | `self_attn.q_proj`, `self_attn.v_proj` | 4 | 16 / 32 / 0.05 | 163,840 | 0.05% | 0.6 MB | 51 min |
-| B | `self_attn.q_proj`, `k_proj`, `v_proj`, `o_proj` | 4 | 16 / 32 / 0.05 | 327,680 | 0.10% | 1.3 MB | 52 min |
-| C | `shared_mlp.input_linear`, `shared_mlp.output_linear` | 32 | 16 / 32 / 0.05 | 3,932,160 | 1.16% | 15.0 MB | 61 min |
-| **D** | **attention q,k,v,o + MLP** | **32** | 16 / 32 / 0.05 | **4,259,840** | **1.25%** | **16.3 MB** | 61 min |
+| A | `self_attn.q_proj`, `self_attn.v_proj` | 4 | 16 / 32 / 0.05 | 163,840 | 0.05% | 0.6 MiB | 51 min |
+| B | `self_attn.q_proj`, `k_proj`, `v_proj`, `o_proj` | 4 | 16 / 32 / 0.05 | 327,680 | 0.10% | 1.3 MiB | 52 min |
+| C | `shared_mlp.input_linear`, `shared_mlp.output_linear` | 32 | 16 / 32 / 0.05 | 3,932,160 | 1.16% | 15.0 MiB | 61 min |
+| **D** | **attention q,k,v,o + MLP** | **32** | 16 / 32 / 0.05 | **4,259,840** | **1.25%** | **16.3 MiB** | 61 min |
 
 Granite-H has no separate `gate_proj` / `up_proj` / `down_proj`. Its MLP fuses gate and up into `shared_mlp.input_linear` (768→4096, split 2048 + 2048), and `shared_mlp.output_linear` (2048→768) plays the down-projection role. Module names were read from the loaded model (`results/model_inspection/granite-4.0-h-350m_modules.txt`).
 
@@ -269,7 +360,7 @@ All rows FP32, PyTorch, unmerged adapter (identical to merged ONNX FP32).
 
 **What the experiments show about this architecture:**
 - **Attention-only adapters (A, B) are limited** because Granite-H has only 4 attention layers out of 32. Even so, they lift exact match from 32.5% to 77–81%. Attention controls which input words are copied into the output fields (names, message text).
-- **MLP adapters (C) touch all 32 layers** and give the largest single gain: +8 points over B. The MLP is where each token's features are transformed into the output format and intent decision.
+- **MLP adapters (C) touch all 32 layers** and give the largest single gain: +4.1 points test exact over B (+8.0 over A). The MLP is where each token's features are transformed into the output format and intent decision.
 - **Combining both (D)** adds the attention copy behaviour on top of the MLP capacity. Gains: +3.6 points exact match and +7.6 points unsupported recall over C, for only 8% more parameters.
 - **The Mamba2 mixer** (`in_proj`, `out_proj`, convolution, state-space scan) was left frozen in all experiments, keeping its pre-trained long-range behaviour. Targeting it is listed as future work.
 
@@ -320,7 +411,7 @@ The merged model has **exactly the same shapes and parameter count as the base**
 - **No PEFT or LoRA code on the phone.** Any runtime that runs the base model runs the fine-tuned one.
 - **Quantization applies to the merged weights.** INT8 and INT4 must keep the small LoRA delta (Section 8.3 shows INT4 partly loses it).
 
-The unmerged adapter (16.3 MB) is still useful: several task adapters could be swapped at run time on one base model. That is listed as future work.
+The unmerged adapter (16.3 MiB) is still useful: several task adapters could be swapped at run time on one base model. That is listed as future work.
 
 ---
 
@@ -344,7 +435,7 @@ LoRA D adapter ─merge─► HF FP32 checkpoint ─► ONNX FP32 ─┬─► F
   - Weight-only, blocks of 32 values with one FP scale per block, symmetric.
   - The embedding uses `GatherBlockQuantized`.
   - `accuracy_level=4`, so compute uses INT8 activations.
-- **Cleanup:** unused FP32 initialisers were stripped. Before that, INT8 was 868 MB and INT4 477 MB.
+- **Cleanup:** unused FP32 initialisers were stripped. Without this step the quantized files kept unused FP32 copies of the embedding and were about twice as large.
 - **Calibration dataset:** none needed. INT8 is *dynamic* (activation ranges computed at run time), INT4 is *weight-only* with per-block scales from the weights themselves, and FP16 is a cast. No calibration data was used, so no test data can leak into quantization.
 - **Runtime compatibility:** every variant runs on ONNX Runtime 1.31.1 CPU (desktop and Android arm64) with standard contrib ops (`DynamicQuantizeLinear` / `MatMulInteger` for INT8, `MatMulNBits` / `GatherBlockQuantized` for INT4, `GroupQueryAttention`). No custom kernels are needed.
 - **Supported variants:** all required variants (FP16, INT8, INT4) were produced. BF16 was not used because ONNX Runtime CPU has no BF16 kernels for this graph and mobile ARM CPUs lack BF16 arithmetic; FP16 is the 16-bit baseline instead.
@@ -384,6 +475,8 @@ Error breakdown against FP32 (`results/quant/quant_error_breakdown.json`):
 **Interpretation:**
 - 8-bit per-channel weights keep the small LoRA correction almost intact.
 - 4-bit blocks (16 levels per 32 weights) round part of it away, so behaviour drifts back toward the base model. The clearest sign: the base model's habit of acting on unsupported requests returns.
+- **Did INT8 reduce accuracy?** Slightly: −2.8 points exact match. Unsupported recall stays at 99.1%, but unsupported precision falls from 93.8% to 89.7%. INT8 refuses a few more valid commands, a safe failure, since nothing wrong gets executed.
+- **Did INT4 reduce accuracy?** Yes: −11.3 points exact match. Unsupported recall drops to 78.3%, so INT4 executes requests it should refuse, an unsafe failure.
 
 ---
 
@@ -400,6 +493,7 @@ Same prompt, same greedy decoding (max 64 new tokens), same scoring code (`scrip
 | Exact JSON match | 32.5% | 32.8% | 89.1% | 89.1% | 86.3% | 77.8% |
 | JSON validity | 98.9% | 99.0% | 100% | 100% | 100% | 99.8% |
 | Unsupported recall | 33.0% | 33.0% | 99.1% | 99.1% | 99.1% | 78.3% |
+| Unsupported precision | 46.1% | 46.1% | 93.8% | 93.8% | 89.7% | 86.5% |
 | Test-set loss (JSON tokens) | 0.353 | 0.353 | 0.062 | 0.062 | 0.064 | 0.082 |
 
 Stages required by the problem statement: Stage 1 = Base, Stage 2 = Fine-tuned (FP32; FP16 shown too), Stage 3 = Fine-tuned INT8, Stage 4 = Fine-tuned INT4.
@@ -452,8 +546,8 @@ The remaining failures are listed in Section 16.
 |---|---:|---:|---:|---:|
 | Demo prompts (where the base model fails) | 10 | 0 | 9 | 7 |
 | Hard commands (typos, informal, self-corrections) | 11 | 4 | 6 | 5 |
-| Free-typed commands in the phone app | 11 | 6 | 8 | 4 |
-| **Total** | **32** | **10 (31%)** | **23 (72%)** | **16 (50%)** |
+| Free-typed commands in the phone app | 11 | 6 | 9 | 4 |
+| **Total** | **32** | **10 (31%)** | **24 (75%)** | **16 (50%)** |
 
 The fine-tuned model is better than the base model on both devices. On the full 613-command test set, the gap is much larger (32.5% → 86.3% for INT8).
 
@@ -525,7 +619,7 @@ Two Android apps were built: Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, mod
 |---|---|
 | Phone | Motorola moto g34 5G, Qualcomm SM6375 (Snapdragon 695 5G) |
 | CPU | 2× Cortex-A78 2.2 GHz + 6× Cortex-A55 1.8 GHz |
-| GPU / NPU | Adreno 619 / not used (CPU execution provider) |
+| GPU / NPU | Adreno 619 GPU and Qualcomm Hexagon processor (NPU): present, not used. The model runs on the ONNX Runtime CPU execution provider; NPU offload (QNN) is future work (Section 18) |
 | RAM | 7,492 MB total, 2,038 MB available at start |
 | Android | 15 (API 35) |
 | Runtime | ONNX Runtime Android 1.31.1, CPU EP, 4 intra-op threads, graph optimisation ALL |
@@ -573,6 +667,10 @@ Same app logic and the same pre-tokenized prompts, run on an Apple M5 Mac with O
 | Loading time | 1.10 s | 1.06 s | 0.56 s | 0.49 s |
 | Baseline (loaded, warm) | 1,550 MB | 1,550 MB | 777 MB | 674 MB |
 | Peak during inference | 1,558 MB | 1,558 MB | 786 MB | 684 MB |
+| After inference | 1,396 MB | 1,558 MB | 785 MB | 683 MB |
+| Increase attributable to inference | +8 MB | +8 MB | +9 MB | +9 MB |
+
+Memory values in Sections 11–13 are mebibytes (bytes ÷ 2^20), labelled MB as Android and the apps report them.
 
 **FP16 uses about twice its file size in RAM on a CPU.** ONNX Runtime's CPU provider has no FP16 kernels for most operators in this graph, so it converts the weights to FP32 at load time (651 MB file → about 1.3 GB in memory). INT8 and INT4 stay compact because their integer kernels run directly on the quantized weights.
 
@@ -583,7 +681,7 @@ Same app logic and the same pre-tokenized prompts, run on an Apple M5 Mac with O
 **Method:**
 - The prompt is filled to exactly 512, 1,024 or 2,048 tokens, then exactly 32 tokens are decoded with end-of-sequence ignored. 2 runs each, averaged.
 - KV size is computed from the actual cache tensors after generation.
-- KV cache data type: FP32 in all variants, also for FP16 (state tensors). KV cache quantization: no.
+- KV cache data type: FP32 for the FP32, INT8 and INT4 graphs; FP16 for the FP16 graphs. KV cache quantization: no.
 
 **Granite-H specifics:**
 - Only the 4 attention layers keep a KV cache: 4 layers × (K + V) × 4 KV heads × 64 dims × 4 bytes = **8 KB per token**.
@@ -686,15 +784,20 @@ A typical command (about 505 prompt tokens and 15 output tokens) takes about 7.5
 
 | Summary | Value |
 |---|---|
-| Initial battery temperature | 35.4 °C |
-| Maximum during inference | 36.3 °C (CPU sensors up to about 62 °C) |
+| Initial temperature | Battery 35.4 °C; CPU sensors 53.9–58.5 °C (hottest core sensor 62.0 °C), already warm from the preceding A–F benchmark |
+| Maximum during inference | Battery 36.3 °C (CPU sensor temperatures per row were not part of the shared log, so the trend uses battery temperature) |
 | After sustained inference | 36.3 °C |
 | Decode tok/s first 30 s → last 30 s | 9.69 → 8.92 (**−8.0%**) |
+| GPU frequency | Not recorded: the GPU is not used by the model (CPU execution provider) |
 | Throttling indicators | Thermal status SEVERE at 371–401 s; little cores capped 1708 → 940 MHz; one window with the big cores capped to 940 MHz (decode −40% for 30 s) |
 | Battery consumption | 64% → 61% (**3% in 10 min**), average current about 0.78 A |
 
 **Verdict:**
 - Throttling is real but mild for sustained use. The governor caps clocks intermittently, but decode speed recovers within 30 s and the 10-minute average loss is 8%.
+- **Status and speed drop don't line up in time:**
+  - At 371–401 s, Android reported SEVERE, but only the 6 little cores were capped. The 2 big cores, which do most of the work, stayed at 2,054 MHz, so speed did not drop.
+  - The one real drop (469 s, −40%) came when the big cores were capped, while the reported status was already back to NONE.
+  - The frequency cap, not the status flag, is what affects speed.
 - Real voice use is bursty (one command every few seconds or minutes), so throttling is unlikely in normal use.
 - The Android thermal-headroom API returned NaN on this device, so the verdict uses thermal status plus CPU frequency plus tokens/s.
 
@@ -734,10 +837,10 @@ Notes:
 
 | Exp | Target modules | Trainable params | Adapter | Training time | Val exact | Test exact | JSON validity | Unsupported recall | Inference (T4, per command) |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| A | q, v | 163,840 | 0.6 MB | 51 min | 81.6% | 77.5% | 100% | 81.1% | 334 ms |
-| B | q, k, v, o | 327,680 | 1.3 MB | 52 min | 85.0% | 81.4% | 100% | 89.6% | 344 ms |
-| C | MLP | 3,932,160 | 15.0 MB | 61 min | 91.2% | 85.5% | 100% | 91.5% | 338 ms |
-| **D** | **attention + MLP** | **4,259,840** | **16.3 MB** | 61 min | **91.2%** | **89.1%** | **100%** | **99.1%** | 348 ms |
+| A | q, v | 163,840 | 0.6 MiB | 51 min | 81.6% | 77.5% | 100% | 81.1% | 334 ms |
+| B | q, k, v, o | 327,680 | 1.3 MiB | 52 min | 85.0% | 81.4% | 100% | 89.6% | 344 ms |
+| C | MLP | 3,932,160 | 15.0 MiB | 61 min | 91.2% | 85.5% | 100% | 91.5% | 338 ms |
+| **D** | **attention + MLP** | **4,259,840** | **16.3 MiB** | 61 min | **91.2%** | **89.1%** | **100%** | **99.1%** | 348 ms |
 
 **Best configuration for TronOS: LoRA D, merged, INT8.**
 - It keeps 97% of full-precision exact match (86.3% vs 89.1%) and the same 99.1% refusal of unsupported requests.
@@ -748,10 +851,10 @@ Notes:
 
 1. **Fine-tuning is the biggest lever.** +56.6 points exact match with 1.25% of parameters trained. The prompt alone gives the format; LoRA teaches the schema rules: no invented fields, 24 h times, refusing unsupported requests.
 2. **Target-module choice matters on a hybrid model.** With only 4 attention layers, attention-only LoRA is capacity-limited. The MLP adapter reaches all 32 layers. Attention + MLP (D) is best, especially for refusing unsupported requests (99.1%).
-3. **INT8 is the sweet spot.** −2.8 points for a 3.2× smaller file than FP32 (1.6× smaller than FP16). INT4 saves another 151 MiB but loses 8.5 more points, and its errors are the dangerous kind: acting on unsupported requests.
+3. **INT8 is the sweet spot.** −2.8 points for a 3.2× smaller file than FP32 (1.6× smaller than FP16). INT4 saves another 152 MiB but loses 8.5 more points, and its errors are the dangerous kind: acting on unsupported requests.
 4. **The hybrid architecture suits phones.** The KV cache is only 8 KB/token and decode speed stays constant from 512 to 2,048 tokens of context.
 5. **Latency is dominated by the long system prompt.** Prefill takes about 85 tok/s on the phone, so 490 prompt tokens take about 5.7 s. Decode of a 15-token answer takes about 1.5 s.
-6. **The same INT8 file behaves differently on the phone.** Over 32 commands where we compared outputs, exact match was 71.9% on the Mac and 50.0% on the phone; only 14 of 32 outputs were identical. Inputs were verified identical and the Mac is deterministic. The cause is dynamic INT8 activation quantization: activations are rounded at run time, and different ARM kernels (Snapdragon 695 vs Apple M5) produce slightly different values that flip close greedy choices. Accuracy measured off-device over-estimates phone accuracy for dynamic INT8.
+6. **The same INT8 file behaves differently on the phone.** Over 32 commands where we compared outputs, exact match was 75.0% on the Mac and 50.0% on the phone; only 14 of 32 outputs were identical. Inputs were verified identical and the Mac is deterministic. The cause is dynamic INT8 activation quantization: activations are rounded at run time, and different ARM kernels (Snapdragon 695 vs Apple M5) produce slightly different values that flip close greedy choices. Accuracy measured off-device over-estimates phone accuracy for dynamic INT8.
 ![Mac vs phone, same INT8 file](../results/plots/mac_vs_phone_int8.png)
 
 7. **Thermals are acceptable:** −8% decode speed after 10 minutes of continuous load, 3% battery.
@@ -782,9 +885,9 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 - Disguised alarms ("make sure I'm awake by 5:15").
 
 **System limitations:**
-- **Phone vs Mac INT8 drift** (Section 15.6): the phone produced 3 non-JSON outputs in 32 commands, for example "I'm sorry, I can't assist with that." Phone-side accuracy is lower than the Mac-measured 86.3%.
+- **Phone vs Mac INT8 drift** (Section 15, observation 6): the phone produced 3 non-JSON outputs in 32 commands, for example "I'm sorry, I can't assist with that." Phone-side accuracy is lower than the Mac-measured 86.3%.
 - **Latency:** about 6 s to first token on the Moto G34 because the 490-token system prompt is processed for every command.
-- **Speech-to-text errors propagate:** names (Ravi → "Navi"), app names (WhatsApp → "watcher") and spoken numbers ("six thirty" → "30 pm"). The LLM cannot fix a wrong transcript. Moonshine small WER on our 150 test clips is 9.07% (q8).
+- **Speech-to-text errors propagate:** names (Ravi → "Navi"), app names (WhatsApp → "watcher") and spoken numbers ("six thirty" → "30 pm"). The LLM cannot fix a wrong transcript. Moonshine small WER on our 150 test clips: 8.42% (PyTorch), 8.52% (ONNX FP32), 9.18% (ONNX q8, used on the phone) (`results/stt/onnx_parity_wer.json`).
 - **English only.** No Hindi, Tamil or code-mixed commands.
 - **Synthetic data:** real-user phrasing will be more diverse than the templates.
 - **Measurement gaps:**
@@ -808,7 +911,7 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 
 **Rejected alternatives:**
 - **FP16:** the same accuracy as FP32 (89.1%), only 2.8 points above INT8, but the file is 1.6× larger. On CPU it needs about 1.3 GB of RAM (converted to FP32 at load) and is the slowest variant: time to first token 2.8× INT8, decode 0.57× INT8 on the Mac.
-- **INT4:** saves 151 MiB but loses 8.5 points and is unsafe on unsupported requests. Use it only if storage is critical, and then only with quantization-aware fine-tuning.
+- **INT4:** saves 152 MiB but loses 8.5 points and is unsafe on unsupported requests. Use it only if storage is critical, and then only with quantization-aware fine-tuning.
 
 **Two changes recommended before shipping** (Section 18): JSON-constrained decoding and system-prompt caching.
 
@@ -835,9 +938,10 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 | Dataset + manifest | `data/v1.2/{train,val,test}.jsonl`, `data/v1.2/manifest.json` (sha256 per file) |
 | Dataset scripts | `scripts/generate_dataset_v12.py`, `docs/dataset_design_v1.2.md`, `docs/granite_failure_analysis.md` |
 | Training scripts | `scripts/train_lora.py`, `kaggle_job/` (Kaggle runner) |
-| LoRA configuration | `runs/granite/<A_qv,B_attn,C_mlp,D_attn_mlp>/train_log.json` and `adapter/adapter_config.json` |
-| Quantization scripts/config | `scripts/export_onnx.py` |
+| LoRA configuration | `configs/granite__v12__lora_{A_qv,B_attn,C_mlp,D_attn_mlp}.json`, `runs/granite/<exp>/train_log.json`, `runs/granite/<exp>/adapter/adapter_config.json` |
+| Quantization scripts/config | `scripts/export_onnx.py`, `configs/quantization.json` |
 | Evaluation scripts | `scripts/eval_hf.py`, `scripts/eval_onnx.py`, `scripts/common.py`, `scripts/error_analysis.py` |
-| Android implementation | `android_voice/` (TronX Voice), `android/` (TronX Bench), APKs in `deliverables/phone/` |
+| Android implementation | `android_voice/` (TronX Voice), `android/` (TronX Bench); build and install steps in `README.md`; phone run guide `deliverables/README_PHONE.md`; demo video `deliverables/demo/` |
 | Raw benchmark results | `results/eval/*/metrics.json` + `predictions.jsonl`, `results/phone/*.json`, `results/bench_mac/*.json`, `results/quant/` |
-| Screenshots / logs | `deliverables/screenshots/`, phone Share logs in `results/phone/` |
+| Screenshots / logs | `deliverables/screenshots/`, `deliverables/demo/` (phone video), phone Share logs `results/phone/raw_share_logs_20261110.txt`, Kaggle training logs `kaggle_job/logs/` |
+| Final report | `report/TRONX_Technical_Report.md` (this document) |
