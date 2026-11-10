@@ -51,7 +51,7 @@ A and B train only the 4 attention layers. C trains the MLP in all 32 layers. D 
 ### 3. Training curves (A–D)
 All four runs converge smoothly. Validation loss keeps falling through epoch 2 (D: 0.326 → 0.0215), so the very low training loss is fitting, not harmful over-fitting.
 
-![LoRA learning curves](results/plots/lora_loss_curves.png)
+![LoRA learning curves](results/plots/lora_training_curves.png)
 
 ### 4. Quantisation: what precision costs
 INT8 keeps almost all of the quality (−2.8 points exact JSON) at 31% of the FP32 size. INT4 saves another 151 MiB but loses 11 points and starts acting on unsupported requests (recall 99% → 78%).

@@ -48,7 +48,7 @@ def main():
     ax[1].set(title="Validation loss (measured per epoch)", xlabel="epoch", ylabel="cross-entropy"); ax[1].legend()
     ax[2].set(title="Learning rate (5% warm-up + cosine decay)", xlabel="optimizer step", ylabel="learning rate"); ax[2].legend()
     ax[2].ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
-    fig.tight_layout(); fig.savefig(OUT / "lora_loss_curves.png", dpi=150); plt.close(fig)
+    fig.tight_layout(); fig.savefig(OUT / "lora_training_curves.png", dpi=150); plt.close(fig)
 
     # 2) quality comparison: base vs A-D on test
     rows = [("Base (no FT)", ev / "granite_v12_base_test/metrics.json")] + \

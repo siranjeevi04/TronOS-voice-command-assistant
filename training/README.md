@@ -11,7 +11,7 @@ LoRA fine-tuning of `ibm-granite/granite-4.0-h-350m` on the TronOS command datas
 | Trained adapters | [`runs/granite/<exp>/adapter/`](../runs/granite) (`adapter_config.json` + `adapter_model.safetensors`) |
 | Loss / LR history + final metrics per run | [`runs/granite/<exp>/train_log.json`](../runs/granite) |
 | Raw console logs from Kaggle | [`kaggle_job/logs/out_v4/`](../kaggle_job/logs/out_v4) (C, D; A/B cut at the 2 h limit) and [`kaggle_job/logs/out_v5/`](../kaggle_job/logs/out_v5) (A, B rerun) |
-| Learning curves | [`results/plots/lora_loss_curves.png`](../results/plots/lora_loss_curves.png) |
+| Learning curves | [`results/plots/lora_training_curves.png`](../results/plots/lora_training_curves.png) |
 | Results per experiment | [`results/eval/granite_v12_lora*_{val,test}/metrics.json`](../results/eval) |
 
 ## Hyper-parameters (same for A–D)
@@ -38,7 +38,7 @@ LoRA fine-tuning of `ibm-granite/granite-4.0-h-350m` on the TronOS command datas
 
 D was selected on validation and is the deployed model. Base model FP32 test exact = 32.5%.
 
-![Learning curves](../results/plots/lora_loss_curves.png)
+![Learning curves](../results/plots/lora_training_curves.png)
 
 ## Run it
 

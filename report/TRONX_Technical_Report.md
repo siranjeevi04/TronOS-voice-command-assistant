@@ -214,13 +214,13 @@ Each sample is a chat: the **system prompt** (schema + 7 examples, 490 tokens), 
 
 **Script:** `scripts/train_lora.py`. The configuration is saved in each `runs/granite/<exp>/train_log.json`.
 
-**Learning curves** (`results/plots/lora_loss_curves.png`):
+**Learning curves** (`results/plots/lora_training_curves.png`):
 - All four runs converge with no divergence.
 - D's training loss ends at 0.0003 and its validation loss at 0.0215.
 - Validation loss keeps decreasing through epoch 2, so the low training loss is fitting, not harmful overfitting.
 - Test exact match (89.1%) is close to validation exact match (91.2%), which confirms the model generalises.
 
-![LoRA learning curves](../results/plots/lora_loss_curves.png)
+![LoRA learning curves](../results/plots/lora_training_curves.png)
 
 ---
 
