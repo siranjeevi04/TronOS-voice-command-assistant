@@ -64,6 +64,49 @@ On the Moto G34 5G (Snapdragon 695, ONNX Runtime Android 1.31.1, fine-tuned INT8
 | Decode speed | 9.8 tok/s |
 | 10-min thermal | −8% decode speed, 3% battery |
 
+## Consolidated performance report
+
+**Table 1: model variants.** Accuracy is on the held-out test set (613 commands). Device measurements are from the **phone** (Moto G34 5G) for the deployed INT8 model and from the **Mac** (Apple M5) for all variants. All runs use ONNX Runtime 1.31.1 CPU with 4 threads.
+
+| Metric | Base FP16 | Fine-tuned FP16 | **Fine-tuned INT8** | Fine-tuned INT4 |
+|---|---:|---:|---:|---:|
+| Model file size | 651.5 MiB | 651.5 MiB | **404.4 MiB** | 252.7 MiB |
+| Model loading memory | +1,280 MB (Mac) | +1,281 MB (Mac) | **+327 MB phone** / +390 MB Mac | +287 MB (Mac) |
+| Peak inference RAM | 1,558 MB (Mac) | 1,558 MB (Mac) | **896 MB phone** / 786 MB Mac | 684 MB (Mac) |
+| KV cache – 512 tokens | 2.12 MB | 2.12 MB | **4.24 MB** | 4.24 MB |
+| KV cache – 1K tokens | 4.12 MB | 4.12 MB | **8.24 MB** | 8.24 MB |
+| KV cache – 2K tokens | 8.12 MB | 8.12 MB | **16.24 MB** | 16.24 MB |
+| Time to first token | 1.45 s (Mac) | 1.58 s (Mac) | **5.92 s phone** / 0.57 s Mac | 0.85 s (Mac) |
+| Decode tokens/sec | 58.5 (Mac) | 57.7 (Mac) | **9.8 phone** / 101.0 Mac | 124.0 (Mac) |
+| Intent accuracy | 74.4% | 94.9% | **94.3%** | 89.9% |
+| Field accuracy | 59.8% | 88.8% | **86.7%** | 82.4% |
+| Exact JSON match | 32.8% | 89.1% | **86.3%** | 77.8% |
+| JSON validity | 99.0% | 100% | **100%** | 99.8% |
+| Thermal throttling | n/a | n/a | **Mild on phone:** −8% decode after 10 min continuous; brief SEVERE status; 35.4 → 36.3 °C; 3% battery | n/a |
+
+Notes:
+- **KV cache** values are identical on Mac and phone (same tensors). FP16 keeps FP16 states; INT8/INT4 keep FP32 states.
+- **Thermal behaviour** was measured for the deployed model (INT8).
+- **Accuracy runtimes:**
+  - Base FP16: PyTorch FP16 (Base FP32 for reference: 32.5% exact).
+  - Fine-tuned variants: ONNX Runtime on the Mac.
+  - INT8 accuracy on the phone is reported separately (report Section 9.4).
+
+**Table 2: LoRA target-module experiments** (same data, seed and hyper-parameters; r 16, alpha 32, dropout 0.05; FP32):
+
+| Exp | Target modules | Trainable params | Adapter | Training time | Val exact | Test exact | JSON validity | Unsupported recall | Inference (T4, per command) |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| A | q, v | 163,840 | 0.6 MB | 51 min | 81.6% | 77.5% | 100% | 81.1% | 334 ms |
+| B | q, k, v, o | 327,680 | 1.3 MB | 52 min | 85.0% | 81.4% | 100% | 89.6% | 344 ms |
+| C | MLP | 3,932,160 | 15.0 MB | 61 min | 91.2% | 85.5% | 100% | 91.5% | 338 ms |
+| **D** | **attention + MLP** | **4,259,840** | **16.3 MB** | 61 min | **91.2%** | **89.1%** | **100%** | **99.1%** | 348 ms |
+
+**Best configuration for TronOS: LoRA D, merged, INT8.**
+- It keeps 97% of full-precision exact match (86.3% vs 89.1%) and the same 99.1% refusal of unsupported requests.
+- It is 1.6× smaller than FP16 and uses about half the RAM of FP16 on CPU.
+- It has the fastest time to first token of all variants.
+- INT4 is smaller and decodes faster, but loses 11 points and starts acting on unsupported requests. Full justification: report Section 17.
+
 ## Results in charts
 
 ### 1. Fine-tuning: before vs after, per intent
@@ -82,7 +125,7 @@ All four runs converge smoothly. Validation loss keeps falling through epoch 2 (
 ![LoRA learning curves](results/plots/lora_training_curves.png)
 
 ### 4. Quantisation: what precision costs
-INT8 keeps almost all of the quality (−2.8 points exact JSON) at 31% of the FP32 size. INT4 saves another 151 MiB but loses 11 points and starts acting on unsupported requests (recall 99% → 78%).
+FP16 is identical to FP32 (89.1%). INT8 keeps almost all of the quality (−2.8 points exact JSON) at 31% of the FP32 size. INT4 saves another 151 MiB but loses 11 points and starts acting on unsupported requests (recall 99% → 78%).
 
 ![Quality after quantisation](results/plots/quant_quality.png)
 

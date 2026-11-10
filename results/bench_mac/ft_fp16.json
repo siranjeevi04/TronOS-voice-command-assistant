@@ -1,0 +1,98 @@
+{
+ "variant": "ft_fp16",
+ "files": {
+  "model.onnx_data": 681315840,
+  "model.onnx": 1821186
+ },
+ "file_size_mb": 651.4902362823486,
+ "runtime": "onnxruntime 1.31.1 CPU EP, 4 threads, graph opt ALL",
+ "device": "arm64 Apple M5",
+ "load": {
+  "before_mb": 49.515625,
+  "after_mb": 1330.484375,
+  "peak_mb": 1329.078125,
+  "load_ms": 1063.5415840006317,
+  "settled_mb": 1330.484375,
+  "released_mb": -1.40625
+ },
+ "state_dtype": "float16",
+ "prompts": {
+  "n_prompts": 10,
+  "repeats": 3,
+  "prompt_tokens": [
+   503,
+   508,
+   501,
+   506,
+   505,
+   506,
+   506,
+   503,
+   506,
+   503
+  ],
+  "ttft_ms": {
+   "avg": 1576.8452417668111,
+   "std": 64.1183024787164,
+   "min": 1456.9560419986374,
+   "max": 1728.2330000016373,
+   "n": 30
+  },
+  "prefill_tps": {
+   "avg": 320.57123969154924,
+   "std": 12.832481648118602,
+   "min": 291.0487185463554,
+   "max": 345.2234382350839,
+   "n": 30
+  },
+  "decode_tps": {
+   "avg": 57.676235143768494,
+   "std": 2.4442000538834847,
+   "min": 49.91299167307138,
+   "max": 62.76964325494507,
+   "n": 30
+  },
+  "gen_tokens": {
+   "avg": 18.9,
+   "std": 4.971296923685838,
+   "min": 8,
+   "max": 24,
+   "n": 30
+  }
+ },
+ "inference_ram": {
+  "baseline_mb": 1550.421875,
+  "peak_mb": 1558.453125,
+  "after_mb": 1558.375,
+  "increase_mb": 8.03125
+ },
+ "kv_cache": {
+  "512": {
+   "prompt_tokens": 512,
+   "output_tokens": 32,
+   "kv_mb": 2.12109375,
+   "mamba_state_mb": 10.8828125,
+   "peak_mb": 1558.484375,
+   "ttft_ms": 1728.698020498996,
+   "decode_tps": 56.851330664113846
+  },
+  "1024": {
+   "prompt_tokens": 1024,
+   "output_tokens": 32,
+   "kv_mb": 4.12109375,
+   "mamba_state_mb": 10.8828125,
+   "peak_mb": 1668.984375,
+   "ttft_ms": 3569.0614165032457,
+   "decode_tps": 55.26194459209347
+  },
+  "2048": {
+   "prompt_tokens": 2048,
+   "output_tokens": 32,
+   "kv_mb": 8.12109375,
+   "mamba_state_mb": 10.8828125,
+   "peak_mb": 2240.359375,
+   "ttft_ms": 7974.344291502348,
+   "decode_tps": 46.49307064786339
+  }
+ }
+}

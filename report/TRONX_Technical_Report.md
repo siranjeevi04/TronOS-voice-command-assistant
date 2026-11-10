@@ -366,7 +366,7 @@ LoRA D adapter ─merge─► HF FP32 checkpoint ─► ONNX FP32 ─┬─► F
 | Variant | Exact | Intent | Fields | Valid JSON | Unsupported recall | Target loss |
 |---|---:|---:|---:|---:|---:|---:|
 | FP32 | 89.1% | 94.9% | 88.8% | 100% | 99.1% | 0.062 |
-| FP16 | ⟨pending⟩ | | | | | |
+| FP16 | 89.1% | 94.9% | 88.8% | 100% | 99.1% | 0.062 |
 | INT8 | 86.3% | 94.3% | 86.7% | 100% | 99.1% | 0.064 |
 | INT4 | 77.8% | 89.9% | 82.4% | 99.8% | 78.3% | 0.082 |
 
@@ -395,12 +395,12 @@ Same prompt, same greedy decoding (max 64 new tokens), same scoring code (`scrip
 
 | Metric | Base FP32 | Base FP16 | Fine-tuned FP32 | Fine-tuned FP16 | Fine-tuned INT8 | Fine-tuned INT4 |
 |---|---:|---:|---:|---:|---:|---:|
-| Intent accuracy | 74.2% | ⟨pending⟩ | 94.9% | ⟨pending⟩ | 94.3% | 89.9% |
-| Field accuracy | 59.3% | ⟨pending⟩ | 88.8% | ⟨pending⟩ | 86.7% | 82.4% |
-| Exact JSON match | 32.5% | ⟨pending⟩ | 89.1% | ⟨pending⟩ | 86.3% | 77.8% |
-| JSON validity | 98.9% | ⟨pending⟩ | 100% | ⟨pending⟩ | 100% | 99.8% |
-| Unsupported recall | 33.0% | ⟨pending⟩ | 99.1% | ⟨pending⟩ | 99.1% | 78.3% |
-| Test-set loss (JSON tokens) | 0.353 | ⟨pending⟩ | 0.062 | ⟨pending⟩ | 0.064 | 0.082 |
+| Intent accuracy | 74.2% | 74.4% | 94.9% | 94.9% | 94.3% | 89.9% |
+| Field accuracy | 59.3% | 59.8% | 88.8% | 88.8% | 86.7% | 82.4% |
+| Exact JSON match | 32.5% | 32.8% | 89.1% | 89.1% | 86.3% | 77.8% |
+| JSON validity | 98.9% | 99.0% | 100% | 100% | 100% | 99.8% |
+| Unsupported recall | 33.0% | 33.0% | 99.1% | 99.1% | 99.1% | 78.3% |
+| Test-set loss (JSON tokens) | 0.353 | 0.353 | 0.062 | 0.062 | 0.064 | 0.082 |
 
 Stages required by the problem statement: Stage 1 = Base, Stage 2 = Fine-tuned (FP32; FP16 shown too), Stage 3 = Fine-tuned INT8, Stage 4 = Fine-tuned INT4.
 
@@ -558,7 +558,17 @@ Two Android apps were built: Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, mod
 Baseline rises from 527 MB to 826 MB after the first generations, mainly because ONNX Runtime allocates its working buffers (memory arena) on first use and keeps them for later calls.
 
 ### 11.4 Other variants (Mac, same method)
-⟨pending: Mac bench table for Base FP16 / FT FP16 / FT INT8 / FT INT4⟩
+Same app logic and the same pre-tokenized prompts, run on an Apple M5 Mac with ONNX Runtime 1.31.1 CPU EP, 4 threads (`scripts/bench_mac.py`, raw results in `results/bench_mac/`):
+
+| Measurement (Mac) | Base FP16 | Fine-tuned FP16 | Fine-tuned INT8 | Fine-tuned INT4 |
+|---|---:|---:|---:|---:|
+| Loading memory (after − before) | +1,280 MB | +1,281 MB | +390 MB | +287 MB |
+| Loading peak | +1,284 MB | +1,280 MB | +526 MB | +352 MB |
+| Loading time | 1.10 s | 1.06 s | 0.56 s | 0.49 s |
+| Baseline (loaded, warm) | 1,550 MB | 1,550 MB | 777 MB | 674 MB |
+| Peak during inference | 1,558 MB | 1,558 MB | 786 MB | 684 MB |
+
+**FP16 uses about twice its file size in RAM on a CPU.** ONNX Runtime's CPU provider has no FP16 kernels for most operators in this graph, so it converts the weights to FP32 at load time (651 MB file → about 1.3 GB in memory). INT8 and INT4 stay compact because their integer kernels run directly on the quantized weights.
 
 ---
 
@@ -588,7 +598,22 @@ Baseline rises from 527 MB to 826 MB after the first generations, mainly because
 - Decode speed does not drop with context length, because the Mamba layers do constant work per token.
 - What grows is prefill time and temporary activation memory during prefill: peak RAM rises by about 0.5 GB from 512 to 2,048 tokens. That comes from the prefill activation buffers, not the KV cache.
 
-⟨pending: KV table for other variants (Mac)⟩
+**All variants on the Mac** (same method):
+
+| Context | Variant | KV cache | State dtype | Peak process RAM | Time to first token | Decode tok/s |
+|---|---|---:|---|---:|---:|---:|
+| 512 | Base FP16 / FT FP16 | 2.12 MB | FP16 | 1,397 / 1,558 MB | 1.51 / 1.73 s | 57.7 / 56.9 |
+| 512 | FT INT8 | 4.24 MB | FP32 | 786 MB | 0.57 s | 98.7 |
+| 512 | FT INT4 | 4.24 MB | FP32 | 684 MB | 0.87 s | 115.2 |
+| 1,024 | Base FP16 / FT FP16 | 4.12 MB | FP16 | 1,654 / 1,669 MB | 3.20 / 3.57 s | 55.6 / 55.3 |
+| 1,024 | FT INT8 | 8.24 MB | FP32 | 1,070 MB | 1.18 s | 96.5 |
+| 1,024 | FT INT4 | 8.24 MB | FP32 | 967 MB | 1.78 s | 113.1 |
+| 2,048 | Base FP16 / FT FP16 | 8.12 MB | FP16 | 2,224 / 2,240 MB | 6.86 / 7.97 s | 51.7 / 46.5 |
+| 2,048 | FT INT8 | 16.24 MB | FP32 | 1,543 MB | 2.51 s | 92.3 |
+| 2,048 | FT INT4 | 16.24 MB | FP32 | 1,437 MB | 3.78 s | 108.6 |
+
+- The KV cache size depends only on the state data type: FP16 states take half the bytes of FP32 states. Weight quantization does not change it, because the INT8/INT4 graphs keep FP32 states.
+- In every variant the KV cache stays small next to the weights and the temporary prefill buffers.
 
 ---
 
@@ -619,7 +644,17 @@ A typical command (about 505 prompt tokens and 15 output tokens) takes about 7.5
 | Total per command | 1.0 s | 7.9 s |
 | Decode | 74 tok/s | 10.2 tok/s |
 
-⟨pending: TTFT/decode for other variants (Mac)⟩
+**All variants on the Mac** (same 10 prompts × 3 runs, 2 warm-up runs):
+
+| Mac, n = 30 | Base FP16 | Fine-tuned FP16 | Fine-tuned INT8 | Fine-tuned INT4 |
+|---|---:|---:|---:|---:|
+| Time to first token | 1,449 ± 39 ms | 1,577 ± 64 ms | 566 ± 13 ms | 848 ± 5 ms |
+| Prefill tok/s | 348.5 | 320.6 | 891.8 | 594.9 |
+| Decode tok/s | 58.5 ± 3.2 | 57.7 ± 2.4 | 101.0 ± 2.0 | 124.0 ± 3.8 |
+
+- **INT8 has the fastest prefill**, which dominates time to first token. Its integer matrix multiply (`MatMulInteger`) uses the CPU's 8-bit dot-product instructions.
+- **INT4 decodes fastest** because it reads the fewest bytes per generated token. Its prefill is slower because the 4-bit weights must be unpacked block by block.
+- **FP16 is slowest on CPU** (FP32 compute after conversion, twice the memory traffic of INT8).
 
 ---
 
@@ -660,6 +695,50 @@ A typical command (about 505 prompt tokens and 15 output tokens) takes about 7.5
 ---
 
 ## 15. Results and observations
+
+### Consolidated performance report
+
+**Table 1: model variants.** Accuracy is on the held-out test set (613 commands). Device measurements are from the **phone** (Moto G34 5G) for the deployed INT8 model and from the **Mac** (Apple M5) for all variants. All runs use ONNX Runtime 1.31.1 CPU with 4 threads.
+
+| Metric | Base FP16 | Fine-tuned FP16 | **Fine-tuned INT8** | Fine-tuned INT4 |
+|---|---:|---:|---:|---:|
+| Model file size | 651.5 MiB | 651.5 MiB | **404.4 MiB** | 252.7 MiB |
+| Model loading memory | +1,280 MB (Mac) | +1,281 MB (Mac) | **+327 MB phone** / +390 MB Mac | +287 MB (Mac) |
+| Peak inference RAM | 1,558 MB (Mac) | 1,558 MB (Mac) | **896 MB phone** / 786 MB Mac | 684 MB (Mac) |
+| KV cache – 512 tokens | 2.12 MB | 2.12 MB | **4.24 MB** | 4.24 MB |
+| KV cache – 1K tokens | 4.12 MB | 4.12 MB | **8.24 MB** | 8.24 MB |
+| KV cache – 2K tokens | 8.12 MB | 8.12 MB | **16.24 MB** | 16.24 MB |
+| Time to first token | 1.45 s (Mac) | 1.58 s (Mac) | **5.92 s phone** / 0.57 s Mac | 0.85 s (Mac) |
+| Decode tokens/sec | 58.5 (Mac) | 57.7 (Mac) | **9.8 phone** / 101.0 Mac | 124.0 (Mac) |
+| Intent accuracy | 74.4% | 94.9% | **94.3%** | 89.9% |
+| Field accuracy | 59.8% | 88.8% | **86.7%** | 82.4% |
+| Exact JSON match | 32.8% | 89.1% | **86.3%** | 77.8% |
+| JSON validity | 99.0% | 100% | **100%** | 99.8% |
+| Thermal throttling | n/a | n/a | **Mild on phone:** −8% decode after 10 min continuous; brief SEVERE status; 35.4 → 36.3 °C; 3% battery | n/a |
+
+Notes:
+- **KV cache** values are identical on Mac and phone (same tensors). FP16 keeps FP16 states; INT8/INT4 keep FP32 states.
+- **Thermal behaviour** was measured for the deployed model (INT8).
+- **Accuracy runtimes:**
+  - Base FP16: PyTorch FP16 (Base FP32 for reference: 32.5% exact).
+  - Fine-tuned variants: ONNX Runtime on the Mac.
+  - INT8 accuracy on the phone is reported separately (Section 9.4).
+
+**Table 2: LoRA target-module experiments** (same data, seed and hyper-parameters; r 16, alpha 32, dropout 0.05; FP32):
+
+| Exp | Target modules | Trainable params | Adapter | Training time | Val exact | Test exact | JSON validity | Unsupported recall | Inference (T4, per command) |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| A | q, v | 163,840 | 0.6 MB | 51 min | 81.6% | 77.5% | 100% | 81.1% | 334 ms |
+| B | q, k, v, o | 327,680 | 1.3 MB | 52 min | 85.0% | 81.4% | 100% | 89.6% | 344 ms |
+| C | MLP | 3,932,160 | 15.0 MB | 61 min | 91.2% | 85.5% | 100% | 91.5% | 338 ms |
+| **D** | **attention + MLP** | **4,259,840** | **16.3 MB** | 61 min | **91.2%** | **89.1%** | **100%** | **99.1%** | 348 ms |
+
+**Best configuration for TronOS: LoRA D, merged, INT8.**
+- It keeps 97% of full-precision exact match (86.3% vs 89.1%) and the same 99.1% refusal of unsupported requests.
+- It is 1.6× smaller than FP16 and uses about half the RAM of FP16 on CPU.
+- It has the fastest time to first token of all variants.
+- INT4 is smaller and decodes faster, but loses 11 points and starts acting on unsupported requests. Full justification: Section 17.
+
 
 1. **Fine-tuning is the biggest lever.** +56.6 points exact match with 1.25% of parameters trained. The prompt alone gives the format; LoRA teaches the schema rules: no invented fields, 24 h times, refusing unsupported requests.
 2. **Target-module choice matters on a hybrid model.** With only 4 attention layers, attention-only LoRA is capacity-limited. The MLP adapter reaches all 32 layers. Attention + MLP (D) is best, especially for refusing unsupported requests (99.1%).
@@ -722,7 +801,7 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 | Thermal | −8% after 10 min continuous; normal bursty use is unaffected |
 
 **Rejected alternatives:**
-- **FP16:** 1.6× larger than INT8 for ⟨pending: FP16 accuracy gain⟩. CPU FP16 kernels on mid-range ARM are slow.
+- **FP16:** the same accuracy as FP32 (89.1%), only 2.8 points above INT8, but the file is 1.6× larger. On CPU it needs about 1.3 GB of RAM (converted to FP32 at load) and is the slowest variant: time to first token 2.8× INT8, decode 0.57× INT8 on the Mac.
 - **INT4:** saves 151 MiB but loses 8.5 points and is unsafe on unsupported requests. Use it only if storage is critical, and then only with quantization-aware fine-tuning.
 
 **Two changes recommended before shipping** (Section 18): JSON-constrained decoding and system-prompt caching.
