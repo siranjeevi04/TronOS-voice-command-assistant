@@ -614,6 +614,12 @@ Two Android apps were built: Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, mod
 - **Packaging:** models are stored uncompressed in the APK assets and copied once to app-private storage on first launch (ONNX Runtime needs a file path for external weights). Uninstalling the app removes them.
 - **Privacy:** no network permission. The ONNX Runtime library's `INTERNET`, `ACCESS_NETWORK_STATE` and telemetry initializer were removed from the merged manifest. The only permission is `RECORD_AUDIO`, in the voice app.
 - **Identical input:** the on-device tokenizer runs a start-up self-check against Mac token ids (20/20 identical). Prompt token counts matched the Mac on every phone command.
+**Phone demo (Moto G34 5G, fully on-device, no network):**
+
+[![TronX Voice running on the phone: open the full video](../deliverables/demo/demo-preview.gif)](../deliverables/demo/tronx-voice-command-assistant-demo.mp4)
+
+*Preview at 4× speed. Full recording (2 min 31 s, muted): [`deliverables/demo/tronx-voice-command-assistant-demo.mp4`](../deliverables/demo/tronx-voice-command-assistant-demo.mp4).*
+
 - **Voice app measured on the phone** (7 spoken commands, screen recording `deliverables/demo/tronx-voice-command-assistant-demo.mp4`):
   - whole-app process RAM with VAD + speech-to-text + LLM loaded: **1,059–1,257 MB**
   - speech-to-text **0.6–1.3 s** (average 0.9 s)
