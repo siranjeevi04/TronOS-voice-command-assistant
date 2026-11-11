@@ -339,6 +339,28 @@ Four experiments on the same data, hyper-parameters and seed. Only the target mo
 
 Granite-H has no separate `gate_proj` / `up_proj` / `down_proj`. Its MLP fuses gate and up into `shared_mlp.input_linear` (768→4096, split 2048 + 2048), and `shared_mlp.output_linear` (2048→768) plays the down-projection role. Module names were read from the loaded model (`results/model_inspection/granite-4.0-h-350m_modules.txt`).
 
+**What the targeted modules do.** Inside the model, every token is a vector of 768 numbers (its "card"), refined layer by layer.
+
+*Attention (`self_attn`, 4 layers): one token gathers information from earlier tokens.* Running example: about to write the contact for "call **mom**".
+
+| Module | Shape | Role | In the example |
+|---|---|---|---|
+| `q_proj` (query) | 768 → 768 | Turns the current token into a **question**: what am I looking for? | "I need the person's name" |
+| `k_proj` (key) | 768 → 256 | Turns every earlier token into a **label**: what do I contain? | "mom" → "I am a person" |
+| `v_proj` (value) | 768 → 256 | Turns every earlier token into the **content** it can hand over | "mom" → "Mom" |
+| `o_proj` (output) | 768 → 768 | **Writes** the collected content back into the current token | the token now carries "Mom" |
+
+The query is compared with every key. The best matches receive high attention weight, and their values are pulled in through `o_proj`. Granite uses 12 query heads that share 4 key/value heads (grouped-query attention), which is why `k_proj` and `v_proj` are smaller.
+
+*MLP (`shared_mlp`, all 32 layers): each token is processed on its own, with no looking at other tokens.* Running example: "11:59 **pm**".
+
+| Module | Shape | Role | In the example |
+|---|---|---|---|
+| `input_linear` | 768 → 4,096 | Expands the token into 2,048 pattern detectors (gate) and 2,048 values (up). The SiLU gate switches on only the detectors that fire | detectors such as "time with pm" or "money involved" switch on |
+| `output_linear` | 2,048 → 768 | Compresses the active detectors back into the 768-number token, adding the learned conclusion | adds "hour + 12 → 23" |
+
+In short: q = what to look for, k = what each token offers, v = what to take, o = write it in; `input_linear` = check thousands of patterns, `output_linear` = turn the patterns that fired into a conclusion. LoRA experiment D adapts all six modules: where to look and what to take (attention), and which patterns lead to which conclusions (MLP). The examples are an illustration of each module's role; they are not traced from the model's activations.
+
 All rows FP32, PyTorch, unmerged adapter (identical to merged ONNX FP32).
 
 | Exp | Val exact | Val loss | **Test exact** | Test intent | Test fields | Valid JSON | Unsupported recall |
