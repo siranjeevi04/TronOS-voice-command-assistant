@@ -12,6 +12,8 @@ A small LLM that runs fully on an Android phone and turns a spoken command into 
 
 **Final report:** [`report/TRONX_Technical_Report.md`](report/TRONX_Technical_Report.md) (18 sections)
 
+**Model weights (Hugging Face):** [Siranjeevi029/TronOS-voice-command-granite-350m](https://huggingface.co/Siranjeevi029/TronOS-voice-command-granite-350m): merged FP32 (safetensors), ONNX FP32 / FP16 / INT8 / INT4 and the LoRA D adapter
+
 ## Phone demo (Moto G34 5G, fully on-device, no network)
 
 [![TronX Voice running on the phone: tap to open the full video](deliverables/demo/demo-preview.gif)](deliverables/demo/tronx-voice-command-assistant-demo.mp4)
@@ -231,10 +233,11 @@ The fine-tuned model is better than the base model on both devices. On the full 
 | Raw benchmark results | [`results/eval/`](results/eval) (metrics + every prediction), [`results/phone/`](results/phone) (on-device runs), [`results/bench_mac/`](results/bench_mac), [`results/quant/`](results/quant), [`results/stt/`](results/stt) |
 | Screenshots / logs | [`deliverables/screenshots/`](deliverables/screenshots), raw phone logs [`results/phone/raw_share_logs_20261110.txt`](results/phone/raw_share_logs_20261110.txt), charts [`results/plots/`](results/plots), model-selection evidence [`evidence/`](evidence) |
 | Final report | [`report/TRONX_Technical_Report.md`](report/TRONX_Technical_Report.md) |
+| Model weights | [Hugging Face: Siranjeevi029/TronOS-voice-command-granite-350m](https://huggingface.co/Siranjeevi029/TronOS-voice-command-granite-350m): merged FP32 safetensors, `onnx/fp32`, `onnx/fp16`, `onnx/int8` (deployed), `onnx/int4`, `adapter/` |
 
 ## Reproduce
 
-Model weights are not stored in git (files over 100 MB). The LoRA adapters (A–D) are in `runs/granite/<exp>/adapter/`; every model variant is regenerated from them with the steps below.
+Model weights are not stored in git (files over 100 MB). Download the fine-tuned variants from [Hugging Face](https://huggingface.co/Siranjeevi029/TronOS-voice-command-granite-350m), or regenerate them: the LoRA adapters (A–D) are in `runs/granite/<exp>/adapter/`, and every model variant is rebuilt from them with the steps below.
 
 ```bash
 python3.12 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt

@@ -664,6 +664,8 @@ Two Android apps were built: Kotlin, ONNX Runtime Android 1.31.1, arm64-v8a, mod
 | Fine-tuned INT8 | 404.4 MiB (423,992,240 bytes) |
 | Fine-tuned INT4 | 252.7 MiB |
 
+All fine-tuned files (merged FP32, ONNX FP32 / FP16 / INT8 / INT4, adapter) can be downloaded from [Hugging Face](https://huggingface.co/Siranjeevi029/TronOS-voice-command-granite-350m).
+
 **Why the sizes differ:**
 - **Base model (651.5 MiB at FP16):** all 340 M parameters at 2 bytes each.
 - **Adapter (16.3 MiB):** only the LoRA matrices A and B: 4.26 M parameters, 1.25% of the base, stored as FP32 (4 bytes each). It is useless on its own; it needs the base model to run. That makes it the cheapest artifact to ship or swap.
@@ -980,3 +982,4 @@ Per intent, `send_message` is the weakest (59.7% exact on the test set): the mod
 | Raw benchmark results | `results/eval/*/metrics.json` + `predictions.jsonl`, `results/phone/*.json`, `results/bench_mac/*.json`, `results/quant/` |
 | Screenshots / logs | `deliverables/screenshots/`, `deliverables/demo/` (phone video), phone Share logs `results/phone/raw_share_logs_20261110.txt`, Kaggle training logs `kaggle_job/logs/` |
 | Final report | `report/TRONX_Technical_Report.md` (this document) |
+| Model weights | Hugging Face: [Siranjeevi029/TronOS-voice-command-granite-350m](https://huggingface.co/Siranjeevi029/TronOS-voice-command-granite-350m) (merged FP32 safetensors, ONNX FP32 / FP16 / INT8 / INT4, LoRA D adapter) |
