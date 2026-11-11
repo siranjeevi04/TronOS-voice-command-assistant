@@ -399,50 +399,33 @@ All rows FP32, PyTorch, unmerged adapter (identical to merged ONNX FP32).
 
 ## 7. LoRA execution explanation
 
-### 7.1 One adapted linear layer
-A frozen weight matrix `W` (d_out × d_in) gets two small trainable matrices: `A` (r × d_in) and `B` (d_out × r), with r = 16. For an input vector `x`:
+### 7.1 What LoRA adds to one weight table
+- Each targeted weight table **W** stays **frozen**.
+- LoRA adds two small tables next to it, **A** and **B** (rank r = 16). Together they act as a correction to W.
+- When the layer runs: **output = W·x + 2·B·(A·x)**.
+  - A squeezes the input (768 numbers) down to 16 numbers, and B expands them back.
+  - The factor 2 (alpha 32 ÷ rank 16) sets how strongly the correction counts.
+- B starts at zero, so before training the model behaves exactly like the base. Training then updates **only A and B**.
+- Size example: `q_proj` (768 × 768) holds 589,824 numbers; its LoRA correction holds 24,576 (4%).
 
-```
-h = W·x  +  (α/r) · B·(A·x)          α/r = 32/16 = 2
-```
+### 7.2 Where it runs (experiment D)
+Each of the 32 layers does two steps for every token:
 
-- `A·x` compresses the input to 16 numbers, and `B` expands them back to d_out.
-- `B` starts at zero, so the model starts exactly as the base model and learns only a low-rank correction.
-- During training, gradients flow only into A and B. W gets no gradient and no optimizer state, which is why training needs little memory.
+| Step | What it does | Layers | LoRA? |
+|---|---|---|---|
+| Mixing | Combines the token with earlier tokens | 4 attention layers (10, 13, 17, 27): `q_proj`, `k_proj`, `v_proj`, `o_proj` | **Yes** |
+| | | 28 Mamba2 layers | No (frozen) |
+| MLP | Processes the token on its own | All 32 layers: `input_linear`, `output_linear` | **Yes** |
 
-Example: `q_proj` (768 → 768). A full update would be 589,824 values. LoRA uses 16 × (768 + 768) = 24,576 values, 4% of that.
+So for every token, the corrections change *where the model looks* (attention, 4 layers) and *what it concludes* (MLP, all 32 layers). Section 6 explains each module's role.
 
-### 7.2 Where the adapter runs inside one Granite-H layer (experiment D)
-Each of the 32 layers is: `x → RMSNorm → mixer → +residual → RMSNorm → MLP → +residual`.
-
-```
-                     ┌──────────── layers 10, 13, 17, 27 (attention) ────────────┐
-x ─► RMSNorm ─► mixer│ q = (Wq + 2·Bq·Aq)·x   k = (Wk + 2·Bk·Ak)·x                   │─► + ─► RMSNorm ─► MLP ─► + ─► next layer
-                     │ v = (Wv + 2·Bv·Av)·x   softmax(qkᵀ/√d)·v → (Wo + 2·Bo·Ao)     │
-                     └──────────── other 28 layers: Mamba2 mixer, FROZEN ────────────┘
-
-MLP (all 32 layers):   [gate | up] = (W_in + 2·B_in·A_in)·x          768 → 4096, split 2048 + 2048
-                       y = (W_out + 2·B_out·A_out)·( SiLU(gate) ⊙ up ) 2048 → 768
-```
-
-**Per token, LoRA D changes:**
-- In all 32 layers: the MLP's input projection (to the gate and up halves) and its output projection.
-- In the 4 attention layers: the query, key and value projections, which change which earlier tokens the model attends to (for example, copying "Mom" into `contact`), and the output projection.
-- The Mamba2 token mixing in 28 layers is unchanged.
-
-### 7.3 Inference: merge, then deploy
-For deployment the adapter is **merged** into the base weights once (`scripts/export_onnx.py merge`):
-
-```
-W' = W + (α/r) · B·A      for every adapted matrix
-```
-
-The merged model has **exactly the same shapes and parameter count as the base** (340 M). Consequences:
-- **No extra latency or memory at inference.** The phone runs one plain matrix multiply per layer, not W·x plus B·A·x.
-- **No PEFT or LoRA code on the phone.** Any runtime that runs the base model runs the fine-tuned one.
-- **Quantization applies to the merged weights.** INT8 and INT4 must keep the small LoRA delta (Section 8.3 shows INT4 partly loses it).
-
-The unmerged adapter (16.3 MiB) is still useful: several task adapters could be swapped at run time on one base model. That is listed as future work.
+### 7.3 At inference: merged, so no extra cost
+- Before export, each correction is added into its table once: **W' = W + 2·B·A** (`scripts/export_onnx.py merge`).
+- The merged model has the same size and shape as the base (340 M parameters), so:
+  - there is no extra time or memory on the phone,
+  - the phone needs no LoRA code: any runtime that runs the base model runs ours,
+  - quantization works on the merged weights (INT4 partly loses the correction, Section 8.3).
+- The separate 16.3 MiB adapter could still be swapped at run time to serve several tasks on one base model (future work).
 
 ---
 
